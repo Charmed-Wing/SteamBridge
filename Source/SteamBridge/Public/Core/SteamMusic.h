@@ -53,7 +53,7 @@ public:
 	 * @return ESteamAudioPlaybackStatus
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Music")
-	ESteamAudioPlaybackStatus GetPlaybackStatus() const { return (ESteamAudioPlaybackStatus)SteamMusic()->GetPlaybackStatus(); }
+	ESteamAudioPlaybackStatus GetPlaybackStatus() const { return static_cast<ESteamAudioPlaybackStatus>(SteamMusic()->GetPlaybackStatus()); }
 
 	/**
 	 * Gets the current volume of the Steam Music player.

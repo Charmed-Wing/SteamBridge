@@ -59,7 +59,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Matchmaking")
-	void AddRequestLobbyListDistanceFilter(ESteamLobbyDistanceFilter LobbyDistanceFilter) { SteamMatchmaking()->AddRequestLobbyListDistanceFilter((ELobbyDistanceFilter)LobbyDistanceFilter); }
+	void AddRequestLobbyListDistanceFilter(ESteamLobbyDistanceFilter LobbyDistanceFilter) { SteamMatchmaking()->AddRequestLobbyListDistanceFilter(static_cast<ELobbyDistanceFilter>(LobbyDistanceFilter)); }
 
 	/**
 	 * Filters to only return lobbies with the specified number of open slots available.
@@ -90,7 +90,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Matchmaking")
-	void AddRequestLobbyListNumericalFilter(const FString& KeyToMatch, int32 ValueToMatch, ESteamLobbyComparison ComparisonType) { SteamMatchmaking()->AddRequestLobbyListNumericalFilter(TCHAR_TO_UTF8(*KeyToMatch), ValueToMatch, (ELobbyComparison)((uint8)ComparisonType - 2)); }
+	void AddRequestLobbyListNumericalFilter(const FString& KeyToMatch, int32 ValueToMatch, ESteamLobbyComparison ComparisonType) { SteamMatchmaking()->AddRequestLobbyListNumericalFilter(TCHAR_TO_UTF8(*KeyToMatch), ValueToMatch, static_cast<ELobbyComparison>(static_cast<uint8>(ComparisonType) - 2)); }
 
 	/**
 	 * Sets the maximum number of lobbies to return. The lower the count the faster it is to download the lobby results & details to the client.
@@ -110,7 +110,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Matchmaking")
-	void AddRequestLobbyListStringFilter(const FString& KeyToMatch, const FString& ValueToMatch, ESteamLobbyComparison ComparisonType) { SteamMatchmaking()->AddRequestLobbyListStringFilter(TCHAR_TO_UTF8(*KeyToMatch), TCHAR_TO_UTF8(*ValueToMatch), (ELobbyComparison)((uint8)ComparisonType - 2)); }
+	void AddRequestLobbyListStringFilter(const FString& KeyToMatch, const FString& ValueToMatch, ESteamLobbyComparison ComparisonType) { SteamMatchmaking()->AddRequestLobbyListStringFilter(TCHAR_TO_UTF8(*KeyToMatch), TCHAR_TO_UTF8(*ValueToMatch), static_cast<ELobbyComparison>(static_cast<uint8>(ComparisonType) - 2)); }
 
 	/**
 	 * Create a new matchmaking lobby.
@@ -124,7 +124,7 @@ public:
 	 * @return FSteamAPICall - SteamAPICall_t to be used with a LobbyCreated_t call result.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	FSteamAPICall CreateLobby(ESteamLobbyType LobbyType = ESteamLobbyType::FriendsOnly, uint8 MaxMembers = 1) const { return SteamMatchmaking()->CreateLobby((ELobbyType)LobbyType, MaxMembers); }
+	FSteamAPICall CreateLobby(ESteamLobbyType LobbyType = ESteamLobbyType::FriendsOnly, uint8 MaxMembers = 1) const { return SteamMatchmaking()->CreateLobby(static_cast<ELobbyType>(LobbyType), MaxMembers); }
 
 	/**
 	 * Removes a metadata key from the lobby.
@@ -468,7 +468,7 @@ public:
 	 * @return bool - true upon success; otherwise, false if you're not the owner of the lobby.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool SetLobbyType(FSteamID SteamIDLobby, ESteamLobbyType LobbyType) const { return SteamMatchmaking()->SetLobbyType(SteamIDLobby, (ELobbyType)LobbyType); }
+	bool SetLobbyType(FSteamID SteamIDLobby, ESteamLobbyType LobbyType) const { return SteamMatchmaking()->SetLobbyType(SteamIDLobby, static_cast<ELobbyType>(LobbyType)); }
 
 	/** Delegates */
 

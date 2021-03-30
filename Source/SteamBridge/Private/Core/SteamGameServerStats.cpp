@@ -27,12 +27,12 @@ bool USteamGameServerStats::UpdateUserAvgRateStat(FSteamID SteamIDUser, const FS
 
 void USteamGameServerStats::OnGSStatsReceived(GSStatsReceived_t *pParam)
 {
-	m_OnGSStatsReceived.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_steamIDUser.ConvertToUint64());
+	m_OnGSStatsReceived.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_steamIDUser.ConvertToUint64());
 }
 
 void USteamGameServerStats::OnGSStatsStored(GSStatsStored_t *pParam)
 {
-	m_OnGSStatsStored.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_steamIDUser.ConvertToUint64());
+	m_OnGSStatsStored.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_steamIDUser.ConvertToUint64());
 }
 
 void USteamGameServerStats::OnGSStatsUnloaded(GSStatsUnloaded_t *pParam)

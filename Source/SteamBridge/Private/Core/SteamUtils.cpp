@@ -64,13 +64,13 @@ bool USteamUtils::GetImageSize(int32 Image, FIntPoint& Size) const
 {
 	uint32 Width, Height;
 	bool bResult = SteamUtils()->GetImageSize(Image, &Width, &Height);
-	Size = { (int32)Width, (int32)Height };
+	Size = { static_cast<int32>(Width), static_cast<int32>(Height) };
 	return bResult;
 }
 
 bool USteamUtils::ShowGamepadTextInput(ESteamGamepadTextInputMode InputMode, ESteamGamepadTextInputLineMode LineInputMode, const FString& Description, const FString& ExistingText, int32 CharMax) const
 {
-	return SteamUtils()->ShowGamepadTextInput((EGamepadTextInputMode)InputMode, (EGamepadTextInputLineMode)LineInputMode, TCHAR_TO_UTF8(*Description), CharMax, TCHAR_TO_UTF8(*ExistingText));
+	return SteamUtils()->ShowGamepadTextInput(static_cast<EGamepadTextInputMode>(InputMode), static_cast<EGamepadTextInputLineMode>(LineInputMode), TCHAR_TO_UTF8(*Description), CharMax, TCHAR_TO_UTF8(*ExistingText));
 }
 
 void USteamUtils::OnGamepadTextInputDismissed(GamepadTextInputDismissed_t* pParam)
@@ -90,7 +90,7 @@ void USteamUtils::OnLowBatteryPower(LowBatteryPower_t* pParam)
 
 void USteamUtils::OnSteamAPICallCompleted(SteamAPICallCompleted_t* pParam)
 {
-	m_OnSteamAPICallCompleted.Broadcast((FSteamAPICall)pParam->m_hAsyncCall, pParam->m_iCallback, pParam->m_cubParam);
+	m_OnSteamAPICallCompleted.Broadcast(static_cast<FSteamAPICall>(pParam->m_hAsyncCall), pParam->m_iCallback, pParam->m_cubParam);
 }
 
 void USteamUtils::OnSteamShutdown(SteamShutdown_t* pParam)

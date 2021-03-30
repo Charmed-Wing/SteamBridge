@@ -369,7 +369,7 @@ public:
 	 * @return ESteamUserHasLicenseForAppResult
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	ESteamUserHasLicenseForAppResult UserHasLicenseForApp(FSteamID SteamID, int32 AppID) const { return (ESteamUserHasLicenseForAppResult)SteamGameServer()->UserHasLicenseForApp(SteamID, AppID); }
+	ESteamUserHasLicenseForAppResult UserHasLicenseForApp(FSteamID SteamID, int32 AppID) const { return static_cast<ESteamUserHasLicenseForAppResult>(SteamGameServer()->UserHasLicenseForApp(SteamID, AppID)); }
 
 	/**
 	 * Checks if the master server has alerted us that we are out of date.

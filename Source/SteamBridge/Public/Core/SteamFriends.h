@@ -75,7 +75,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Friends")
-	void ActivateGameOverlayToStore(int32 AppID, ESteamOverlayToStoreFlag StoreFlag) { SteamFriends()->ActivateGameOverlayToStore(AppID, (EOverlayToStoreFlag)StoreFlag); }
+	void ActivateGameOverlayToStore(int32 AppID, ESteamOverlayToStoreFlag StoreFlag) { SteamFriends()->ActivateGameOverlayToStore(AppID, static_cast<EOverlayToStoreFlag>(StoreFlag)); }
 
 	/**
 	 * Activates Steam Overlay to a specific dialog.
@@ -398,7 +398,7 @@ public:
 	 * @return ESteamPersonaState - The friend state of the specified user. (Online, Offline, In-Game, etc)
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Friends")
-	ESteamPersonaState GetFriendPersonaState(FSteamID SteamIDFriend) const { return (ESteamPersonaState)SteamFriends()->GetFriendPersonaState(SteamIDFriend); }
+	ESteamPersonaState GetFriendPersonaState(FSteamID SteamIDFriend) const { return static_cast<ESteamPersonaState>(SteamFriends()->GetFriendPersonaState(SteamIDFriend)); }
 
 	/**
 	 * Gets a relationship to a specified user.
@@ -407,7 +407,7 @@ public:
 	 * @return ESteamFriendRelationship - How the users know each other.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Friends")
-	ESteamFriendRelationship GetFriendRelationship(FSteamID SteamIDFriend) const { return (ESteamFriendRelationship)SteamFriends()->GetFriendRelationship(SteamIDFriend); }
+	ESteamFriendRelationship GetFriendRelationship(FSteamID SteamIDFriend) const { return static_cast<ESteamFriendRelationship>(SteamFriends()->GetFriendRelationship(SteamIDFriend)); }
 
 	/**
 	 * Get a Rich Presence value from a specified friend.
@@ -533,7 +533,7 @@ public:
 	 * @return ESteamPersonaState - The friend state of the current user. (Online, Offline, In-Game, etc)
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Friends")
-	ESteamPersonaState GetPersonaState() const { return (ESteamPersonaState)SteamFriends()->GetPersonaState(); }
+	ESteamPersonaState GetPersonaState() const { return static_cast<ESteamPersonaState>(SteamFriends()->GetPersonaState()); }
 
 	/**
 	 * Gets the nickname that the current user has set for the specified user.

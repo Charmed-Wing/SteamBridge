@@ -102,7 +102,7 @@ public:
 	 * @return bool - true upon success. false if the UGC update handle is invalid.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UGC")
-	bool AddItemPreviewFile(FUGCUpdateHandle handle, const FString& PreviewFile, ESteamItemPreviewType type) const { return SteamUGC()->AddItemPreviewFile(handle, TCHAR_TO_UTF8(*PreviewFile), (EItemPreviewType)type); }
+	bool AddItemPreviewFile(FUGCUpdateHandle handle, const FString& PreviewFile, ESteamItemPreviewType type) const { return SteamUGC()->AddItemPreviewFile(handle, TCHAR_TO_UTF8(*PreviewFile), static_cast<EItemPreviewType>(type)); }
 
 	/**
 	 * Adds an additional video preview from YouTube for the item.
@@ -178,7 +178,7 @@ public:
 	 * @return FSteamAPICall - SteamAPICall_t to be used with a CreateItemResult_t call result.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UGC")
-	FSteamAPICall CreateItem(int32 ConsumerAppId, ESteamWorkshopFileType FileType) const { return SteamUGC()->CreateItem(ConsumerAppId, (EWorkshopFileType)FileType); }
+	FSteamAPICall CreateItem(int32 ConsumerAppId, ESteamWorkshopFileType FileType) const { return SteamUGC()->CreateItem(ConsumerAppId, static_cast<EWorkshopFileType>(FileType)); }
 
 	/**
 	 * Query for all matching UGC. You can use this to list all of the available UGC for your app.
@@ -323,7 +323,7 @@ public:
 	 * @return ESteamItemUpdateStatus - The current status.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UGC")
-	ESteamItemUpdateStatus GetItemUpdateProgress(FUGCUpdateHandle handle, int64& BytesProcessed, int64& BytesTotal) const { return (ESteamItemUpdateStatus)SteamUGC()->GetItemUpdateProgress(handle, (uint64*)BytesProcessed, (uint64*)BytesTotal); }
+	ESteamItemUpdateStatus GetItemUpdateProgress(FUGCUpdateHandle handle, int64& BytesProcessed, int64& BytesTotal) const { return static_cast<ESteamItemUpdateStatus>(SteamUGC()->GetItemUpdateProgress(handle, (uint64*)BytesProcessed, (uint64*)BytesTotal)); }
 
 	/**
 	 * Gets the total number of items the current user is subscribed to for the game or application.
@@ -469,7 +469,7 @@ public:
 	 * @return bool - true upon success, indicates that pStatValue has been filled out. Otherwise, false if the UGC query handle is invalid, the index is out of bounds, or eStatType was invalid.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UGC")
-	bool GetQueryUGCStatistic(FUGCQueryHandle handle, int32 index, ESteamItemStatistic StatType, int64& StatValue) const { return SteamUGC()->GetQueryUGCStatistic(handle, index, (EItemStatistic)StatType, (uint64*)&StatValue); }
+	bool GetQueryUGCStatistic(FUGCQueryHandle handle, int32 index, ESteamItemStatistic StatType, int64& StatValue) const { return SteamUGC()->GetQueryUGCStatistic(handle, index, static_cast<EItemStatistic>(StatType), (uint64*)&StatValue); }
 
 	/**
 	 * Gets a list of all of the items the current user is subscribed to for the current game.
@@ -677,7 +677,7 @@ public:
 	 * @return bool - true upon success. false if the UGC update handle is invalid.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UGC")
-	bool SetItemVisibility(FUGCUpdateHandle handle, ESteamRemoteStoragePublishedFileVisibility Visibility) const { return SteamUGC()->SetItemVisibility(handle, (ERemoteStoragePublishedFileVisibility)Visibility); }
+	bool SetItemVisibility(FUGCUpdateHandle handle, ESteamRemoteStoragePublishedFileVisibility Visibility) const { return SteamUGC()->SetItemVisibility(handle, static_cast<ERemoteStoragePublishedFileVisibility>(Visibility)); }
 
 	/**
 	 * Sets the language to return the title and description in for the items on a pending UGC Query.

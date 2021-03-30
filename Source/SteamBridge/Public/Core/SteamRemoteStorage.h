@@ -225,7 +225,7 @@ public:
 	 * @return ESteamRemoteStoragePlatform - Bitfield containing the platforms that the file was set to with SetSyncPlatforms.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|RemoteStorage")
-	ESteamRemoteStoragePlatform GetSyncPlatforms(const FString& FileName) const { return (ESteamRemoteStoragePlatform)SteamRemoteStorage()->GetSyncPlatforms(TCHAR_TO_UTF8(*FileName)); }
+	ESteamRemoteStoragePlatform GetSyncPlatforms(const FString& FileName) const { return static_cast<ESteamRemoteStoragePlatform>(SteamRemoteStorage()->GetSyncPlatforms(TCHAR_TO_UTF8(*FileName))); }
 
 	// #NOTE: No docs for this method currently
 	// #TODO: GetUGCDetails
@@ -272,7 +272,7 @@ public:
 	 * @return bool - true if the file exists, otherwise false.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|RemoteStorage")
-	bool SetSyncPlatforms(const FString& FileName, ESteamRemoteStoragePlatform RemoteStoragePlatform) const { return SteamRemoteStorage()->SetSyncPlatforms(TCHAR_TO_UTF8(*FileName), (ERemoteStoragePlatform)RemoteStoragePlatform); }
+	bool SetSyncPlatforms(const FString& FileName, ESteamRemoteStoragePlatform RemoteStoragePlatform) const { return SteamRemoteStorage()->SetSyncPlatforms(TCHAR_TO_UTF8(*FileName), static_cast<ERemoteStoragePlatform>(RemoteStoragePlatform)); }
 
 	/**
 	 * SteamAPICall_t to be used with a RemoteStorageDownloadUGCResult_t call result.

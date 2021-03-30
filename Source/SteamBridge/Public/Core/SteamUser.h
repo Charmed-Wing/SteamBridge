@@ -65,7 +65,7 @@ public:
      * @return ESteamBeginAuthSessionResult
      */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|User")
-	ESteamBeginAuthSessionResult BeginAuthSession(TArray<uint8> Ticket, FSteamID SteamID) { return (ESteamBeginAuthSessionResult)SteamUser()->BeginAuthSession(Ticket.GetData(), Ticket.Num(), SteamID); }
+	ESteamBeginAuthSessionResult BeginAuthSession(TArray<uint8> Ticket, FSteamID SteamID) { return static_cast<ESteamBeginAuthSessionResult>(SteamUser()->BeginAuthSession(Ticket.GetData(), Ticket.Num(), SteamID)); }
 
 	/**
 	 * Checks if the current users looks like they are behind a NAT device.
@@ -173,7 +173,7 @@ public:
      * @return ESteamVoiceResult
      */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|User")
-	ESteamVoiceResult GetAvailableVoice(int32& CompressedSize) { return (ESteamVoiceResult)SteamUser()->GetAvailableVoice((uint32*)&CompressedSize); }
+	ESteamVoiceResult GetAvailableVoice(int32& CompressedSize) { return static_cast<ESteamVoiceResult>(SteamUser()->GetAvailableVoice((uint32*)&CompressedSize)); }
 
 	/**
 	 * Retrieves anti indulgence / duration control for current user / game combination.
@@ -181,7 +181,7 @@ public:
 	 * @return FSteamAPICall - SteamAPICall_t to be used with a DurationControl_t call result. Returns k_uAPICallInvalid if no connection to the Steam servers could be made.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|User")
-	FSteamAPICall GetDurationControl() { return (FSteamAPICall)SteamUser()->GetDurationControl(); }
+	FSteamAPICall GetDurationControl() { return static_cast<FSteamAPICall>(SteamUser()->GetDurationControl()); }
 
 	/**
 	 * Retrieve an encrypted ticket.
@@ -218,7 +218,7 @@ public:
 	 * @return FHSteamUser
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|User")
-	FHSteamUser GetHSteamUser() { return (FHSteamUser)SteamUser()->GetHSteamUser(); }
+	FHSteamUser GetHSteamUser() { return static_cast<FHSteamUser>(SteamUser()->GetHSteamUser()); }
 
 	/**
 	 * Gets the Steam level of the user, as shown on their Steam community profile.
@@ -266,7 +266,7 @@ public:
 	 * @return int32
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|User")
-	int32 GetVoiceOptimalSampleRate() { return (uint32)SteamUser()->GetVoiceOptimalSampleRate(); }
+	int32 GetVoiceOptimalSampleRate() { return static_cast<uint32>(SteamUser()->GetVoiceOptimalSampleRate()); }
 
 	// #TODO RequestEncryptedAppTicket, RequestStoreAuthURL
 
@@ -298,7 +298,7 @@ public:
 	 * @return ESteamUserHasLicenseForAppResult
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|User")
-	ESteamUserHasLicenseForAppResult UserHasLicenseForApp(FSteamID SteamID, int32 AppID) { return (ESteamUserHasLicenseForAppResult)SteamUser()->UserHasLicenseForApp(SteamID, AppID); }
+	ESteamUserHasLicenseForAppResult UserHasLicenseForApp(FSteamID SteamID, int32 AppID) { return static_cast<ESteamUserHasLicenseForAppResult>(SteamUser()->UserHasLicenseForApp(SteamID, AppID)); }
 
 	/** Delegates */
 

@@ -250,16 +250,16 @@ public:
 	static FString BreakSteamID(FSteamID SteamID) { return LexToString(SteamID.Value); }
 
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|USteamBPUtils", meta = (NativeMakeFunc))
-	static FAppID MakeAppID(int32 AppID) { return {(uint32)AppID}; }
+	static FAppID MakeAppID(int32 AppID) { return {static_cast<uint32>(AppID)}; }
 
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|USteamBPUtils", meta = (NativeBreakFunc))
-	static int32 BreakAppID(FAppID AppID) { return (int32)AppID; }
+	static int32 BreakAppID(FAppID AppID) { return static_cast<int32>(AppID); }
 
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|USteamBPUtils", meta = (NativeMakeFunc))
-	static FAccountID MakeAccountID(int32 AccountID) { return {(uint32)AccountID}; }
+	static FAccountID MakeAccountID(int32 AccountID) { return {static_cast<uint32>(AccountID)}; }
 
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|USteamBPUtils", meta = (NativeBreakFunc))
-	static int32 BreakAccountID(FAccountID AccountID) { return (int32)AccountID; }
+	static int32 BreakAccountID(FAccountID AccountID) { return static_cast<int32>(AccountID); }
 
 protected:
 private:

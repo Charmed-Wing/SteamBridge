@@ -282,7 +282,7 @@ public:
 	 * @return ESteamLeaderboardDisplayType - The display type of the leaderboard. Returns k_ELeaderboardDisplayTypeNone if the leaderboard handle is invalid.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	ESteamLeaderboardDisplayType GetLeaderboardDisplayType(FSteamLeaderboard SteamLeaderboard) const { return (ESteamLeaderboardDisplayType)SteamUserStats()->GetLeaderboardDisplayType(SteamLeaderboard); }
+	ESteamLeaderboardDisplayType GetLeaderboardDisplayType(FSteamLeaderboard SteamLeaderboard) const { return static_cast<ESteamLeaderboardDisplayType>(SteamUserStats()->GetLeaderboardDisplayType(SteamLeaderboard)); }
 
 	/**
 	 * Returns the total number of entries in a leaderboard.
@@ -310,7 +310,7 @@ public:
 	 * @return ESteamLeaderboardSortMethod - The sort method of the leaderboard. Returns k_ELeaderboardSortMethodNone if the leaderboard handle is invalid.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	ESteamLeaderboardSortMethod GetLeaderboardSortMethod(FSteamLeaderboard SteamLeaderboard) const { return (ESteamLeaderboardSortMethod)SteamUserStats()->GetLeaderboardSortMethod(SteamLeaderboard); }
+	ESteamLeaderboardSortMethod GetLeaderboardSortMethod(FSteamLeaderboard SteamLeaderboard) const { return static_cast<ESteamLeaderboardSortMethod>(SteamUserStats()->GetLeaderboardSortMethod(SteamLeaderboard)); }
 
 	/**
 	 * Gets the info on the most achieved achievement for the game.
@@ -609,7 +609,7 @@ public:
 	 * The type must be AVGRATE in the Steamworks Partner backend.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UserStats")
-	bool UpdateAvgRateStat(const FString& Name, float CountThisSession, float SessionLength) const { return SteamUserStats()->UpdateAvgRateStat(TCHAR_TO_UTF8(*Name), CountThisSession, (double)SessionLength); }
+	bool UpdateAvgRateStat(const FString& Name, float CountThisSession, float SessionLength) const { return SteamUserStats()->UpdateAvgRateStat(TCHAR_TO_UTF8(*Name), CountThisSession, static_cast<double>(SessionLength)); }
 
 	/**
 	 * Uploads a user score to a specified leaderboard.

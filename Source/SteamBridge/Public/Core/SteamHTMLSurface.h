@@ -184,7 +184,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|HTMLSurface")
-	void KeyChar(FHHTMLBrowser BrowserHandle, int32 UnicodeChar, ESteamHTMLKeyModifiers HTMLKeyModifiers) { SteamHTMLSurface()->KeyChar(BrowserHandle, UnicodeChar, (ISteamHTMLSurface::EHTMLKeyModifiers)HTMLKeyModifiers); }
+	void KeyChar(FHHTMLBrowser BrowserHandle, int32 UnicodeChar, ESteamHTMLKeyModifiers HTMLKeyModifiers) { SteamHTMLSurface()->KeyChar(BrowserHandle, UnicodeChar, static_cast<ISteamHTMLSurface::EHTMLKeyModifiers>(HTMLKeyModifiers)); }
 
 	/**
 	 * keyboard interactions, native keycode is the virtual key code value from your OS
@@ -195,7 +195,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|HTMLSurface")
-	void KeyDown(FHHTMLBrowser BrowserHandle, int32 NativeKeyCode, ESteamHTMLKeyModifiers HTMLKeyModifiers) { SteamHTMLSurface()->KeyDown(BrowserHandle, NativeKeyCode, (ISteamHTMLSurface::EHTMLKeyModifiers)HTMLKeyModifiers); }
+	void KeyDown(FHHTMLBrowser BrowserHandle, int32 NativeKeyCode, ESteamHTMLKeyModifiers HTMLKeyModifiers) { SteamHTMLSurface()->KeyDown(BrowserHandle, NativeKeyCode, static_cast<ISteamHTMLSurface::EHTMLKeyModifiers>(HTMLKeyModifiers)); }
 
 	/**
 	 * keyboard interactions, native keycode is the virtual key code value from your OS
@@ -206,7 +206,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|HTMLSurface")
-	void KeyUp(FHHTMLBrowser BrowserHandle, int32 NativeKeyCode, ESteamHTMLKeyModifiers HTMLKeyModifiers) { SteamHTMLSurface()->KeyUp(BrowserHandle, NativeKeyCode, (ISteamHTMLSurface::EHTMLKeyModifiers)HTMLKeyModifiers); }
+	void KeyUp(FHHTMLBrowser BrowserHandle, int32 NativeKeyCode, ESteamHTMLKeyModifiers HTMLKeyModifiers) { SteamHTMLSurface()->KeyUp(BrowserHandle, NativeKeyCode, static_cast<ISteamHTMLSurface::EHTMLKeyModifiers>(HTMLKeyModifiers)); }
 
 	/**
 	 * Navigate to a specified URL.
@@ -231,7 +231,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|HTMLSurface")
-	void MouseDoubleClick(FHHTMLBrowser BrowserHandle, ESteamHTMLMouseButton MouseButton) { SteamHTMLSurface()->MouseDoubleClick(BrowserHandle, (ISteamHTMLSurface::EHTMLMouseButton)MouseButton); }
+	void MouseDoubleClick(FHHTMLBrowser BrowserHandle, ESteamHTMLMouseButton MouseButton) { SteamHTMLSurface()->MouseDoubleClick(BrowserHandle, static_cast<ISteamHTMLSurface::EHTMLMouseButton>(MouseButton)); }
 
 	/**
 	 * Tells an HTML surface that a mouse button has been pressed.
@@ -242,7 +242,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|HTMLSurface")
-	void MouseDown(FHHTMLBrowser BrowserHandle, ESteamHTMLMouseButton MouseButton) { SteamHTMLSurface()->MouseDown(BrowserHandle, (ISteamHTMLSurface::EHTMLMouseButton)MouseButton); }
+	void MouseDown(FHHTMLBrowser BrowserHandle, ESteamHTMLMouseButton MouseButton) { SteamHTMLSurface()->MouseDown(BrowserHandle, static_cast<ISteamHTMLSurface::EHTMLMouseButton>(MouseButton)); }
 
 	/**
 	 * Tells an HTML surface where the mouse is.
@@ -264,7 +264,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|HTMLSurface")
-	void MouseUp(FHHTMLBrowser BrowserHandle, ESteamHTMLMouseButton MouseButton) { SteamHTMLSurface()->MouseUp(BrowserHandle, (ISteamHTMLSurface::EHTMLMouseButton)MouseButton); }
+	void MouseUp(FHHTMLBrowser BrowserHandle, ESteamHTMLMouseButton MouseButton) { SteamHTMLSurface()->MouseUp(BrowserHandle, static_cast<ISteamHTMLSurface::EHTMLMouseButton>(MouseButton)); }
 
 	/**
 	 * Tells an HTML surface that the mouse wheel has moved.

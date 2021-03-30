@@ -31,14 +31,14 @@ USteamGameServer::~USteamGameServer()
 ESteamBeginAuthSessionResult USteamGameServer::BeginAuthSession(TArray<uint8> AuthTicket, FSteamID SteamID) const
 {
 	AuthTicket.SetNum(8192);
-	return (ESteamBeginAuthSessionResult)SteamGameServer()->BeginAuthSession(AuthTicket.GetData(), 8192, SteamID);
+	return static_cast<ESteamBeginAuthSessionResult>(SteamGameServer()->BeginAuthSession(AuthTicket.GetData(), 8192, SteamID));
 }
 
 FHAuthTicket USteamGameServer::GetAuthSessionTicket(TArray<uint8> &AuthTicket) const
 {
 	uint32 length = 0;
 	AuthTicket.SetNum(8192);
-	FHAuthTicket result = (FHAuthTicket)SteamGameServer()->GetAuthSessionTicket(AuthTicket.GetData(), 8192, &length);
+	FHAuthTicket result = static_cast<FHAuthTicket>(SteamGameServer()->GetAuthSessionTicket(AuthTicket.GetData(), 8192, &length));
 	AuthTicket.SetNum(length);
 	return result;
 }
@@ -53,12 +53,12 @@ FString USteamGameServer::GetPublicIP() const
 
 void USteamGameServer::OnAssociateWithClanResult(AssociateWithClanResult_t *pParam)
 {
-	m_OnAssociateWithClanResult.Broadcast((ESteamResult)pParam->m_eResult);
+	m_OnAssociateWithClanResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult));
 }
 
 void USteamGameServer::OnComputeNewPlayerCompatibilityResult(ComputeNewPlayerCompatibilityResult_t *pParam)
 {
-	m_OnComputeNewPlayerCompatibilityResult.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_cPlayersThatDontLikeCandidate, pParam->m_cPlayersThatCandidateDoesntLike,
+	m_OnComputeNewPlayerCompatibilityResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_cPlayersThatDontLikeCandidate, pParam->m_cPlayersThatCandidateDoesntLike,
 		pParam->m_cClanPlayersThatDontLikeCandidate, pParam->m_SteamIDCandidate.ConvertToUint64());
 }
 
@@ -69,7 +69,7 @@ void USteamGameServer::OnGSClientApprove(GSClientApprove_t *pParam)
 
 void USteamGameServer::OnGSClientDeny(GSClientDeny_t *pParam)
 {
-	m_OnGSClientDeny.Broadcast(pParam->m_SteamID.ConvertToUint64(), (ESteamDenyReason)pParam->m_eDenyReason, UTF8_TO_TCHAR(pParam->m_rgchOptionalText));
+	m_OnGSClientDeny.Broadcast(pParam->m_SteamID.ConvertToUint64(), static_cast<ESteamDenyReason>(pParam->m_eDenyReason), UTF8_TO_TCHAR(pParam->m_rgchOptionalText));
 }
 
 void USteamGameServer::OnGSClientGroupStatus(GSClientGroupStatus_t *pParam)
@@ -79,7 +79,7 @@ void USteamGameServer::OnGSClientGroupStatus(GSClientGroupStatus_t *pParam)
 
 void USteamGameServer::OnGSClientKick(GSClientKick_t *pParam)
 {
-	m_OnGSClientKick.Broadcast(pParam->m_SteamID.ConvertToUint64(), (ESteamDenyReason)pParam->m_eDenyReason);
+	m_OnGSClientKick.Broadcast(pParam->m_SteamID.ConvertToUint64(), static_cast<ESteamDenyReason>(pParam->m_eDenyReason));
 }
 
 void USteamGameServer::OnGSPolicyResponse(GSPolicyResponse_t *pParam)

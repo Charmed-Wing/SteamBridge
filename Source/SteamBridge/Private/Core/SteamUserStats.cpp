@@ -38,12 +38,12 @@ USteamUserStats::~USteamUserStats()
 
 FSteamAPICall USteamUserStats::DownloadLeaderboardEntries(FSteamLeaderboard SteamLeaderboard, ESteamLeaderboardDataRequest LeaderboardDataRequest, int32 RangeStart, int32 RangeEnd) const
 {
-	return SteamUserStats()->DownloadLeaderboardEntries(SteamLeaderboard, (ELeaderboardDataRequest)LeaderboardDataRequest, RangeStart, RangeEnd);
+	return SteamUserStats()->DownloadLeaderboardEntries(SteamLeaderboard, static_cast<ELeaderboardDataRequest>(LeaderboardDataRequest), RangeStart, RangeEnd);
 }
 
 FSteamAPICall USteamUserStats::FindOrCreateLeaderboard(const FString& LeaderboardName, ESteamLeaderboardSortMethod LeaderboardSortMethod, ESteamLeaderboardDisplayType LeaderboardDisplayType) const
 {
-	return SteamUserStats()->FindOrCreateLeaderboard(TCHAR_TO_UTF8(*LeaderboardName), (ELeaderboardSortMethod)LeaderboardSortMethod, (ELeaderboardDisplayType)LeaderboardDisplayType);
+	return SteamUserStats()->FindOrCreateLeaderboard(TCHAR_TO_UTF8(*LeaderboardName), static_cast<ELeaderboardSortMethod>(LeaderboardSortMethod), static_cast<ELeaderboardDisplayType>(LeaderboardDisplayType));
 }
 
 bool USteamUserStats::GetAchievementAndUnlockTime(const FString& Name, bool& bAchieved, FDateTime& UnlockTime) const
@@ -69,7 +69,7 @@ int32 USteamUserStats::GetGlobalStatHistoryFloat(const FString& StatName, TArray
 	int32 result = SteamUserStats()->GetGlobalStatHistory(TCHAR_TO_UTF8(*StatName), TmpData.GetData(), Size);
 	for (const auto& LData : TmpData)
 	{
-		Data.Add((float)LData);
+		Data.Add(static_cast<float>(LData));
 	}
 	return result;
 }
@@ -100,17 +100,17 @@ bool USteamUserStats::GetUserAchievementAndUnlockTime(FSteamID SteamIDUser, cons
 
 FSteamAPICall USteamUserStats::UploadLeaderboardScore(FSteamLeaderboard SteamLeaderboard, ESteamLeaderboardUploadScoreMethod LeaderboardUploadScoreMethod, int32 Score, const TArray<int32>& ScoreDetails) const
 {
-	return SteamUserStats()->UploadLeaderboardScore(SteamLeaderboard, (ELeaderboardUploadScoreMethod)LeaderboardUploadScoreMethod, Score, ScoreDetails.GetData(), ScoreDetails.Num());
+	return SteamUserStats()->UploadLeaderboardScore(SteamLeaderboard, static_cast<ELeaderboardUploadScoreMethod>(LeaderboardUploadScoreMethod), Score, ScoreDetails.GetData(), ScoreDetails.Num());
 }
 
 void USteamUserStats::OnGlobalAchievementPercentagesReady(GlobalAchievementPercentagesReady_t* pParam)
 {
-	m_OnGlobalAchievementPercentagesReady.Broadcast(pParam->m_nGameID, (ESteamResult)pParam->m_eResult);
+	m_OnGlobalAchievementPercentagesReady.Broadcast(pParam->m_nGameID, static_cast<ESteamResult>(pParam->m_eResult));
 }
 
 void USteamUserStats::OnGlobalStatsReceived(GlobalStatsReceived_t* pParam)
 {
-	m_OnGlobalStatsReceived.Broadcast(pParam->m_nGameID, (ESteamResult)pParam->m_eResult);
+	m_OnGlobalStatsReceived.Broadcast(pParam->m_nGameID, static_cast<ESteamResult>(pParam->m_eResult));
 }
 
 void USteamUserStats::OnLeaderboardFindResult(LeaderboardFindResult_t* pParam)
@@ -130,7 +130,7 @@ void USteamUserStats::OnLeaderboardScoreUploaded(LeaderboardScoreUploaded_t* pPa
 
 void USteamUserStats::OnLeaderboardUGCSet(LeaderboardUGCSet_t* pParam)
 {
-	m_OnLeaderboardUGCSet.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_hSteamLeaderboard);
+	m_OnLeaderboardUGCSet.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_hSteamLeaderboard);
 }
 
 void USteamUserStats::OnNumberOfCurrentPlayers(NumberOfCurrentPlayers_t* pParam)
@@ -150,12 +150,12 @@ void USteamUserStats::OnUserAchievementStored(UserAchievementStored_t* pParam)
 
 void USteamUserStats::OnUserStatsReceived(UserStatsReceived_t* pParam)
 {
-	m_OnUserStatsReceived.Broadcast(pParam->m_nGameID, (ESteamResult)pParam->m_eResult, pParam->m_steamIDUser.ConvertToUint64());
+	m_OnUserStatsReceived.Broadcast(pParam->m_nGameID, static_cast<ESteamResult>(pParam->m_eResult), pParam->m_steamIDUser.ConvertToUint64());
 }
 
 void USteamUserStats::OnUserStatsStored(UserStatsStored_t* pParam)
 {
-	m_OnUserStatsStored.Broadcast(pParam->m_nGameID, (ESteamResult)pParam->m_eResult);
+	m_OnUserStatsStored.Broadcast(pParam->m_nGameID, static_cast<ESteamResult>(pParam->m_eResult));
 }
 
 void USteamUserStats::OnUserStatsUnloaded(UserStatsUnloaded_t* pParam)

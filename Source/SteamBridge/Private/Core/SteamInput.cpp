@@ -30,7 +30,7 @@ int32 USteamInput::GetActiveActionSetLayers(FInputHandle InputHandle, TArray<FIn
 FSteamInputAnalogActionData USteamInput::GetAnalogActionData(FInputHandle InputHandle, FInputActionSetHandle ActionSetLayerHandle) const
 {
 	InputAnalogActionData_t data = SteamInput()->GetAnalogActionData(InputHandle, ActionSetLayerHandle);
-	return {(ESteamControllerSourceMode)data.eMode, data.x, data.y, data.bActive};
+	return {static_cast<ESteamControllerSourceMode>(data.eMode), data.x, data.y, data.bActive};
 }
 
 int32 USteamInput::GetAnalogActionOrigins(FInputHandle InputHandle, FInputActionSetHandle ActionSetHandle, FInputAnalogActionHandle AnalogActionHandle, TArray<ESteamInputActionOrigin>& Origins)
@@ -40,7 +40,7 @@ int32 USteamInput::GetAnalogActionOrigins(FInputHandle InputHandle, FInputAction
 
 	for (int32 i = 0; i < result; i++)
 	{
-		Origins.Add((ESteamInputActionOrigin)Tmp[i]);
+		Origins.Add(static_cast<ESteamInputActionOrigin>(Tmp[i]));
 	}
 
 	return result;
@@ -72,7 +72,7 @@ int32 USteamInput::GetDigitalActionOrigins(FInputHandle InputHandle, FInputActio
 
 	for (int32 i = 0; i < result; i++)
 	{
-		Origins.Add((ESteamInputActionOrigin)Tmp[i]);
+		Origins.Add(static_cast<ESteamInputActionOrigin>(Tmp[i]));
 	}
 
 	return result;
@@ -89,7 +89,7 @@ void USteamInput::SetLEDColorU(FInputHandle InputHandle, uint8 R, uint8 G, uint8
 	int Tmp = 0;
 	for (int i = 0; i < Flags.Num(); i++)
 	{
-		Tmp |= 1 << (uint8)Flags[i];
+		Tmp |= 1 << static_cast<uint8>(Flags[i]);
 	}
 	SteamInput()->SetLEDColor(InputHandle, R, G, B, Tmp);
 }
@@ -99,7 +99,7 @@ void USteamInput::SetLEDColor(FInputHandle InputHandle, const FLinearColor& Colo
 	int Tmp = 0;
 	for (int i = 0; i < Flags.Num(); i++)
 	{
-		Tmp |= 1 << (uint8)Flags[i];
+		Tmp |= 1 << static_cast<uint8>(Flags[i]);
 	}
 	SteamInput()->SetLEDColor(InputHandle, Color.R, Color.G, Color.B, Tmp);
 }

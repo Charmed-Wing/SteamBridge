@@ -373,15 +373,15 @@ struct STEAMBRIDGE_API FSteamItemDetails
 		ItemID = details.m_itemId;
 		Definition = details.m_iDefinition;
 		Quantity = details.m_unQuantity;
-		if (details.m_unFlags & 1 << (int32)ESteamItemFlags_::NoTrade)
+		if (details.m_unFlags & 1 << static_cast<int32>(ESteamItemFlags_::NoTrade))
 		{
 			Flags.Add(ESteamItemFlags_::NoTrade);
 		}
-		if (details.m_unFlags & 1 << (int32)ESteamItemFlags_::ItemRemoved)
+		if (details.m_unFlags & 1 << static_cast<int32>(ESteamItemFlags_::ItemRemoved))
 		{
 			Flags.Add(ESteamItemFlags_::ItemRemoved);
 		}
-		if (details.m_unFlags & 1 << (int32)ESteamItemFlags_::ItemConsumed)
+		if (details.m_unFlags & 1 << static_cast<int32>(ESteamItemFlags_::ItemConsumed))
 		{
 			Flags.Add(ESteamItemFlags_::ItemConsumed);
 		}
@@ -405,7 +405,7 @@ struct STEAMBRIDGE_API FSteamPartyBeaconLocation
 	operator SteamPartyBeaconLocation_t() const
 	{
 		SteamPartyBeaconLocation_t beacon;
-		beacon.m_eType = (ESteamPartyBeaconLocationType)Type;
+		beacon.m_eType = static_cast<ESteamPartyBeaconLocationType>(Type);
 		beacon.m_ulLocationID = LocationID;
 		return beacon;
 	}
@@ -414,7 +414,7 @@ struct STEAMBRIDGE_API FSteamPartyBeaconLocation
 	FSteamPartyBeaconLocation(ESteamPartyBeaconLocation type, uint64 id) :
 		Type(type), LocationID(id) {}
 	FSteamPartyBeaconLocation(const SteamPartyBeaconLocation_t& type) :
-		Type((ESteamPartyBeaconLocation)type.m_eType), LocationID(type.m_ulLocationID) {}
+		Type(static_cast<ESteamPartyBeaconLocation>(type.m_eType)), LocationID(type.m_ulLocationID) {}
 
 	bool operator==(const FSteamPartyBeaconLocation& Other) const { return Type == Other.Type && LocationID == Other.LocationID; }
 	bool operator!=(const FSteamPartyBeaconLocation& Other) const { return !(*this == Other); }
@@ -537,7 +537,7 @@ struct STEAMBRIDGE_API FSteamUGCDetails
 		PublishedFileId(0), Result(ESteamResult::None), FileType(ESteamWorkshopFileType::Max), CreatorAppID(0), ConsumerAppID(0), Title(""), Description(""), SteamIDOwner(0), TimeCreated(FDateTime::Now()), TimeUpdated(FDateTime::Now()), TimeAddedToUserList(FDateTime::Now()), Visibility(ESteamRemoteStoragePublishedFileVisibility::Public), bBanned(false), bAcceptedForUse(false), bTagsTruncated(false), Tags({}), File(0), PreviewFile(0), FileName(""), FileSize(0), PreviewFileSize(0), URL(""), VotesUp(0), VotesDown(0), Score(0.0f), NumChildren(0) {}
 
 	FSteamUGCDetails(const SteamUGCDetails_t& data) :
-		PublishedFileId(data.m_nPublishedFileId), Result((ESteamResult)data.m_eResult), FileType((ESteamWorkshopFileType)data.m_eFileType), CreatorAppID(data.m_nCreatorAppID), ConsumerAppID(data.m_nConsumerAppID), Title(FString(UTF8_TO_TCHAR(data.m_rgchTitle))), Description(FString(UTF8_TO_TCHAR(data.m_rgchDescription))), SteamIDOwner(data.m_ulSteamIDOwner), TimeCreated(FDateTime::FromUnixTimestamp(data.m_rtimeCreated)), TimeUpdated(FDateTime::FromUnixTimestamp(data.m_rtimeUpdated)), TimeAddedToUserList(FDateTime::FromUnixTimestamp(data.m_rtimeAddedToUserList)), Visibility((ESteamRemoteStoragePublishedFileVisibility)data.m_eVisibility), bBanned(data.m_bBanned), bAcceptedForUse(data.m_bAcceptedForUse), bTagsTruncated(data.m_bTagsTruncated), File(data.m_hFile), PreviewFile(data.m_hPreviewFile), FileName(data.m_pchFileName), FileSize(data.m_nFileSize), PreviewFileSize(data.m_nPreviewFileSize), URL(UTF8_TO_TCHAR(data.m_rgchURL)), VotesUp(data.m_unVotesUp), VotesDown(data.m_unVotesDown), Score(data.m_flScore), NumChildren(data.m_unNumChildren)
+		PublishedFileId(data.m_nPublishedFileId), Result(static_cast<ESteamResult>(data.m_eResult)), FileType(static_cast<ESteamWorkshopFileType>(data.m_eFileType)), CreatorAppID(data.m_nCreatorAppID), ConsumerAppID(data.m_nConsumerAppID), Title(FString(UTF8_TO_TCHAR(data.m_rgchTitle))), Description(FString(UTF8_TO_TCHAR(data.m_rgchDescription))), SteamIDOwner(data.m_ulSteamIDOwner), TimeCreated(FDateTime::FromUnixTimestamp(data.m_rtimeCreated)), TimeUpdated(FDateTime::FromUnixTimestamp(data.m_rtimeUpdated)), TimeAddedToUserList(FDateTime::FromUnixTimestamp(data.m_rtimeAddedToUserList)), Visibility(static_cast<ESteamRemoteStoragePublishedFileVisibility>(data.m_eVisibility)), bBanned(data.m_bBanned), bAcceptedForUse(data.m_bAcceptedForUse), bTagsTruncated(data.m_bTagsTruncated), File(data.m_hFile), PreviewFile(data.m_hPreviewFile), FileName(data.m_pchFileName), FileSize(data.m_nFileSize), PreviewFileSize(data.m_nPreviewFileSize), URL(UTF8_TO_TCHAR(data.m_rgchURL)), VotesUp(data.m_unVotesUp), VotesDown(data.m_unVotesDown), Score(data.m_flScore), NumChildren(data.m_unNumChildren)
 	{
 		FString(UTF8_TO_TCHAR(data.m_rgchTags)).ParseIntoArray(Tags, TEXT(","), true);
 	}
