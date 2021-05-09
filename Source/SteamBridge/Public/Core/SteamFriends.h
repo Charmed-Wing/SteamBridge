@@ -14,7 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnAvatarImageLoadedDelegate, FSte
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnClanOfficerListResponseDelegate, FSteamID, SteamID, int32, OfficersCount, bool, bSuccess);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDownloadClanActivityCountsResultDelegate, bool, bSuccess);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnFriendRichPresenceUpdateDelegate, FSteamID, SteamID, int32, AppID);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnFriendsEnumerateFollowingListDelegate, ESteamResult, Result, TArray<FSteamID>, SteamIDs, int32, ResultsReturned, int32, TotalResults);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnFriendsEnumerateFollowingListDelegate, ESteamResult, Result, const TArray<FSteamID>&, SteamIDs, int32, ResultsReturned, int32, TotalResults);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnFriendsGetFollowerCountDelegate, ESteamResult, Result, FSteamID, SteamID, int32, Count);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnFriendsIsFollowingDelegate, ESteamResult, Result, FSteamID, SteamID, bool, bIsFollowing);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnGameConnectedChatJoinDelegate, FSteamID, SteamIDClanChat, FSteamID, SteamIDUser);
@@ -301,10 +301,10 @@ public:
 	 * Gets the timestamp of when the user played with someone on their recently-played-with list.
 	 *
 	 * @param FSteamID SteamIDFriend - The Steam ID of the user on the recently-played-with list to get the timestamp for.
-	 * @return int32 - The time is provided in Unix epoch format (seconds since Jan 1st 1970). Steam IDs not in the recently-played-with list return 0.
+	 * @return FDateTime - The time is provided in a friendly format. Steam IDs not in the recently-played-with list return 0.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Friends")
-	int32 GetFriendCoplayTime(FSteamID SteamIDFriend) const { return SteamFriends()->GetFriendCoplayTime(SteamIDFriend); }
+	FDateTime GetFriendCoplayTime(FSteamID SteamIDFriend) const { return FDateTime::FromUnixTimestamp(SteamFriends()->GetFriendCoplayTime(SteamIDFriend)); }
 
 	/**
 	 * Gets the number of users the client knows about who meet a specified criteria. (Friends, blocked, users on the same server, etc)
