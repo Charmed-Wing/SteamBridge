@@ -33,7 +33,7 @@ public:
 		{
 			return FString("Invalid");
 		}
-		return enumPtr->GetNameByValue((int64)Value).ToString();
+		return enumPtr->GetNameByValue(static_cast<int64>(Value)).ToString();
 	}
 
 	static FString GetEnumValueAsStringParsed(const FString& Data)

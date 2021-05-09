@@ -42,7 +42,7 @@ int32 USteamMatchmaking::AddFavoriteGame(int32 AppID, const FString& IP, int32 C
 	int32 TmpFlags = 0;
 	for (const auto& Flag : Flags)
 	{
-		TmpFlags |= 1 << (int32)Flag;
+		TmpFlags |= 1 << static_cast<int32>(Flag);
 	}
 
 	return SteamMatchmaking()->AddFavoriteGame(AppID, TmpIP, ConnPort, QueryPort, TmpFlags, TimeLastPlayedOnServer.ToUnixTimestamp());
@@ -60,7 +60,7 @@ bool USteamMatchmaking::GetFavoriteGame(int32 GameIndex, int32& AppID, FString& 
 	{
 		if (TmpFlags & 1 << i)
 		{
-			Flags.Add((ESteamFavoriteFlags)i);
+			Flags.Add(static_cast<ESteamFavoriteFlags>(i));
 		}
 	}
 
@@ -77,7 +77,7 @@ int32 USteamMatchmaking::GetLobbyChatEntry(FSteamID SteamIDLobby, int32 ChatID, 
 	int32 Result = SteamMatchmaking()->GetLobbyChatEntry(SteamIDLobby, ChatID, &TmpUserSteamID, MessageBuffer.GetData(), 8192, &TmpType);
 
 	SteamIDUser = TmpUserSteamID.ConvertToUint64();
-	ChatEntryType = (ESteamChatEntryType)TmpType;
+	ChatEntryType = static_cast<ESteamChatEntryType>(TmpType);
 
 	FMemoryReader MemReader(MessageBuffer, true);
 	MemReader << Message;
@@ -116,7 +116,7 @@ bool USteamMatchmaking::RemoveFavoriteGame(int32 AppID, const FString& IP, int32
 	int32 TmpFlags = 0;
 	for (const auto& Flag : Flags)
 	{
-		TmpFlags |= 1 << (int32)Flag;
+		TmpFlags |= 1 << static_cast<int32>(Flag);
 	}
 
 	return SteamMatchmaking()->RemoveFavoriteGame(AppID, TmpIP, ConnPort, QueryPort, TmpFlags);
@@ -142,7 +142,7 @@ void USteamMatchmaking::SetLobbyGameServer(FSteamID SteamIDLobby, const FString&
 
 void USteamMatchmaking::OnFavoritesListAccountsUpdated(FavoritesListAccountsUpdated_t* pParam)
 {
-	m_OnFavoritesListAccountsUpdated.Broadcast((ESteamResult)pParam->m_eResult);
+	m_OnFavoritesListAccountsUpdated.Broadcast(static_cast<ESteamResult>(pParam->m_eResult));
 }
 
 void USteamMatchmaking::OnFavoritesListChanged(FavoritesListChanged_t* pParam)
@@ -153,7 +153,7 @@ void USteamMatchmaking::OnFavoritesListChanged(FavoritesListChanged_t* pParam)
 	{
 		if (TmpFlags & 1 << i)
 		{
-			Flags.Add((ESteamFavoriteFlags)i);
+			Flags.Add(static_cast<ESteamFavoriteFlags>(i));
 		}
 	}
 	m_OnFavoritesListChanged.Broadcast(USteamBridgeUtils::ConvertIPToString(pParam->m_nIP), pParam->m_nQueryPort, pParam->m_nConnPort, pParam->m_nAppID, Flags, pParam->m_bAdd, pParam->m_unAccountId);
@@ -161,7 +161,7 @@ void USteamMatchmaking::OnFavoritesListChanged(FavoritesListChanged_t* pParam)
 
 void USteamMatchmaking::OnLobbyChatMsg(LobbyChatMsg_t* pParam)
 {
-	m_OnLobbyChatMsg.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_ulSteamIDUser, (ESteamChatEntryType)pParam->m_eChatEntryType, pParam->m_iChatID);
+	m_OnLobbyChatMsg.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_ulSteamIDUser, static_cast<ESteamChatEntryType>(pParam->m_eChatEntryType), pParam->m_iChatID);
 }
 
 void USteamMatchmaking::OnLobbyChatUpdate(LobbyChatUpdate_t* pParam)
@@ -172,7 +172,7 @@ void USteamMatchmaking::OnLobbyChatUpdate(LobbyChatUpdate_t* pParam)
 	{
 		if (TmpFlags & 1 << i)
 		{
-			Flags.Add((ESteamChatMemberStateChange)i);
+			Flags.Add(static_cast<ESteamChatMemberStateChange>(i));
 		}
 	}
 	m_OnLobbyChatUpdate.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_ulSteamIDUserChanged, pParam->m_ulSteamIDMakingChange, Flags);
@@ -180,7 +180,7 @@ void USteamMatchmaking::OnLobbyChatUpdate(LobbyChatUpdate_t* pParam)
 
 void USteamMatchmaking::OnLobbyCreated(LobbyCreated_t* pParam)
 {
-	m_OnLobbyCreated.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_ulSteamIDLobby);
+	m_OnLobbyCreated.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_ulSteamIDLobby);
 }
 
 void USteamMatchmaking::OnLobbyDataUpdate(LobbyDataUpdate_t* pParam)
@@ -190,7 +190,7 @@ void USteamMatchmaking::OnLobbyDataUpdate(LobbyDataUpdate_t* pParam)
 
 void USteamMatchmaking::OnLobbyEnter(LobbyEnter_t* pParam)
 {
-	m_OnLobbyEnter.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_bLocked, (ESteamChatRoomEnterResponse)pParam->m_EChatRoomEnterResponse);
+	m_OnLobbyEnter.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_bLocked, static_cast<ESteamChatRoomEnterResponse>(pParam->m_EChatRoomEnterResponse));
 }
 
 void USteamMatchmaking::OnLobbyGameCreated(LobbyGameCreated_t* pParam)

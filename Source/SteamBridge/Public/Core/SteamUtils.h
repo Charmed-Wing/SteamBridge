@@ -52,7 +52,7 @@ public:
 	 * @return ESteamAPICallFailure_
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Utils")
-	ESteamAPICallFailure_ GetAPICallFailureReason(FSteamAPICall SteamAPICall) const { return (ESteamAPICallFailure_)((uint8)SteamUtils()->GetAPICallFailureReason(SteamAPICall) - 1); }
+	ESteamAPICallFailure_ GetAPICallFailureReason(FSteamAPICall SteamAPICall) const { return static_cast<ESteamAPICallFailure_>(static_cast<uint8>(SteamUtils()->GetAPICallFailureReason(SteamAPICall)) - 1); }
 
 	// #TODO: GetAPICallResult
 
@@ -70,7 +70,7 @@ public:
 	 * @return ESteamUniverse
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Utils")
-	ESteamUniverse GetConnectedUniverse() const { return (ESteamUniverse)SteamUtils()->GetConnectedUniverse(); }
+	ESteamUniverse GetConnectedUniverse() const { return static_cast<ESteamUniverse>(SteamUtils()->GetConnectedUniverse()); }
 
 	/**
 	 * Gets the IP of the reporting server for valve - currently only used in Source engine games
@@ -271,7 +271,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Utils")
-	void SetOverlayNotificationPosition(ESteamNotificationPosition NotificationPosition) { SteamUtils()->SetOverlayNotificationPosition((ENotificationPosition)NotificationPosition); }
+	void SetOverlayNotificationPosition(ESteamNotificationPosition NotificationPosition) { SteamUtils()->SetOverlayNotificationPosition(static_cast<ENotificationPosition>(NotificationPosition)); }
 
 	/**
 	 * Set whether the HMD content will be streamed via Steam Remote Play.

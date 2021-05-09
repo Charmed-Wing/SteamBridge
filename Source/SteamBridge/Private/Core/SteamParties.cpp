@@ -42,7 +42,7 @@ FSteamAPICall USteamParties::CreateBeacon(int32 OpenSlots, FSteamPartyBeaconLoca
 {
 	SteamPartyBeaconLocation_t TmpLocation;
 	FSteamAPICall result = SteamParties()->CreateBeacon(OpenSlots, &TmpLocation, TCHAR_TO_UTF8(*ConnectString), TCHAR_TO_UTF8(*Metadata));
-	BeaconLocation = {(ESteamPartyBeaconLocation)TmpLocation.m_eType, TmpLocation.m_ulLocationID};
+	BeaconLocation = {static_cast<ESteamPartyBeaconLocation>(TmpLocation.m_eType), TmpLocation.m_ulLocationID};
 	return result;
 }
 
@@ -61,19 +61,19 @@ bool USteamParties::GetBeaconDetails(FPartyBeaconID BeaconID, FSteamID& SteamIDB
 bool USteamParties::GetBeaconLocationData(FSteamPartyBeaconLocation BeaconLocation, ESteamPartyBeaconLocationData_ LocationData, FString& DataString) const
 {
 	TArray<char> TmpData;
-	bool bResult = SteamParties()->GetBeaconLocationData(BeaconLocation, (ESteamPartyBeaconLocationData)LocationData, TmpData.GetData(), 8192);  // Might not be the smartest to hardcode
+	bool bResult = SteamParties()->GetBeaconLocationData(BeaconLocation, static_cast<ESteamPartyBeaconLocationData>(LocationData), TmpData.GetData(), 8192);  // Might not be the smartest to hardcode
 	DataString = UTF8_TO_TCHAR(TmpData.GetData());
 	return bResult;
 }
 
 void USteamParties::OnJoinParty(JoinPartyCallback_t* pParam)
 {
-	m_OnJoinParty.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_ulBeaconID, pParam->m_SteamIDBeaconOwner.ConvertToUint64(), UTF8_TO_TCHAR(pParam->m_rgchConnectString));
+	m_OnJoinParty.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_ulBeaconID, pParam->m_SteamIDBeaconOwner.ConvertToUint64(), UTF8_TO_TCHAR(pParam->m_rgchConnectString));
 }
 
 void USteamParties::OnCreateBeacon(CreateBeaconCallback_t* pParam)
 {
-	m_OnCreateBeacon.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_ulBeaconID);
+	m_OnCreateBeacon.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_ulBeaconID);
 }
 
 void USteamParties::OnReservationNotification(ReservationNotificationCallback_t* pParam)
@@ -83,7 +83,7 @@ void USteamParties::OnReservationNotification(ReservationNotificationCallback_t*
 
 void USteamParties::OnChangeNumOpenSlots(ChangeNumOpenSlotsCallback_t* pParam)
 {
-	m_OnChangeNumOpenSlots.Broadcast((ESteamResult)pParam->m_eResult);
+	m_OnChangeNumOpenSlots.Broadcast(static_cast<ESteamResult>(pParam->m_eResult));
 }
 
 void USteamParties::OnAvailableBeaconLocationsUpdated(AvailableBeaconLocationsUpdated_t* pParam)

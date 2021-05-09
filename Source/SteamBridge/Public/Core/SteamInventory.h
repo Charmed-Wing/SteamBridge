@@ -296,7 +296,7 @@ public:
 	 *  k_EResultFail - ERROR: Generic error.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Inventory")
-	ESteamResult GetResultStatus(FSteamInventoryResult ResultHandle) const { return (ESteamResult)SteamInventory()->GetResultStatus(ResultHandle); }
+	ESteamResult GetResultStatus(FSteamInventoryResult ResultHandle) const { return static_cast<ESteamResult>(SteamInventory()->GetResultStatus(ResultHandle)); }
 
 	/**
 	 * Gets the server time at which the result was generated.

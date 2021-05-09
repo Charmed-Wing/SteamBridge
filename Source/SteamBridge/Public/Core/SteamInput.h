@@ -194,7 +194,7 @@ public:
 	 * @return FString
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Input")
-	FString GetGlyphForActionOrigin(ESteamInputActionOrigin Origin) const { return UTF8_TO_TCHAR(SteamInput()->GetGlyphForActionOrigin((EInputActionOrigin)Origin)); }
+	FString GetGlyphForActionOrigin(ESteamInputActionOrigin Origin) const { return UTF8_TO_TCHAR(SteamInput()->GetGlyphForActionOrigin(static_cast<EInputActionOrigin>(Origin))); }
 
 	/**
 	 * Returns the input type (device model) for the specified controller. This tells you if a given controller is a Steam controller, XBox 360 controller, PS4 controller, etc.
@@ -203,7 +203,7 @@ public:
 	 * @return ESteamInputType_
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Input")
-	ESteamInputType_ GetInputTypeForHandle(FInputHandle InputHandle) const { return (ESteamInputType_)SteamInput()->GetInputTypeForHandle(InputHandle); }
+	ESteamInputType_ GetInputTypeForHandle(FInputHandle InputHandle) const { return static_cast<ESteamInputType_>(SteamInput()->GetInputTypeForHandle(InputHandle)); }
 
 	/**
 	 * Returns raw motion data for the specified controller.
@@ -221,7 +221,7 @@ public:
 	 * @return FString
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Input")
-	FString GetStringForActionOrigin(ESteamInputActionOrigin Origin) const { return SteamInput()->GetStringForActionOrigin((EInputActionOrigin)Origin); }
+	FString GetStringForActionOrigin(ESteamInputActionOrigin Origin) const { return SteamInput()->GetStringForActionOrigin(static_cast<EInputActionOrigin>(Origin)); }
 
 	/**
 	 * Must be called when starting use of the ISteamInput interface.
@@ -309,7 +309,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Input")
-	void TriggerHapticPulse(FInputHandle InputHandle, ESteamControllerPad_ TargetPad, int32 DurationMicroSec) { SteamInput()->TriggerHapticPulse(InputHandle, (ESteamControllerPad)TargetPad, DurationMicroSec); }
+	void TriggerHapticPulse(FInputHandle InputHandle, ESteamControllerPad_ TargetPad, int32 DurationMicroSec) { SteamInput()->TriggerHapticPulse(InputHandle, static_cast<ESteamControllerPad>(TargetPad), DurationMicroSec); }
 
 	/**
 	 * Triggers a repeated haptic pulse on supported controllers.
@@ -326,7 +326,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Input")
-	void TriggerRepeatedHapticPulse(FInputHandle InputHandle, ESteamControllerPad_ TargetPad, int32 DurationMicroSec, int32 OffMicroSec, int32 Repeat) { SteamInput()->TriggerRepeatedHapticPulse(InputHandle, (ESteamControllerPad)TargetPad, DurationMicroSec, OffMicroSec, Repeat, 0); }
+	void TriggerRepeatedHapticPulse(FInputHandle InputHandle, ESteamControllerPad_ TargetPad, int32 DurationMicroSec, int32 OffMicroSec, int32 Repeat) { SteamInput()->TriggerRepeatedHapticPulse(InputHandle, static_cast<ESteamControllerPad>(TargetPad), DurationMicroSec, OffMicroSec, Repeat, 0); }
 
 	/**
 	 * Trigger a vibration event on supported controllers.
@@ -350,7 +350,7 @@ public:
 	 * @return ESteamInputActionOrigin
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Input")
-	ESteamInputActionOrigin GetActionOriginFromXboxOrigin(FInputHandle InputHandle, ESteamXboxOrigin Origin) const { return (ESteamInputActionOrigin)SteamInput()->GetActionOriginFromXboxOrigin(InputHandle, (EXboxOrigin)Origin); }
+	ESteamInputActionOrigin GetActionOriginFromXboxOrigin(FInputHandle InputHandle, ESteamXboxOrigin Origin) const { return static_cast<ESteamInputActionOrigin>(SteamInput()->GetActionOriginFromXboxOrigin(InputHandle, static_cast<EXboxOrigin>(Origin))); }
 
 	/**
 	 * Get the equivalent origin for a given controller type or the closest controller type that existed in the SDK you built into your game if eDestinationInputType is k_ESteamInputType_Unknown. This action origin -
@@ -361,7 +361,7 @@ public:
 	 * @return ESteamInputActionOrigin
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Input")
-	ESteamInputActionOrigin TranslateActionOrigin(ESteamInputType_ DestinationInputType, ESteamInputActionOrigin SourceOrigin) const { return (ESteamInputActionOrigin)SteamInput()->TranslateActionOrigin((ESteamInputType)DestinationInputType, (EInputActionOrigin)SourceOrigin); }
+	ESteamInputActionOrigin TranslateActionOrigin(ESteamInputType_ DestinationInputType, ESteamInputActionOrigin SourceOrigin) const { return static_cast<ESteamInputActionOrigin>(SteamInput()->TranslateActionOrigin(static_cast<ESteamInputType>(DestinationInputType), static_cast<EInputActionOrigin>(SourceOrigin))); }
 
 	/**
 	 * Gets the major and minor device binding revisions for Steam Input API configurations. Major revisions are to be used when changing the number of action sets or otherwise reworking configurations to the degree -

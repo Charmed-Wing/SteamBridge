@@ -71,7 +71,7 @@ public:
 	 * @return ESteamDeviceFormFactor_ - The form factor of the device associated with the Remote Play session, or k_ESteamDeviceFormFactorUnknown if the session ID is not valid.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|RemotePlay")
-	ESteamDeviceFormFactor_ GetSessionClientFormFactor(int32 SessionID) const { return (ESteamDeviceFormFactor_)SteamRemotePlay()->GetSessionClientFormFactor(SessionID); }
+	ESteamDeviceFormFactor_ GetSessionClientFormFactor(int32 SessionID) const { return static_cast<ESteamDeviceFormFactor_>(SteamRemotePlay()->GetSessionClientFormFactor(SessionID)); }
 
 	/**
 	 * Get the resolution, in pixels, of the session client device. This is set to 0x0 if the resolution is not available.

@@ -24,7 +24,7 @@ FScreenshotHandle USteamScreenshots::AddScreenshotToLibrary(const FString& FileN
 
 FScreenshotHandle USteamScreenshots::AddVRScreenshotToLibrary(ESteamVRScreenshotType Type, const FString& FileName, const FString& VRFileName) const
 {
-	return SteamScreenshots()->AddVRScreenshotToLibrary((EVRScreenshotType)Type, TCHAR_TO_UTF8(*FileName), TCHAR_TO_UTF8(*VRFileName));
+	return SteamScreenshots()->AddVRScreenshotToLibrary(static_cast<EVRScreenshotType>(Type), TCHAR_TO_UTF8(*FileName), TCHAR_TO_UTF8(*VRFileName));
 }
 
 FScreenshotHandle USteamScreenshots::WriteScreenshot(UTexture2D* Image) const
@@ -36,7 +36,7 @@ FScreenshotHandle USteamScreenshots::WriteScreenshot(UTexture2D* Image) const
 
 void USteamScreenshots::OnScreenshotReady(ScreenshotReady_t* pParam)
 {
-	m_OnScreenshotReady.Broadcast(pParam->m_hLocal, (ESteamResult)pParam->m_eResult);
+	m_OnScreenshotReady.Broadcast(pParam->m_hLocal, static_cast<ESteamResult>(pParam->m_eResult));
 }
 
 void USteamScreenshots::OnScreenshotRequested(ScreenshotRequested_t* pParam)

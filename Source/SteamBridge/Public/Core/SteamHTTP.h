@@ -55,7 +55,7 @@ public:
 	 * @return FHTTPRequestHandle - Returns a new request handle to be used with future calls to SteamHTTP functions. Returns INVALID_HTTPREQUEST_HANDLE if pchAbsoluteURL is NULL or empty ("").
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|HTTP")
-	FHTTPRequestHandle CreateHTTPRequest(ESteamHTTPMethod HTTPRequestMethod, const FString& AbsoluteURL) const { return SteamHTTP()->CreateHTTPRequest((EHTTPMethod)HTTPRequestMethod, TCHAR_TO_UTF8(*AbsoluteURL)); }
+	FHTTPRequestHandle CreateHTTPRequest(ESteamHTTPMethod HTTPRequestMethod, const FString& AbsoluteURL) const { return SteamHTTP()->CreateHTTPRequest(static_cast<EHTTPMethod>(HTTPRequestMethod), TCHAR_TO_UTF8(*AbsoluteURL)); }
 
 	/**
 	 * Defers a request which has already been sent by moving it at the back of the queue.

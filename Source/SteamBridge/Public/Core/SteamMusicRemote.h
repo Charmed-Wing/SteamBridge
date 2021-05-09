@@ -126,7 +126,7 @@ public:
 	bool UpdateLooped(bool bValue) const { return SteamMusicRemote()->UpdateLooped(bValue); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool UpdatePlaybackStatus(ESteamAudioPlaybackStatus Status) const { return SteamMusicRemote()->UpdatePlaybackStatus((AudioPlayback_Status)Status); }
+	bool UpdatePlaybackStatus(ESteamAudioPlaybackStatus Status) const { return SteamMusicRemote()->UpdatePlaybackStatus(static_cast<AudioPlayback_Status>(Status)); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
 	bool UpdateShuffled(bool bValue) const { return SteamMusicRemote()->UpdateShuffled(bValue); }

@@ -83,7 +83,7 @@ bool USteamInventory::GetEligiblePromoItemDefinitionIDs(FSteamID SteamID, TArray
 		TmpArray.SetNum(TmpCount);
 		bool result = SteamInventory()->GetEligiblePromoItemDefinitionIDs(SteamID, TmpArray.GetData(), &TmpCount);
 
-		for (int32 i = 0; i < (int32)TmpCount; i++)
+		for (int32 i = 0; i < static_cast<int32>(TmpCount); i++)
 		{
 			Items.Add(TmpArray[i]);
 		}
@@ -102,7 +102,7 @@ bool USteamInventory::GetItemDefinitionIDs(TArray<FSteamItemDef>& Items) const
 		TmpArray.SetNum(TmpCount);
 		bool result = SteamInventory()->GetItemDefinitionIDs(TmpArray.GetData(), &TmpCount);
 
-		for (int32 i = 0; i < (int32)TmpCount; i++)
+		for (int32 i = 0; i < static_cast<int32>(TmpCount); i++)
 		{
 			Items.Add(TmpArray[i]);
 		}
@@ -155,7 +155,7 @@ bool USteamInventory::GetItemsWithPrices(TArray<FSteamItemPriceData>& ItemData) 
 	{
 		for (int32 i = 0; i < Size; i++)
 		{
-			ItemData.Add({TmpItems[i], (int64)TmpCurrentPrices[i], (int64)TmpBasePrices[i] });
+			ItemData.Add({TmpItems[i], static_cast<int64>(TmpCurrentPrices[i]), static_cast<int64>(TmpBasePrices[i]) });
 		}
 		return bResult;
 	}
@@ -181,9 +181,9 @@ bool USteamInventory::GetResultItems(FSteamInventoryResult ResultHandle, TArray<
 		TmpArray.SetNum(TmpCount);
 		bool result = SteamInventory()->GetResultItems(ResultHandle, TmpArray.GetData(), &TmpCount);
 
-		for (int32 i = 0; i < (int32)TmpCount; i++)
+		for (int32 i = 0; i < static_cast<int32>(TmpCount); i++)
 		{
-			ItemsArray.Add((FSteamItemDetails)TmpArray[i]);
+			ItemsArray.Add(static_cast<FSteamItemDetails>(TmpArray[i]));
 		}
 
 		return result;
@@ -222,7 +222,7 @@ void USteamInventory::OnSteamInventoryDefinitionUpdate(SteamInventoryDefinitionU
 
 void USteamInventory::OnSteamInventoryEligiblePromoItemDefIDs(SteamInventoryEligiblePromoItemDefIDs_t* pParam)
 {
-	m_OnSteamInventoryEligiblePromoItemDefIDs.Broadcast((ESteamResult)pParam->m_result, pParam->m_steamID.ConvertToUint64(), pParam->m_numEligiblePromoItemDefs, pParam->m_bCachedData);
+	m_OnSteamInventoryEligiblePromoItemDefIDs.Broadcast(static_cast<ESteamResult>(pParam->m_result), pParam->m_steamID.ConvertToUint64(), pParam->m_numEligiblePromoItemDefs, pParam->m_bCachedData);
 }
 
 void USteamInventory::OnSteamInventoryFullUpdate(SteamInventoryFullUpdate_t* pParam)
@@ -232,15 +232,15 @@ void USteamInventory::OnSteamInventoryFullUpdate(SteamInventoryFullUpdate_t* pPa
 
 void USteamInventory::OnSteamInventoryResultReady(SteamInventoryResultReady_t* pParam)
 {
-	m_OnSteamInventoryResultReady.Broadcast(pParam->m_handle, (ESteamResult)pParam->m_result);
+	m_OnSteamInventoryResultReady.Broadcast(pParam->m_handle, static_cast<ESteamResult>(pParam->m_result));
 }
 
 void USteamInventory::OnSteamInventoryStartPurchaseResult(SteamInventoryStartPurchaseResult_t* pParam)
 {
-	m_OnSteamInventoryStartPurchaseResult.Broadcast((ESteamResult)pParam->m_result, pParam->m_ulOrderID, pParam->m_ulTransID);
+	m_OnSteamInventoryStartPurchaseResult.Broadcast(static_cast<ESteamResult>(pParam->m_result), pParam->m_ulOrderID, pParam->m_ulTransID);
 }
 
 void USteamInventory::OnSteamInventoryRequestPricesResult(SteamInventoryRequestPricesResult_t* pParam)
 {
-	m_OnSteamInventoryRequestPricesResult.Broadcast((ESteamResult)pParam->m_result, UTF8_TO_TCHAR(pParam->m_rgchCurrency));
+	m_OnSteamInventoryRequestPricesResult.Broadcast(static_cast<ESteamResult>(pParam->m_result), UTF8_TO_TCHAR(pParam->m_rgchCurrency));
 }

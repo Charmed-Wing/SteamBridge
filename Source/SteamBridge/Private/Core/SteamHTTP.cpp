@@ -22,7 +22,7 @@ USteamHTTP::~USteamHTTP()
 
 void USteamHTTP::OnHTTPRequestCompleted(HTTPRequestCompleted_t* pParam)
 {
-	m_OnHTTPRequestCompleted.Broadcast(pParam->m_hRequest, pParam->m_ulContextValue, pParam->m_bRequestSuccessful, (ESteamHTTPStatus::Type)pParam->m_eStatusCode, pParam->m_unBodySize);
+	m_OnHTTPRequestCompleted.Broadcast(pParam->m_hRequest, pParam->m_ulContextValue, pParam->m_bRequestSuccessful, static_cast<ESteamHTTPStatus::Type>(pParam->m_eStatusCode), pParam->m_unBodySize);
 }
 
 void USteamHTTP::OnHTTPRequestDataReceived(HTTPRequestDataReceived_t* pParam)

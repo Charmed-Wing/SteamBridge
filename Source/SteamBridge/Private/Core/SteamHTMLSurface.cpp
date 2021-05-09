@@ -120,13 +120,13 @@ void USteamHTMLSurface::OnHTMLLinkAtPosition(HTML_LinkAtPosition_t* pParam)
 
 void USteamHTMLSurface::OnHTMLNeedsPaint(HTML_NeedsPaint_t* pParam)
 {
-	m_OnHTMLNeedsPaint.Broadcast(pParam->unBrowserHandle, UTF8_TO_TCHAR(pParam->pBGRA), {(int32)pParam->unTall, (int32)pParam->unWide}, {(int32)pParam->unUpdateX, (int32)pParam->unUpdateY}, {(int32)pParam->unUpdateTall, (int32)pParam->unUpdateWide},
-		{(int32)pParam->unScrollX, (int32)pParam->unScrollY}, pParam->flPageScale, pParam->unPageSerial);
+	m_OnHTMLNeedsPaint.Broadcast(pParam->unBrowserHandle, UTF8_TO_TCHAR(pParam->pBGRA), {static_cast<int32>(pParam->unTall), static_cast<int32>(pParam->unWide)}, {static_cast<int32>(pParam->unUpdateX), static_cast<int32>(pParam->unUpdateY)}, {static_cast<int32>(pParam->unUpdateTall), static_cast<int32>(pParam->unUpdateWide)},
+		{static_cast<int32>(pParam->unScrollX), static_cast<int32>(pParam->unScrollY)}, pParam->flPageScale, pParam->unPageSerial);
 }
 
 void USteamHTMLSurface::OnHTMLNewWindow(HTML_NewWindow_t* pParam)
 {
-	m_OnHTMLNewWindow.Broadcast(pParam->unBrowserHandle, UTF8_TO_TCHAR(pParam->pchURL), {(int32)pParam->unX, (int32)pParam->unY}, {(int32)pParam->unTall, (int32)pParam->unWide});
+	m_OnHTMLNewWindow.Broadcast(pParam->unBrowserHandle, UTF8_TO_TCHAR(pParam->pchURL), {static_cast<int32>(pParam->unX), static_cast<int32>(pParam->unY)}, {static_cast<int32>(pParam->unTall), static_cast<int32>(pParam->unWide)});
 }
 
 void USteamHTMLSurface::OnHTMLOpenLinkInNewTab(HTML_OpenLinkInNewTab_t* pParam)
@@ -141,7 +141,7 @@ void USteamHTMLSurface::OnHTMLSearchResults(HTML_SearchResults_t* pParam)
 
 void USteamHTMLSurface::OnHTMLSetCursor(HTML_SetCursor_t* pParam)
 {
-	m_OnHTMLSetCursor.Broadcast(pParam->unBrowserHandle, (ESteamMouseCursor)pParam->eMouseCursor);
+	m_OnHTMLSetCursor.Broadcast(pParam->unBrowserHandle, static_cast<ESteamMouseCursor>(pParam->eMouseCursor));
 }
 
 void USteamHTMLSurface::OnHTMLShowToolTip(HTML_ShowToolTip_t* pParam)

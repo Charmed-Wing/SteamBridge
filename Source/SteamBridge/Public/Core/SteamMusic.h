@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Steam.h"
 #include "SteamEnums.h"
-#include "SteamStructs.h"
 #include "UObject/NoExportTypes.h"
 
 #include "SteamMusic.generated.h"
@@ -28,7 +27,7 @@ public:
 	~USteamMusic();
 
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore", meta = (DisplayName = "Steam Music", CompactNodeTitle = "SteamMusic"))
-	static USteamMusic* GetSteamMusic() { return USteamMusic::StaticClass()->GetDefaultObject<USteamMusic>(); }
+	static USteamMusic* GetSteamMusic() { return StaticClass()->GetDefaultObject<USteamMusic>(); }
 
 	/**
 	 * Checks if Steam Music is enabled.
@@ -36,7 +35,7 @@ public:
 	 * @return bool - true if it is enabled; otherwise false.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Music")
-	bool BIsEnabled() const { return SteamMusic()->BIsEnabled(); }
+	static bool IsEnabled() { return SteamMusic()->BIsEnabled(); }
 
 	/**
 	 * Checks if Steam Music is active. This does not necessarily a song is currently playing, it may be paused.
@@ -45,7 +44,7 @@ public:
 	 * @return bool - true if a song is currently playing, paused, or queued up to play; otherwise false.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Music")
-	bool BIsPlaying() const { return SteamMusic()->BIsPlaying(); }
+	static bool IsPlaying() { return SteamMusic()->BIsPlaying(); }
 
 	/**
 	 * Gets the current status of the Steam Music player.
@@ -53,7 +52,7 @@ public:
 	 * @return ESteamAudioPlaybackStatus
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Music")
-	ESteamAudioPlaybackStatus GetPlaybackStatus() const { return (ESteamAudioPlaybackStatus)SteamMusic()->GetPlaybackStatus(); }
+	static ESteamAudioPlaybackStatus GetPlaybackStatus() { return static_cast<ESteamAudioPlaybackStatus>(SteamMusic()->GetPlaybackStatus()); }
 
 	/**
 	 * Gets the current volume of the Steam Music player.
@@ -61,7 +60,7 @@ public:
 	 * @return float - The volume is returned as a percentage between 0.0 and 1.0.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Music")
-	float GetVolume() const { return SteamMusic()->GetVolume(); }
+	static float GetVolume() { return SteamMusic()->GetVolume(); }
 
 	/**
 	 * Pause the Steam Music player.
@@ -69,7 +68,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Music")
-	void Pause() { SteamMusic()->Pause(); }
+	static void Pause() { SteamMusic()->Pause(); }
 
 	/**
 	 * Have the Steam Music player resume playing.
@@ -77,7 +76,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Music")
-	void Play() { SteamMusic()->Play(); }
+	static void Play() { SteamMusic()->Play(); }
 
 	/**
 	 * Have the Steam Music player skip to the next song.
@@ -85,7 +84,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Music")
-	void PlayNext() { SteamMusic()->PlayNext(); }
+	static void PlayNext() { SteamMusic()->PlayNext(); }
 
 	/**
 	 * Have the Steam Music player play the previous song.
@@ -93,16 +92,16 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Music")
-	void PlayPrevious() { SteamMusic()->PlayPrevious(); }
+	static void PlayPrevious() { SteamMusic()->PlayPrevious(); }
 
 	/**
 	 * Sets the volume of the Steam Music player.
 	 *
-	 * @param float Volume - The volume percentage to set from 0.0 to 1.0.
+	 * @param Volume (float) - The volume percentage to set from 0.0 to 1.0.
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Music")
-	void SetVolume(float Volume) { SteamMusic()->SetVolume(Volume); }
+	static void SetVolume(const float Volume) { SteamMusic()->SetVolume(Volume); }
 
 	/** Delegates */
 
