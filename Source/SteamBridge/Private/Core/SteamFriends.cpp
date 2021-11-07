@@ -4,6 +4,7 @@
 
 #include "Engine/Texture2D.h"
 #include "Steam.h"
+#include "SteamBridgeUtils.h"
 
 USteamFriends::USteamFriends()
 {
@@ -159,13 +160,13 @@ int32 USteamFriends::GetFriendCount(const TArray<ESteamFriendFlags>& FriendFlags
 	return SteamFriends()->GetFriendCount(flags);
 }
 
-bool USteamFriends::GetFriendGamePlayed(FSteamID SteamIDFriend, FSteamID& GameID, FString& GameIP, int32& GamePort, int32& QueryPort, FSteamID& SteamIDLobby)
+bool USteamFriends::GetFriendGamePlayed(FSteamID SteamIDFriend, FSteamID& GameID, FString& GameIP, int32& InGamePort, int32& QueryPort, FSteamID& SteamIDLobby)
 {
 	FriendGameInfo_t InGameInfoStruct;
 	bool bResult = SteamFriends()->GetFriendGamePlayed(SteamIDFriend, &InGameInfoStruct);
 	GameID = InGameInfoStruct.m_gameID.ToUint64();
 	GameIP = USteamBridgeUtils::ConvertIPToString(InGameInfoStruct.m_unGameIP);
-	GamePort = InGameInfoStruct.m_usGamePort;
+	InGamePort = InGameInfoStruct.m_usGamePort;
 	QueryPort = InGameInfoStruct.m_usQueryPort;
 	SteamIDLobby = InGameInfoStruct.m_steamIDLobby.ConvertToUint64();
 	return bResult;

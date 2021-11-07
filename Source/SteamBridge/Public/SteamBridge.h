@@ -6,7 +6,7 @@
 #include "Modules/ModuleManager.h"
 #include "Containers/Ticker.h"
 
-class FSteamBridgeModule : public IModuleInterface, public FTickerObjectBase
+class FSteamBridgeModule : public IModuleInterface, public FTSTickerObjectBase
 {
 public:
 
