@@ -300,9 +300,15 @@ struct STEAMBRIDGE_API FSteamInputAnalogActionData
 	bool bActive;
 
 	FSteamInputAnalogActionData() :
-		Mode(ESteamControllerSourceMode::None), X(0.0f), Y(0.0f) {}
-	FSteamInputAnalogActionData(ESteamControllerSourceMode mode, float x, float y, bool bactive) :
-		Mode(mode), X(x), Y(y), bActive(bactive) {}
+		Mode(ESteamControllerSourceMode::None),
+		X(0.0f),
+		Y(0.0f),
+		bActive(false)
+	{
+	}
+
+	FSteamInputAnalogActionData(const ESteamControllerSourceMode Mode, const float X, const float Y, const bool bActive) :
+		Mode(Mode), X(X), Y(Y), bActive(bActive) {}
 
 	bool operator==(const FSteamInputAnalogActionData& Other) const { return Mode == Other.Mode && X == Other.X && Y == Other.Y && bActive == Other.bActive; }
 	bool operator!=(const FSteamInputAnalogActionData& Other) const { return !(*this == Other); }
@@ -319,8 +325,13 @@ struct STEAMBRIDGE_API FSteamInputDigitalActionData
 	UPROPERTY(BlueprintReadWrite, Category = "SteamBridgeCore")
 	bool bActive;
 
-	FSteamInputDigitalActionData() {}
-	FSteamInputDigitalActionData(bool bstate, bool bactive) :
+	FSteamInputDigitalActionData():
+		bState(false),
+		bActive(false)
+	{
+	}
+
+	FSteamInputDigitalActionData(bool bstate, const bool bactive) :
 		bState(bstate), bActive(bactive) {}
 
 	bool operator==(const FSteamInputDigitalActionData& Other) const { return bState == Other.bState && bActive == Other.bActive; }
