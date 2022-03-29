@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #include "Core/SteamUGC.h"
 
@@ -44,9 +44,10 @@ USteamUGC::~USteamUGC()
 	OnUserFavoriteItemsListChangedCallback.Unregister();
 }
 
-bool USteamUGC::AddRequiredTagGroup(FUGCQueryHandle handle, const TArray<FString>& Tags) const
+bool USteamUGC::AddRequiredTagGroup(const FUGCQueryHandle handle, const TArray<FString>& Tags) const
 {
 	TArray<char*> TmpTags;
+	TmpTags.Reserve(Tags.Num());
 	SteamParamStringArray_t TmpTagsArray;
 	for (int32 i = 0; i < Tags.Num(); i++)
 	{
@@ -59,18 +60,18 @@ bool USteamUGC::AddRequiredTagGroup(FUGCQueryHandle handle, const TArray<FString
 	return SteamUGC()->AddRequiredTagGroup(handle, &TmpTagsArray);
 }
 
-FUGCQueryHandle USteamUGC::CreateQueryAllUGCRequest(ESteamUGCQuery QueryType, ESteamUGCMatchingUGCType MatchingUGCTypeFileType, int32 CreatorAppID, int32 ConsumerAppID, int32 Page) const
+FUGCQueryHandle USteamUGC::CreateQueryAllUGCRequest(const ESteamUGCQuery QueryType, const ESteamUGCMatchingUGCType MatchingUGCTypeFileType, const int32 CreatorAppID, const int32 ConsumerAppID, const int32 Page) const
 {
-	return SteamUGC()->CreateQueryAllUGCRequest(static_cast<EUGCQuery>(QueryType), static_cast<EUGCMatchingUGCType>(MatchingUGCTypeFileType), CreatorAppID, ConsumerAppID, Page);
+	return SteamUGC()->CreateQueryAllUGCRequest((EUGCQuery)QueryType, (EUGCMatchingUGCType)MatchingUGCTypeFileType, CreatorAppID, ConsumerAppID, Page);
 }
 
-FUGCQueryHandle USteamUGC::CreateQueryUserUGCRequest(FAccountID AccountID, ESteamUserUGCList ListType, ESteamUGCMatchingUGCType MatchingUGCType, ESteamUserUGCListSortOrder SortOrder, int32 CreatorAppID, int32 ConsumerAppID, int32 Page) const
+FUGCQueryHandle USteamUGC::CreateQueryUserUGCRequest(const FAccountID AccountID, const ESteamUserUGCList ListType, ESteamUGCMatchingUGCType MatchingUGCType, ESteamUserUGCListSortOrder SortOrder, const int32 CreatorAppID, const int32 ConsumerAppID, const int32 Page) const
 {
-	return SteamUGC()->CreateQueryUserUGCRequest(AccountID, static_cast<EUserUGCList>(ListType), static_cast<EUGCMatchingUGCType>(MatchingUGCType), static_cast<EUserUGCListSortOrder>(SortOrder), CreatorAppID, ConsumerAppID, Page);
+	return SteamUGC()->CreateQueryUserUGCRequest(AccountID, (EUserUGCList)ListType, (EUGCMatchingUGCType)MatchingUGCType, (EUserUGCListSortOrder)SortOrder, CreatorAppID, ConsumerAppID, Page);
 }
 
 
-bool USteamUGC::GetItemInstallInfo(FPublishedFileId PublishedFileID, int64& SizeOnDisk, FString& FolderName, int32 FolderSize, FDateTime& TimeStamp) const
+bool USteamUGC::GetItemInstallInfo(const FPublishedFileId PublishedFileID, int64& SizeOnDisk, FString& FolderName, const int32 FolderSize, FDateTime& TimeStamp) const
 {
 	uint32 TmpTime;
 	TArray<char> TmpData;
@@ -81,7 +82,7 @@ bool USteamUGC::GetItemInstallInfo(FPublishedFileId PublishedFileID, int64& Size
 	return bResult;
 }
 
-bool USteamUGC::GetQueryUGCAdditionalPreview(FUGCQueryHandle handle, int32 index, int32 previewIndex, FString& URLOrVideoID, int32 URLSize, FString& OriginalFileName, int32 OriginalFileNameSize, ESteamItemPreviewType& PreviewType) const
+bool USteamUGC::GetQueryUGCAdditionalPreview(const FUGCQueryHandle handle, const int32 index, const int32 previewIndex, FString& URLOrVideoID, const int32 URLSize, FString& OriginalFileName, int32 OriginalFileNameSize, ESteamItemPreviewType& PreviewType) const
 {
 	TArray<char> TmpStr, TmpStr2;
 	TmpStr.SetNum(URLSize);
@@ -92,7 +93,7 @@ bool USteamUGC::GetQueryUGCAdditionalPreview(FUGCQueryHandle handle, int32 index
 	return bResult;
 }
 
-bool USteamUGC::GetQueryUGCChildren(FUGCQueryHandle handle, int32 index, TArray<FPublishedFileId>& PublishedFileIDs, int32 MaxEntries) const
+bool USteamUGC::GetQueryUGCChildren(const FUGCQueryHandle handle, const int32 index, TArray<FPublishedFileId>& PublishedFileIDs, const int32 MaxEntries) const
 {
 	TArray<PublishedFileId_t> TmpData;
 	TmpData.SetNum(MaxEntries);
@@ -104,7 +105,7 @@ bool USteamUGC::GetQueryUGCChildren(FUGCQueryHandle handle, int32 index, TArray<
 	return bResult;
 }
 
-bool USteamUGC::GetQueryUGCKeyValueTag(FUGCQueryHandle handle, int32 index, int32 keyValueTagIndex, FString& Key, int32 KeySize, FString& Value, int32 ValueSize) const
+bool USteamUGC::GetQueryUGCKeyValueTag(const FUGCQueryHandle handle, const int32 index, const int32 keyValueTagIndex, FString& Key, const int32 KeySize, FString& Value, const int32 ValueSize) const
 {
 	TArray<char> TmpKey, TmpValue;
 	TmpKey.SetNum(KeySize);
@@ -115,7 +116,7 @@ bool USteamUGC::GetQueryUGCKeyValueTag(FUGCQueryHandle handle, int32 index, int3
 	return bResult;
 }
 
-bool USteamUGC::GetQueryUGCMetadata(FUGCQueryHandle handle, int32 index, FString& Metadata, int32 Metadatasize) const
+bool USteamUGC::GetQueryUGCMetadata(const FUGCQueryHandle handle, const int32 index, FString& Metadata, const int32 Metadatasize) const
 {
 	TArray<char> TmpStr;
 	bool bResult = SteamUGC()->GetQueryUGCMetadata(handle, index, TmpStr.GetData(), TmpStr.Num());
@@ -123,7 +124,7 @@ bool USteamUGC::GetQueryUGCMetadata(FUGCQueryHandle handle, int32 index, FString
 	return bResult;
 }
 
-bool USteamUGC::GetQueryUGCPreviewURL(FUGCQueryHandle handle, int32 index, FString& URL, int32 URLSize) const
+bool USteamUGC::GetQueryUGCPreviewURL(const FUGCQueryHandle handle, const int32 index, FString& URL, const int32 URLSize) const
 {
 	TArray<char> TmpUrl;
 	TmpUrl.SetNum(URLSize);
@@ -132,7 +133,7 @@ bool USteamUGC::GetQueryUGCPreviewURL(FUGCQueryHandle handle, int32 index, FStri
 	return bResult;
 }
 
-bool USteamUGC::GetQueryUGCResult(FUGCQueryHandle handle, int32 index, FSteamUGCDetails& Details) const
+bool USteamUGC::GetQueryUGCResult(const FUGCQueryHandle handle, const int32 index, FSteamUGCDetails& Details) const
 {
 	SteamUGCDetails_t TmpDetails;
 	bool bResult = SteamUGC()->GetQueryUGCResult(handle, index, &TmpDetails);
@@ -140,7 +141,7 @@ bool USteamUGC::GetQueryUGCResult(FUGCQueryHandle handle, int32 index, FSteamUGC
 	return bResult;
 }
 
-int32 USteamUGC::GetSubscribedItems(TArray<FPublishedFileId>& PublishedFileIDs, int32 MaxEntries) const
+int32 USteamUGC::GetSubscribedItems(TArray<FPublishedFileId>& PublishedFileIDs, const int32 MaxEntries) const
 {
 	TArray<PublishedFileId_t> TmpData;
 	int32 result = SteamUGC()->GetSubscribedItems(TmpData.GetData(), MaxEntries);
@@ -152,9 +153,10 @@ int32 USteamUGC::GetSubscribedItems(TArray<FPublishedFileId>& PublishedFileIDs, 
 	return result;
 }
 
-bool USteamUGC::SetItemTags(FUGCUpdateHandle UpdateHandle, const TArray<FString>& Tags) const
+bool USteamUGC::SetItemTags(const FUGCUpdateHandle UpdateHandle, const TArray<FString>& Tags) const
 {
 	TArray<char*> TmpTags;
+	TmpTags.Reserve(Tags.Num());
 	SteamParamStringArray_t TmpTagsArray;
 	for (const auto& Tag : Tags)
 	{
@@ -168,86 +170,87 @@ bool USteamUGC::SetItemTags(FUGCUpdateHandle UpdateHandle, const TArray<FString>
 
 void USteamUGC::OnAddAppDependencyResult(AddAppDependencyResult_t* pParam)
 {
-	m_OnAddAppDependencyResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_nPublishedFileId, pParam->m_nAppID);
+	OnAddAppDependencyResultDelegate.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_nPublishedFileId, pParam->m_nAppID);
 }
 
 void USteamUGC::OnAddUGCDependencyResult(AddUGCDependencyResult_t* pParam)
 {
-	m_OnAddUGCDependencyResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_nPublishedFileId, pParam->m_nChildPublishedFileId);
+	OnAddUGCDependencyResultDelegate.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_nPublishedFileId, pParam->m_nChildPublishedFileId);
 }
 
 void USteamUGC::OnCreateItemResult(CreateItemResult_t* pParam)
 {
-	m_OnCreateItemResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_nPublishedFileId, pParam->m_bUserNeedsToAcceptWorkshopLegalAgreement);
+	OnCreateItemResultDelegate.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_nPublishedFileId, pParam->m_bUserNeedsToAcceptWorkshopLegalAgreement);
 }
 
 void USteamUGC::OnDownloadItemResult(DownloadItemResult_t* pParam)
 {
-	m_OnDownloadItemResult.Broadcast(pParam->m_unAppID, pParam->m_nPublishedFileId, static_cast<ESteamResult>(pParam->m_eResult));
+	OnDownloadItemResultDelegate.Broadcast(pParam->m_unAppID, pParam->m_nPublishedFileId, (ESteamResult)pParam->m_eResult);
 }
 
 void USteamUGC::OnGetAppDependenciesResult(GetAppDependenciesResult_t* pParam)
 {
 	TArray<int32> AppIDs;
+	AppIDs.Reserve(32);
 	for (int32 i = 0; i < 32; i++)
 	{
 		AppIDs.Add(pParam->m_rgAppIDs[i]);
 	}
 
-	m_OnGetAppDependenciesResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_nPublishedFileId, AppIDs, AppIDs.Num(), pParam->m_nTotalNumAppDependencies);
+	OnGetAppDependenciesResultDelegate.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_nPublishedFileId, AppIDs, AppIDs.Num(), pParam->m_nTotalNumAppDependencies);
 }
 
 void USteamUGC::OnDeleteItemResult(DeleteItemResult_t* pParam)
 {
-	m_OnDeleteItemResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_nPublishedFileId);
+	OnDeleteItemResultDelegate.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_nPublishedFileId);
 }
 
 void USteamUGC::OnGetUserItemVoteResult(GetUserItemVoteResult_t* pParam)
 {
-	m_OnGetUserItemVoteResult.Broadcast(pParam->m_nPublishedFileId, static_cast<ESteamResult>(pParam->m_eResult), pParam->m_bVotedUp, pParam->m_bVotedDown, pParam->m_bVoteSkipped);
+	OnGetUserItemVoteResultDelegate.Broadcast(pParam->m_nPublishedFileId, (ESteamResult)pParam->m_eResult, pParam->m_bVotedUp, pParam->m_bVotedDown, pParam->m_bVoteSkipped);
 }
 
 void USteamUGC::OnItemInstalled(ItemInstalled_t* pParam)
 {
-	m_OnItemInstalled.Broadcast(pParam->m_unAppID, pParam->m_nPublishedFileId);
+	OnItemInstalledDelegate.Broadcast(pParam->m_unAppID, pParam->m_nPublishedFileId);
 }
 
 void USteamUGC::OnRemoveAppDependencyResult(RemoveAppDependencyResult_t* pParam)
 {
-	m_OnRemoveAppDependencyResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_nPublishedFileId, pParam->m_nAppID);
+	OnRemoveAppDependencyResultDelegate.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_nPublishedFileId, pParam->m_nAppID);
 }
 
 void USteamUGC::OnRemoveUGCDependencyResult(RemoveUGCDependencyResult_t* pParam)
 {
-	m_OnRemoveUGCDependencyResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_nPublishedFileId, pParam->m_nChildPublishedFileId);
+	OnRemoveUGCDependencyResultDelegate.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_nPublishedFileId, pParam->m_nChildPublishedFileId);
 }
 
 void USteamUGC::OnSetUserItemVoteResult(SetUserItemVoteResult_t* pParam)
 {
-	m_OnSetUserItemVoteResult.Broadcast(pParam->m_nPublishedFileId, static_cast<ESteamResult>(pParam->m_eResult), pParam->m_bVoteUp);
+	OnSetUserItemVoteResultDelegate.Broadcast(pParam->m_nPublishedFileId, (ESteamResult)pParam->m_eResult, pParam->m_bVoteUp);
 }
 
 void USteamUGC::OnStartPlaytimeTrackingResult(StartPlaytimeTrackingResult_t* pParam)
 {
-	m_OnStartPlaytimeTrackingResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult));
+	OnStartPlaytimeTrackingResultDelegate.Broadcast((ESteamResult)pParam->m_eResult);
 }
 
 void USteamUGC::OnSteamUGCQueryCompleted(SteamUGCQueryCompleted_t* pParam)
 {
-	m_OnSteamUGCQueryCompleted.Broadcast(pParam->m_handle, static_cast<ESteamResult>(pParam->m_eResult), pParam->m_unNumResultsReturned, pParam->m_unTotalMatchingResults, pParam->m_bCachedData);
+	OnSteamUGCQueryCompletedDelegate.Broadcast(pParam->m_handle, (ESteamResult)pParam->m_eResult, pParam->m_unNumResultsReturned, pParam->m_unTotalMatchingResults, pParam->m_bCachedData);
 }
 
 void USteamUGC::OnStopPlaytimeTrackingResult(StopPlaytimeTrackingResult_t* pParam)
 {
-	m_OnStopPlaytimeTrackingResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult));
+	OnStopPlaytimeTrackingResultDelegate.Broadcast((ESteamResult)pParam->m_eResult);
 }
 
 void USteamUGC::OnSubmitItemUpdateResult(SubmitItemUpdateResult_t* pParam)
 {
-	m_OnSubmitItemUpdateResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_bUserNeedsToAcceptWorkshopLegalAgreement);
+	OnSubmitItemUpdateResultDelegate.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_bUserNeedsToAcceptWorkshopLegalAgreement);
 }
 
 void USteamUGC::OnUserFavoriteItemsListChanged(UserFavoriteItemsListChanged_t* pParam)
 {
-	m_OnUserFavoriteItemsListChanged.Broadcast(pParam->m_nPublishedFileId, static_cast<ESteamResult>(pParam->m_eResult), pParam->m_bWasAddRequest);
+	OnUserFavoriteItemsListChangedDelegate.Broadcast(pParam->m_nPublishedFileId, (ESteamResult)pParam->m_eResult, pParam->m_bWasAddRequest);
 }

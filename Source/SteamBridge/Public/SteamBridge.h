@@ -1,10 +1,10 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "Modules/ModuleManager.h"
-#include "Containers/Ticker.h"
+#include <CoreMinimal.h>
+#include <Containers/Ticker.h>
+#include <Modules/ModuleManager.h>
 
 class FSteamBridgeModule : public IModuleInterface, public FTSTickerObjectBase
 {
@@ -21,5 +21,5 @@ private:
 	void RegisterSettings();
 	void UnregisterSettings();
 
-	void* m_SteamLibSDKHandle;
+	void* SteamLibSDKHandle;
 };

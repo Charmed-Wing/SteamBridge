@@ -1,12 +1,13 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
+#include <UObject/NoExportTypes.h>
+
 #include "Steam.h"
 #include "SteamEnums.h"
 #include "SteamStructs.h"
-#include "UObject/NoExportTypes.h"
 
 #include "SteamGameServerStats.generated.h"
 
@@ -46,7 +47,7 @@ public:
 	 *	The stat must be allowed to be set by game server.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|GameServerStats")
-	bool ClearUserAchievement(FSteamID SteamIDUser, const FString& Name) const { return SteamGameServerStats()->ClearUserAchievement(SteamIDUser, TCHAR_TO_UTF8(*Name)); }
+	bool ClearUserAchievement(const FSteamID SteamIDUser, const FString& Name) const { return SteamGameServerStats()->ClearUserAchievement(SteamIDUser, TCHAR_TO_UTF8(*Name)); }
 
 	/**
 	 * Gets the unlock status of the Achievement.
@@ -60,7 +61,7 @@ public:
 	 * If the call is successful then the unlock status is returned via the bAchieved parameter.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|GameServerStats")
-	bool GetUserAchievement(FSteamID SteamIDUser, const FString& Name, bool& bAchieved) { return SteamGameServerStats()->GetUserAchievement(SteamIDUser, TCHAR_TO_UTF8(*Name), &bAchieved); }
+	bool GetUserAchievement(const FSteamID SteamIDUser, const FString& Name, bool& bAchieved) { return SteamGameServerStats()->GetUserAchievement(SteamIDUser, TCHAR_TO_UTF8(*Name), &bAchieved); }
 
 	/**
 	 * Gets the current value of the a stat for the specified user.
@@ -75,7 +76,7 @@ public:
 	 * The type passed to this function must match the type listed in the App Admin panel of the Steamworks website.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|GameServerStats")
-	bool GetUserStatInt(FSteamID SteamIDUser, const FString& Name, int32& Data) { return SteamGameServerStats()->GetUserStat(SteamIDUser, TCHAR_TO_UTF8(*Name), &Data); }
+	bool GetUserStatInt(const FSteamID SteamIDUser, const FString& Name, int32& Data) { return SteamGameServerStats()->GetUserStat(SteamIDUser, TCHAR_TO_UTF8(*Name), &Data); }
 
 	/**
 	 * Gets the current value of the a stat for the specified user.
@@ -90,7 +91,7 @@ public:
 	 * The type passed to this function must match the type listed in the App Admin panel of the Steamworks website.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|GameServerStats")
-	bool GetUserStatFloat(FSteamID SteamIDUser, const FString& Name, float& Data) { return SteamGameServerStats()->GetUserStat(SteamIDUser, TCHAR_TO_UTF8(*Name), &Data); }
+	bool GetUserStatFloat(const FSteamID SteamIDUser, const FString& Name, float& Data) { return SteamGameServerStats()->GetUserStat(SteamIDUser, TCHAR_TO_UTF8(*Name), &Data); }
 
 	/**
 	* Asynchronously downloads stats and achievements for the specified user from the server.
@@ -101,7 +102,7 @@ public:
 	* @return FSteamAPICall - SteamAPICall_t to be used with a GSStatsReceived_t call result.
 	*/
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|GameServerStats")
-	FSteamAPICall RequestUserStats(FSteamID SteamIDUser) const { return SteamGameServerStats()->RequestUserStats(SteamIDUser); }
+	FSteamAPICall RequestUserStats(const FSteamID SteamIDUser) const { return SteamGameServerStats()->RequestUserStats(SteamIDUser); }
 
 	/**
 	 * Unlocks an achievement for the specified user.
@@ -118,7 +119,7 @@ public:
 	 * The stat must be allowed to be set by game server.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|GameServerStats")
-	bool SetUserAchievement(FSteamID SteamIDUser, const FString& Name) const { return SteamGameServerStats()->SetUserAchievement(SteamIDUser, TCHAR_TO_UTF8(*Name)); }
+	bool SetUserAchievement(const FSteamID SteamIDUser, const FString& Name) const { return SteamGameServerStats()->SetUserAchievement(SteamIDUser, TCHAR_TO_UTF8(*Name)); }
 
 	/**
 	 * Sets / updates the value of a given stat for the specified user.
@@ -137,7 +138,7 @@ public:
 	 * The stat must be allowed to be set by game server.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|GameServerStats")
-	bool SetUserStatInt(FSteamID SteamIDUser, const FString& Name, int32 Data) { return SteamGameServerStats()->SetUserStat(SteamIDUser, TCHAR_TO_UTF8(*Name), Data); }
+	bool SetUserStatInt(const FSteamID SteamIDUser, const FString& Name, const int32 Data) { return SteamGameServerStats()->SetUserStat(SteamIDUser, TCHAR_TO_UTF8(*Name), Data); }
 
 	/**
 	 * Sets / updates the value of a given stat for the specified user.
@@ -156,7 +157,7 @@ public:
 	 * The stat must be allowed to be set by game server.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|GameServerStats")
-	bool SetUserStatFloat(FSteamID SteamIDUser, const FString& Name, float Data) { return SteamGameServerStats()->SetUserStat(SteamIDUser, TCHAR_TO_UTF8(*Name), Data); }
+	bool SetUserStatFloat(const FSteamID SteamIDUser, const FString& Name, const float Data) { return SteamGameServerStats()->SetUserStat(SteamIDUser, TCHAR_TO_UTF8(*Name), Data); }
 
 	/**
 	* Send the changed stats and achievements data to the server for permanent storage for the specified user.
@@ -173,7 +174,7 @@ public:
 	* In this case the server sends back updated values and the stats should be updated locally to keep in sync.
 	*/
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|GameServerStats")
-	FSteamAPICall StoreUserStats(FSteamID SteamIDUser) const { return SteamGameServerStats()->StoreUserStats(SteamIDUser); }
+	FSteamAPICall StoreUserStats(const FSteamID SteamIDUser) const { return SteamGameServerStats()->StoreUserStats(SteamIDUser); }
 
 	/**
 	 * Updates an AVGRATE stat with new values for the specified user.
@@ -193,24 +194,24 @@ public:
 	 * The stat must be allowed to be set by game server.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|GameServerStats")
-	bool UpdateUserAvgRateStat(FSteamID SteamIDUser, const FString& Name, float CountThisSession, float SessionLength) const;
+	bool UpdateUserAvgRateStat(const FSteamID SteamIDUser, const FString& Name, const float CountThisSession, const float SessionLength) const;
 
 	/** Delegates */
 
 	/** Result when getting the latests stats and achievements for a user from the server. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServerStats", meta = (DisplayName = "OnGSStatsReceived"))
-	FOnGSStatsReceivedDelegate m_OnGSStatsReceived;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServerStats|Delegates", meta = (DisplayName = "OnGSStatsReceived"))
+	FOnGSStatsReceivedDelegate OnGSStatsReceivedDelegate;
 
 	/** Result of a request to store the user stats. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServerStats", meta = (DisplayName = "OnGSStatsStored"))
-	FOnGSStatsStoredDelegate m_OnGSStatsStored;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServerStats|Delegates", meta = (DisplayName = "OnGSStatsStored"))
+	FOnGSStatsStoredDelegate OnGSStatsStoredDelegate;
 
 	/**
 	 * Callback indicating that a user's stats have been unloaded.
 	 * Call RequestUserStats again to access stats for this user.
 	 */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServerStats", meta = (DisplayName = "OnGSStatsUnloaded"))
-	FOnGSStatsUnloadedDelegate m_OnGSStatsUnloaded;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServerStats|Delegates", meta = (DisplayName = "OnGSStatsUnloaded"))
+	FOnGSStatsUnloadedDelegate OnGSStatsUnloadedDelegate;
 
 protected:
 private:

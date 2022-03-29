@@ -1,12 +1,13 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
+#include <UObject/NoExportTypes.h>
+
 #include "Steam.h"
 #include "SteamEnums.h"
 #include "SteamStructs.h"
-#include "UObject/NoExportTypes.h"
 
 #include "SteamMusicRemote.generated.h"
 
@@ -59,22 +60,22 @@ public:
 	bool DeregisterSteamMusicRemote() const { return SteamMusicRemote()->DeregisterSteamMusicRemote(); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool EnableLooped(bool bValue) const { return SteamMusicRemote()->EnableLooped(bValue); }
+	bool EnableLooped(const bool bValue) const { return SteamMusicRemote()->EnableLooped(bValue); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool EnablePlaylists(bool bValue) const { return SteamMusicRemote()->EnablePlaylists(bValue); }
+	bool EnablePlaylists(const bool bValue) const { return SteamMusicRemote()->EnablePlaylists(bValue); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool EnablePlayNext(bool bValue) const { return SteamMusicRemote()->EnablePlayNext(bValue); }
+	bool EnablePlayNext(const bool bValue) const { return SteamMusicRemote()->EnablePlayNext(bValue); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool EnablePlayPrevious(bool bValue) const { return SteamMusicRemote()->EnablePlayPrevious(bValue); }
+	bool EnablePlayPrevious(const bool bValue) const { return SteamMusicRemote()->EnablePlayPrevious(bValue); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool EnableQueue(bool bValue) const { return SteamMusicRemote()->EnableQueue(bValue); }
+	bool EnableQueue(const bool bValue) const { return SteamMusicRemote()->EnableQueue(bValue); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool EnableShuffled(bool bValue) const { return SteamMusicRemote()->EnableShuffled(bValue); }
+	bool EnableShuffled(const bool bValue) const { return SteamMusicRemote()->EnableShuffled(bValue); }
 
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|MusicRemote")
 	bool PlaylistDidChange() const { return SteamMusicRemote()->PlaylistDidChange(); }
@@ -98,85 +99,85 @@ public:
 	bool ResetQueueEntries() const { return SteamMusicRemote()->ResetQueueEntries(); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool SetCurrentPlaylistEntry(int32 ID) const { return SteamMusicRemote()->SetCurrentPlaylistEntry(ID); }
+	bool SetCurrentPlaylistEntry(const int32 ID) const { return SteamMusicRemote()->SetCurrentPlaylistEntry(ID); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool SetCurrentQueueEntry(int32 ID) const { return SteamMusicRemote()->SetCurrentQueueEntry(ID); }
+	bool SetCurrentQueueEntry(const int32 ID) const { return SteamMusicRemote()->SetCurrentQueueEntry(ID); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
 	bool SetDisplayName(const FString& DisplayName) const { return SteamMusicRemote()->SetDisplayName(TCHAR_TO_UTF8(*DisplayName)); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool SetPlaylistEntry(int32 ID, int32 Position, const FString& EntryText) const { return SteamMusicRemote()->SetPlaylistEntry(ID, Position, TCHAR_TO_UTF8(*EntryText)); }
+	bool SetPlaylistEntry(const int32 ID, int32 Position, const FString& EntryText) const { return SteamMusicRemote()->SetPlaylistEntry(ID, Position, TCHAR_TO_UTF8(*EntryText)); }
 
 	// #TODO: SetPNGIcon_64x64
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool SetQueueEntry(int32 ID, int32 Position, const FString& EntryText) const { return SteamMusicRemote()->SetQueueEntry(ID, Position, TCHAR_TO_UTF8(*EntryText)); }
+	bool SetQueueEntry(const int32 ID, const int32 Position, const FString& EntryText) const { return SteamMusicRemote()->SetQueueEntry(ID, Position, TCHAR_TO_UTF8(*EntryText)); }
 
 	// #TODO: UpdateCurrentEntryCoverArt
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool UpdateCurrentEntryElapsedSeconds(int32 Value) const { return SteamMusicRemote()->UpdateCurrentEntryElapsedSeconds(Value); }
+	bool UpdateCurrentEntryElapsedSeconds(const int32 Value) const { return SteamMusicRemote()->UpdateCurrentEntryElapsedSeconds(Value); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
 	bool UpdateCurrentEntryText(const FString& Text) const { return SteamMusicRemote()->UpdateCurrentEntryText(TCHAR_TO_UTF8(*Text)); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool UpdateLooped(bool bValue) const { return SteamMusicRemote()->UpdateLooped(bValue); }
+	bool UpdateLooped(const bool bValue) const { return SteamMusicRemote()->UpdateLooped(bValue); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
 	bool UpdatePlaybackStatus(ESteamAudioPlaybackStatus Status) const { return SteamMusicRemote()->UpdatePlaybackStatus(static_cast<AudioPlayback_Status>(Status)); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool UpdateShuffled(bool bValue) const { return SteamMusicRemote()->UpdateShuffled(bValue); }
+	bool UpdateShuffled(const bool bValue) const { return SteamMusicRemote()->UpdateShuffled(bValue); }
 
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|MusicRemote")
-	bool UpdateVolume(float Value) const { return SteamMusicRemote()->UpdateVolume(Value); }
+	bool UpdateVolume(const float Value) const { return SteamMusicRemote()->UpdateVolume(Value); }
 
 	/** Delegates */
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerRemoteToFront"))
-	FOnMusicPlayerRemoteToFrontDelegate m_OnMusicPlayerRemoteToFront;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerRemoteToFront"))
+	FOnMusicPlayerRemoteToFrontDelegate OnMusicPlayerRemoteToFrontDelegate;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerRemoteWillActivate"))
-	FOnMusicPlayerRemoteWillActivateDelegate m_OnMusicPlayerRemoteWillActivate;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerRemoteWillActivate"))
+	FOnMusicPlayerRemoteWillActivateDelegate OnMusicPlayerRemoteWillActivateDelegate;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerRemoteWillDeactivate"))
-	FOnMusicPlayerRemoteWillDeactivateDelegate m_OnMusicPlayerRemoteWillDeactivate;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerRemoteWillDeactivate"))
+	FOnMusicPlayerRemoteWillDeactivateDelegate OnMusicPlayerRemoteWillDeactivateDelegate;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerSelectsPlaylistEntry"))
-	FOnMusicPlayerSelectsPlaylistEntryDelegate m_OnMusicPlayerSelectsPlaylistEntry;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerSelectsPlaylistEntry"))
+	FOnMusicPlayerSelectsPlaylistEntryDelegate OnMusicPlayerSelectsPlaylistEntryDelegate;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerSelectsQueueEntry"))
-	FOnMusicPlayerSelectsQueueEntryDelegate m_OnMusicPlayerSelectsQueueEntry;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerSelectsQueueEntry"))
+	FOnMusicPlayerSelectsQueueEntryDelegate OnMusicPlayerSelectsQueueEntryDelegate;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerWantsLooped"))
-	FOnMusicPlayerWantsLoopedDelegate m_OnMusicPlayerWantsLooped;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerWantsLooped"))
+	FOnMusicPlayerWantsLoopedDelegate OnMusicPlayerWantsLoopedDelegate;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerWantsPause"))
-	FOnMusicPlayerWantsPauseDelegate m_OnMusicPlayerWantsPause;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerWantsPause"))
+	FOnMusicPlayerWantsPauseDelegate OnMusicPlayerWantsPauseDelegate;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerWantsPlayingRepeatStatus"))
-	FOnMusicPlayerWantsPlayingRepeatStatusDelegate m_OnMusicPlayerWantsPlayingRepeatStatus;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerWantsPlayingRepeatStatus"))
+	FOnMusicPlayerWantsPlayingRepeatStatusDelegate OnMusicPlayerWantsPlayingRepeatStatusDelegate;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerWantsPlayNext"))
-	FOnMusicPlayerWantsPlayNextDelegate m_OnMusicPlayerWantsPlayNext;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerWantsPlayNext"))
+	FOnMusicPlayerWantsPlayNextDelegate OnMusicPlayerWantsPlayNextDelegate;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerWantsPlayPrevious"))
-	FOnMusicPlayerWantsPlayPreviousDelegate m_OnMusicPlayerWantsPlayPrevious;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerWantsPlayPrevious"))
+	FOnMusicPlayerWantsPlayPreviousDelegate OnMusicPlayerWantsPlayPreviousDelegate;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerWantsPlay"))
-	FOnMusicPlayerWantsPlayDelegate m_OnMusicPlayerWantsPlay;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerWantsPlay"))
+	FOnMusicPlayerWantsPlayDelegate OnMusicPlayerWantsPlayDelegate;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerWantsShuffled"))
-	FOnMusicPlayerWantsShuffledDelegate m_OnMusicPlayerWantsShuffled;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerWantsShuffled"))
+	FOnMusicPlayerWantsShuffledDelegate OnMusicPlayerWantsShuffledDelegate;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerWantsVolume"))
-	FOnMusicPlayerWantsVolumeDelegate m_OnMusicPlayerWantsVolume;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerWantsVolume"))
+	FOnMusicPlayerWantsVolumeDelegate OnMusicPlayerWantsVolumeDelegate;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote", meta = (DisplayName = "OnMusicPlayerWillQuit"))
-	FOnMusicPlayerWillQuitDelegate m_OnMusicPlayerWillQuit;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|MusicRemote|Delegates", meta = (DisplayName = "OnMusicPlayerWillQuit"))
+	FOnMusicPlayerWillQuitDelegate OnMusicPlayerWillQuitDelegate;
 
 protected:
 private:

@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #include "Core/SteamMusic.h"
 
@@ -18,10 +18,10 @@ USteamMusic::~USteamMusic()
 
 void USteamMusic::OnPlaybackStatusHasChanged(PlaybackStatusHasChanged_t* pParam)
 {
-	m_OnPlaybackStatusHasChanged.Broadcast();
+	OnPlaybackStatusHasChangedDelegate.Broadcast();
 }
 
 void USteamMusic::OnVolumeHasChanged(VolumeHasChanged_t* pParam)
 {
-	m_OnVolumeHasChanged.Broadcast(pParam->m_flNewVolume);
+	OnVolumeHasChangedDelegate.Broadcast(pParam->m_flNewVolume);
 }

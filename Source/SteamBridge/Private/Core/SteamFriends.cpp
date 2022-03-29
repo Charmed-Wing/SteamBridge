@@ -1,10 +1,10 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #include "Core/SteamFriends.h"
-
-#include "Engine/Texture2D.h"
 #include "Steam.h"
 #include "SteamBridgeUtils.h"
+
+#include <Engine/Texture2D.h>
 
 USteamFriends::USteamFriends()
 {
@@ -65,6 +65,7 @@ void USteamFriends::ActivateGameOverlayToUser(const ESteamGameUserOverlayTypes O
 FSteamAPICall USteamFriends::DownloadClanActivityCounts(TArray<FSteamID>& SteamClanIDs, int32 ClansToRequest) const
 {
 	TArray<CSteamID> TmpArray;
+	TmpArray.Reserve(ClansToRequest);
 	uint64 res = SteamFriends()->DownloadClanActivityCounts(TmpArray.GetData(), ClansToRequest);
 
 	for (int32 i = 0; i < ClansToRequest; i++)
@@ -115,9 +116,9 @@ int32 USteamFriends::GetClanChatMessage(FSteamID SteamIDClanChat, int32 MessageI
 {
 	EChatEntryType TmpEntryType;
 	TArray<char> TmpMessage;
-	TmpMessage.SetNum(2048);
+	TmpMessage.SetNum(SteamDefs::Buffer2048);
 	CSteamID TmpSteamID;
-	int32 res = SteamFriends()->GetClanChatMessage(SteamIDClanChat, MessageID, TmpMessage.GetData(), 2048, &TmpEntryType, &TmpSteamID);
+	int32 res = SteamFriends()->GetClanChatMessage(SteamIDClanChat, MessageID, TmpMessage.GetData(), SteamDefs::Buffer2048, &TmpEntryType, &TmpSteamID);
 	if (res < 0)
 	{
 		return -1;
@@ -160,7 +161,7 @@ int32 USteamFriends::GetFriendCount(const TArray<ESteamFriendFlags>& FriendFlags
 	return SteamFriends()->GetFriendCount(flags);
 }
 
-bool USteamFriends::GetFriendGamePlayed(FSteamID SteamIDFriend, FSteamID& GameID, FString& GameIP, int32& InGamePort, int32& QueryPort, FSteamID& SteamIDLobby)
+bool USteamFriends::GetFriendGamePlayed(const FSteamID SteamIDFriend, FSteamID& GameID, FString& GameIP, int32& GamePort, int32& QueryPort, FSteamID& SteamIDLobby)
 {
 	FriendGameInfo_t InGameInfoStruct;
 	bool bResult = SteamFriends()->GetFriendGamePlayed(SteamIDFriend, &InGameInfoStruct);
@@ -172,12 +173,12 @@ bool USteamFriends::GetFriendGamePlayed(FSteamID SteamIDFriend, FSteamID& GameID
 	return bResult;
 }
 
-int32 USteamFriends::GetFriendMessage(FSteamID SteamIDFriend, int32 MessageIndex, FString& Message, ESteamChatEntryType& ChatEntryType)
+int32 USteamFriends::GetFriendMessage(const FSteamID SteamIDFriend, const int32 MessageIndex, FString& Message, ESteamChatEntryType& ChatEntryType)
 {
 	EChatEntryType TmpEntryType;
 	TArray<char> TmpMessage;
-	TmpMessage.SetNum(2048);
-	int32 res = SteamFriends()->GetFriendMessage(SteamIDFriend, MessageIndex, TmpMessage.GetData(), 2048, &TmpEntryType);
+	TmpMessage.Reserve(SteamDefs::Buffer2048);
+	int32 res = SteamFriends()->GetFriendMessage(SteamIDFriend, MessageIndex, TmpMessage.GetData(), SteamDefs::Buffer2048, &TmpEntryType);
 	if (res < 0)
 	{
 		return 0;
@@ -188,7 +189,7 @@ int32 USteamFriends::GetFriendMessage(FSteamID SteamIDFriend, int32 MessageIndex
 	return res;
 }
 
-void USteamFriends::GetFriendsGroupMembersList(FSteamFriendsGroupID FriendsGroupID, TArray<FSteamID>& MemberSteamIDs)
+void USteamFriends::GetFriendsGroupMembersList(const FSteamFriendsGroupID FriendsGroupID, TArray<FSteamID>& MemberSteamIDs)
 {
 	int32 count = GetFriendsGroupMembersCount(FriendsGroupID);
 	if (count < 0)
@@ -197,6 +198,7 @@ void USteamFriends::GetFriendsGroupMembersList(FSteamFriendsGroupID FriendsGroup
 	}
 
 	TArray<CSteamID> TmpArray;
+	TmpArray.Reserve(SteamDefs::Buffer128);
 	SteamFriends()->GetFriendsGroupMembersList(FriendsGroupID, TmpArray.GetData(), count);
 	for (int32 i = 0; i < count; i++)
 	{
@@ -204,7 +206,7 @@ void USteamFriends::GetFriendsGroupMembersList(FSteamFriendsGroupID FriendsGroup
 	}
 }
 
-UTexture2D* USteamFriends::GetFriendAvatar(FSteamID SteamIDFriend, ESteamAvatarSize AvatarSize, int32& ImageHandle) const
+UTexture2D* USteamFriends::GetFriendAvatar(const FSteamID SteamIDFriend, const ESteamAvatarSize AvatarSize, int32& ImageHandle) const
 {
 	int32 Avatar = 0;
 	switch (AvatarSize)
@@ -251,6 +253,7 @@ UTexture2D* USteamFriends::GetFriendAvatar(FSteamID SteamIDFriend, ESteamAvatarS
 TArray<ESteamUserRestrictions> USteamFriends::GetUserRestrictions() const
 {
 	TArray<ESteamUserRestrictions> TmpArray;
+	TmpArray.Reserve(8);
 	uint32 flags = SteamFriends()->GetUserRestrictions();
 	for (int32 i = 0; i < 32; i++)
 	{
@@ -279,29 +282,29 @@ bool USteamFriends::HasFriend(FSteamID SteamIDFriend, const TArray<ESteamFriendF
 
 void USteamFriends::OnAvatarImageLoaded(AvatarImageLoaded_t* pParam)
 {
-	m_OnAvatarImageLoaded.Broadcast(pParam->m_steamID.ConvertToUint64(), pParam->m_iImage, pParam->m_iWide, pParam->m_iTall);
+	OnAvatarImageLoadedDelegate.Broadcast(pParam->m_steamID.ConvertToUint64(), pParam->m_iImage, pParam->m_iWide, pParam->m_iTall);
 }
 
 void USteamFriends::OnClanOfficerListResponse(ClanOfficerListResponse_t* pParam)
 {
-	m_OnClanOfficerListResponse.Broadcast(pParam->m_steamIDClan.ConvertToUint64(), pParam->m_cOfficers, pParam->m_bSuccess == 1);
+	OnClanOfficerListResponseDelegate.Broadcast(pParam->m_steamIDClan.ConvertToUint64(), pParam->m_cOfficers, pParam->m_bSuccess == 1);
 }
 
 void USteamFriends::OnDownloadClanActivityCountsResult(DownloadClanActivityCountsResult_t* pParam)
 {
-	m_OnDownloadClanActivityCountsResult.Broadcast(pParam->m_bSuccess);
+	OnDownloadClanActivityCountsResultDelegate.Broadcast(pParam->m_bSuccess);
 }
 
 void USteamFriends::OnFriendRichPresenceUpdate(FriendRichPresenceUpdate_t* pParam)
 {
-	m_OnFriendRichPresenceUpdate.Broadcast(pParam->m_steamIDFriend.ConvertToUint64(), pParam->m_nAppID);
+	OnFriendRichPresenceUpdateDelegate.Broadcast(pParam->m_steamIDFriend.ConvertToUint64(), pParam->m_nAppID);
 }
 
 void USteamFriends::OnFriendsEnumerateFollowingList(FriendsEnumerateFollowingList_t* pParam)
 {
 #if 0
 	TArray<FSteamID> TmpArray;
-
+	TmpArray.Reserve(SteamDefs::Buffer128);
 	for (int32 i = 0; i < pParam->m_nResultsReturned; i++)
 	{
 		TmpArray.Add(pParam->m_rgSteamID[i].ConvertToUint64());
@@ -313,65 +316,65 @@ void USteamFriends::OnFriendsEnumerateFollowingList(FriendsEnumerateFollowingLis
 
 void USteamFriends::OnFriendsGetFollowerCount(FriendsGetFollowerCount_t* pParam)
 {
-	m_OnFriendsGetFollowerCount.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_steamID.ConvertToUint64(), pParam->m_nCount);
+	OnFriendsGetFollowerCountDelegate.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_steamID.ConvertToUint64(), pParam->m_nCount);
 }
 
 void USteamFriends::OnFriendsIsFollowing(FriendsIsFollowing_t* pParam)
 {
-	m_OnFriendsIsFollowing.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_steamID.ConvertToUint64(), pParam->m_bIsFollowing);
+	OnFriendsIsFollowingDelegate.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_steamID.ConvertToUint64(), pParam->m_bIsFollowing);
 }
 
 void USteamFriends::OnGameConnectedChatJoin(GameConnectedChatJoin_t* pParam)
 {
-	m_OnGameConnectedChatJoin.Broadcast(pParam->m_steamIDClanChat.ConvertToUint64(), pParam->m_steamIDUser.ConvertToUint64());
+	OnGameConnectedChatJoinDelegate.Broadcast(pParam->m_steamIDClanChat.ConvertToUint64(), pParam->m_steamIDUser.ConvertToUint64());
 }
 
 void USteamFriends::OnGameConnectedChatLeave(GameConnectedChatLeave_t* pParam)
 {
-	m_OnGameConnectedChatLeave.Broadcast(pParam->m_steamIDClanChat.ConvertToUint64(), pParam->m_steamIDUser.ConvertToUint64(), pParam->m_bKicked, pParam->m_bDropped);
+	OnGameConnectedChatLeaveDelegate.Broadcast(pParam->m_steamIDClanChat.ConvertToUint64(), pParam->m_steamIDUser.ConvertToUint64(), pParam->m_bKicked, pParam->m_bDropped);
 }
 
 void USteamFriends::OnGameConnectedClanChatMsg(GameConnectedClanChatMsg_t* pParam)
 {
-	m_OnGameConnectedClanChatMsg.Broadcast(pParam->m_steamIDClanChat.ConvertToUint64(), pParam->m_steamIDUser.ConvertToUint64(), pParam->m_iMessageID);
+	OnGameConnectedClanChatMsgDelegate.Broadcast(pParam->m_steamIDClanChat.ConvertToUint64(), pParam->m_steamIDUser.ConvertToUint64(), pParam->m_iMessageID);
 }
 
 void USteamFriends::OnGameConnectedFriendChatMsg(GameConnectedFriendChatMsg_t* pParam)
 {
-	m_OnGameConnectedFriendChatMsg.Broadcast(pParam->m_steamIDUser.ConvertToUint64(), pParam->m_iMessageID);
+	OnGameConnectedFriendChatMsgDelegate.Broadcast(pParam->m_steamIDUser.ConvertToUint64(), pParam->m_iMessageID);
 }
 
 void USteamFriends::OnGameLobbyJoinRequested(GameLobbyJoinRequested_t* pParam)
 {
-	m_OnGameLobbyJoinRequested.Broadcast(pParam->m_steamIDLobby.ConvertToUint64(), pParam->m_steamIDFriend.ConvertToUint64());
+	OnGameLobbyJoinRequestedDelegate.Broadcast(pParam->m_steamIDLobby.ConvertToUint64(), pParam->m_steamIDFriend.ConvertToUint64());
 }
 
 void USteamFriends::OnGameOverlayActivated(GameOverlayActivated_t* pParam)
 {
-	m_OnGameOverlayActivated.Broadcast(pParam->m_bActive == 1);
+	OnGameOverlayActivatedDelegate.Broadcast(pParam->m_bActive == 1);
 }
 
 void USteamFriends::OnGameRichPresenceJoinRequested(GameRichPresenceJoinRequested_t* pParam)
 {
-	m_OnGameRichPresenceJoinRequested.Broadcast(pParam->m_steamIDFriend.ConvertToUint64(), UTF8_TO_TCHAR(pParam->m_rgchConnect));
+	OnGameRichPresenceJoinRequestedDelegate.Broadcast(pParam->m_steamIDFriend.ConvertToUint64(), UTF8_TO_TCHAR(pParam->m_rgchConnect));
 }
 
 void USteamFriends::OnGameServerChangeRequested(GameServerChangeRequested_t* pParam)
 {
-	m_OnGameServerChangeRequested.Broadcast(UTF8_TO_TCHAR(pParam->m_rgchServer), UTF8_TO_TCHAR(pParam->m_rgchPassword));
+	OnGameServerChangeRequestedDelegate.Broadcast(UTF8_TO_TCHAR(pParam->m_rgchServer), UTF8_TO_TCHAR(pParam->m_rgchPassword));
 }
 
 void USteamFriends::OnJoinClanChatRoomCompletionResult(JoinClanChatRoomCompletionResult_t* pParam)
 {
-	m_OnJoinClanChatRoomCompletionResult.Broadcast(pParam->m_steamIDClanChat.ConvertToUint64(), static_cast<ESteamChatRoomEnterResponse>(pParam->m_eChatRoomEnterResponse));
+	OnJoinClanChatRoomCompletionResultDelegate.Broadcast(pParam->m_steamIDClanChat.ConvertToUint64(), (ESteamChatRoomEnterResponse)pParam->m_eChatRoomEnterResponse);
 }
 
 void USteamFriends::OnPersonaStateChange(PersonaStateChange_t* pParam)
 {
-	m_OnPersonaStateChange.Broadcast(pParam->m_ulSteamID, static_cast<ESteamPersonaChange>(static_cast<uint8>(pParam->m_nChangeFlags)));
+	OnPersonaStateChangeDelegate.Broadcast(pParam->m_ulSteamID, static_cast<ESteamPersonaChange>((uint8)pParam->m_nChangeFlags));
 }
 
 void USteamFriends::OnSetPersonaNameResponse(SetPersonaNameResponse_t* pParam)
 {
-	m_OnSetPersonaNameResponse.Broadcast(pParam->m_bSuccess, pParam->m_bLocalSuccess, static_cast<ESteamResult>(pParam->m_result));
+	OnSetPersonaNameResponseDelegate.Broadcast(pParam->m_bSuccess, pParam->m_bLocalSuccess, (ESteamResult)pParam->m_result);
 }

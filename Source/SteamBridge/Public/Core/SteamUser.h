@@ -1,12 +1,13 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
+#include <UObject/NoExportTypes.h>
+
 #include "Steam.h"
 #include "SteamEnums.h"
 #include "SteamStructs.h"
-#include "UObject/NoExportTypes.h"
 
 #include "SteamUser.generated.h"
 
@@ -51,7 +52,7 @@ public:
      * @return void
      */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|User")
-	void AdvertiseGame(FSteamID SteamID, const FString& IP, int32 Port);
+	void AdvertiseGame(const FSteamID SteamID, const FString& IP, int32 Port);
 
 	/**
 	 * Authenticate the ticket from the entity Steam ID to be sure it is valid and isn't reused.
@@ -65,7 +66,7 @@ public:
      * @return ESteamBeginAuthSessionResult
      */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|User")
-	ESteamBeginAuthSessionResult BeginAuthSession(TArray<uint8> Ticket, FSteamID SteamID) { return static_cast<ESteamBeginAuthSessionResult>(SteamUser()->BeginAuthSession(Ticket.GetData(), Ticket.Num(), SteamID)); }
+	ESteamBeginAuthSessionResult BeginAuthSession(TArray<uint8> Ticket, const FSteamID SteamID) { return (ESteamBeginAuthSessionResult)SteamUser()->BeginAuthSession(Ticket.GetData(), Ticket.Num(), SteamID); }
 
 	/**
 	 * Checks if the current users looks like they are behind a NAT device.
@@ -127,7 +128,7 @@ public:
      * @return void
      */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|User")
-	void CancelAuthTicket(FHAuthTicket AuthTicket) { SteamUser()->CancelAuthTicket(AuthTicket); }
+	void CancelAuthTicket(const FHAuthTicket AuthTicket) { SteamUser()->CancelAuthTicket(AuthTicket); }
 
 	/**
      * Decodes the compressed voice data returned by GetVoice.
@@ -148,7 +149,7 @@ public:
      * @return void
      */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|User")
-	void EndAuthSession(FSteamID SteamID) { SteamUser()->EndAuthSession(SteamID); }
+	void EndAuthSession(const FSteamID SteamID) { SteamUser()->EndAuthSession(SteamID); }
 
 	/**
 	 * Retrieve a authentication ticket to be sent to the entity who wishes to authenticate you.
@@ -173,7 +174,7 @@ public:
      * @return ESteamVoiceResult
      */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|User")
-	ESteamVoiceResult GetAvailableVoice(int32& CompressedSize) { return static_cast<ESteamVoiceResult>(SteamUser()->GetAvailableVoice((uint32*)&CompressedSize)); }
+	ESteamVoiceResult GetAvailableVoice(int32& CompressedSize) { return (ESteamVoiceResult)SteamUser()->GetAvailableVoice((uint32*)&CompressedSize); }
 
 	/**
 	 * Retrieves anti indulgence / duration control for current user / game combination.
@@ -181,7 +182,7 @@ public:
 	 * @return FSteamAPICall - SteamAPICall_t to be used with a DurationControl_t call result. Returns k_uAPICallInvalid if no connection to the Steam servers could be made.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|User")
-	FSteamAPICall GetDurationControl() { return static_cast<FSteamAPICall>(SteamUser()->GetDurationControl()); }
+	FSteamAPICall GetDurationControl() { return (FSteamAPICall)SteamUser()->GetDurationControl(); }
 
 	/**
 	 * Retrieve an encrypted ticket.
@@ -209,7 +210,7 @@ public:
 	 * @return int32 - The level of the badge, 0 if they don't have it.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|User")
-	int32 GetGameBadgeLevel(int32 nSeries, bool bFoil) { return SteamUser()->GetGameBadgeLevel(nSeries, bFoil); }
+	int32 GetGameBadgeLevel(const int32 nSeries, const bool bFoil) { return SteamUser()->GetGameBadgeLevel(nSeries, bFoil); }
 
 	/**
 	 * Gets Steam user handle that this interface represents.
@@ -218,7 +219,7 @@ public:
 	 * @return FHSteamUser
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|User")
-	FHSteamUser GetHSteamUser() { return static_cast<FHSteamUser>(SteamUser()->GetHSteamUser()); }
+	FHSteamUser GetHSteamUser() { return (FHSteamUser)SteamUser()->GetHSteamUser(); }
 
 	/**
 	 * Gets the Steam level of the user, as shown on their Steam community profile.
@@ -266,7 +267,7 @@ public:
 	 * @return int32
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|User")
-	int32 GetVoiceOptimalSampleRate() { return static_cast<uint32>(SteamUser()->GetVoiceOptimalSampleRate()); }
+	int32 GetVoiceOptimalSampleRate() { return (uint32)SteamUser()->GetVoiceOptimalSampleRate(); }
 
 	// #TODO RequestEncryptedAppTicket, RequestStoreAuthURL
 
@@ -298,7 +299,7 @@ public:
 	 * @return ESteamUserHasLicenseForAppResult
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|User")
-	ESteamUserHasLicenseForAppResult UserHasLicenseForApp(FSteamID SteamID, int32 AppID) { return static_cast<ESteamUserHasLicenseForAppResult>(SteamUser()->UserHasLicenseForApp(SteamID, AppID)); }
+	ESteamUserHasLicenseForAppResult UserHasLicenseForApp(const FSteamID SteamID, const int32 AppID) { return (ESteamUserHasLicenseForAppResult)SteamUser()->UserHasLicenseForApp(SteamID, AppID); }
 
 	/** Delegates */
 
@@ -307,76 +308,76 @@ public:
 	 * The game client should immediately disconnect upon receiving this message.
 	 * This can usually occur if the user doesn't have rights to play on the game server.
 	 */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User", meta = (DisplayName = "OnClientGameServerDeny"))
-	FOnClientGameServerDenyDelegate m_OnClientGameServerDeny;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User|Delegates", meta = (DisplayName = "OnClientGameServerDeny"))
+	FOnClientGameServerDenyDelegate OnClientGameServerDenyDelegate;
 
 	/**
 	 * Sent for games with enabled anti indulgence / duration control, for enabled users. Lets the game know whether persistent rewards or XP should be granted at normal rate, half rate, or zero rate.
 	 * This callback is fired asynchronously in response to timers triggering. It is also fired in response to calls to GetDurationControl().
 	 */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User", meta = (DisplayName = "OnDurationControl"))
-	FOnDurationControlDelegate m_OnDurationControl;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User|Delegates", meta = (DisplayName = "OnDurationControl"))
+	FOnDurationControlDelegate OnDurationControlDelegate;
 
 	/** Called when an encrypted application ticket has been received. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User", meta = (DisplayName = "OnEncryptedAppTicketResponse"))
-	FOnEncryptedAppTicketResponseDelegate m_OnEncryptedAppTicketResponse;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User|Delegates", meta = (DisplayName = "OnEncryptedAppTicketResponse"))
+	FOnEncryptedAppTicketResponseDelegate OnEncryptedAppTicketResponseDelegate;
 
 	/**
 	 * Sent to your game in response to a steam://gamewebcallback/ command from a user clicking a link in the Steam overlay browser.
 	 * You can use this to add support for external site signups where you want to pop back into the browser after some web page signup sequence, and optionally get back some detail about that.
 	 */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User", meta = (DisplayName = "OnGameWebCallback"))
-	FOnGameWebCallbackDelegate m_OnGameWeb;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User|Delegates", meta = (DisplayName = "OnGameWebCallback"))
+	FOnGameWebCallbackDelegate OnGameWebDelegate;
 
 	/** Result when creating an auth session ticket. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User", meta = (DisplayName = "OnGetAuthSessionTicketResponse"))
-	FOnGetAuthSessionTicketResponseDelegate m_OnGetAuthSessionTicketResponse;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User|Delegates", meta = (DisplayName = "OnGetAuthSessionTicketResponse"))
+	FOnGetAuthSessionTicketResponseDelegate OnGetAuthSessionTicketResponseDelegate;
 
 	/**
 	 * Called when the callback system for this client is in an error state (and has flushed pending callbacks)
 	 * When getting this message the client should disconnect from Steam, reset any stored Steam state and reconnect.
 	 * This usually occurs in the rare event the Steam client has some kind of fatal error.
 	 */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User", meta = (DisplayName = "OnIPCFailure"))
-	FOnIPCFailureDelegate m_IPCFailure;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User|Delegates", meta = (DisplayName = "OnIPCFailure"))
+	FOnIPCFailureDelegate OnIPCFailureDelegate;
 
 	/** Called whenever the users licenses (owned packages) changes. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User", meta = (DisplayName = "OnLicensesUpdated"))
-	FOnLicensesUpdatedDelegate m_OnLicensesUpdated;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User|Delegates", meta = (DisplayName = "OnLicensesUpdated"))
+	FOnLicensesUpdatedDelegate OnLicensesUpdatedDelegate;
 
 	/** Called when a user has responded to a microtransaction authorization request. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User", meta = (DisplayName = "OnMicroTxnAuthorizationResponse"))
-	FOnMicroTxnAuthorizationResponseDelegate m_OnMicroTxnAuthorizationResponse;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User|Delegates", meta = (DisplayName = "OnMicroTxnAuthorizationResponse"))
+	FOnMicroTxnAuthorizationResponseDelegate OnMicroTxnAuthorizationResponseDelegate;
 
 	/**
 	 * Called when a connection attempt has failed.
 	 * This will occur periodically if the Steam client is not connected, and has failed when retrying to establish a connection.
      */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User", meta = (DisplayName = "OnSteamServerConnectFailure"))
-	FOnSteamServerConnectFailureDelegate m_OnSteamServerConnectFailure;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User|Delegates", meta = (DisplayName = "OnSteamServerConnectFailure"))
+	FOnSteamServerConnectFailureDelegate OnSteamServerConnectFailureDelegate;
 
 	/**
 	 * Called when a connections to the Steam back-end has been established.
 	 * This means the Steam client now has a working connection to the Steam servers.
 	 * Usually this will have occurred before the game has launched, and should only be seen if the user has dropped connection due to a networking issue or a Steam server update.
 	 */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User", meta = (DisplayName = "OnSteamServersConnected"))
-	FOnSteamServersConnectedDelegate m_OnSteamServersConnected;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User|Delegates", meta = (DisplayName = "OnSteamServersConnected"))
+	FOnSteamServersConnectedDelegate OnSteamServersConnectedDelegate;
 
 	/**
 	 * Called if the client has lost connection to the Steam servers.
 	 * Real-time services will be disabled until a matching SteamServersConnected_t has been posted.
 	 */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User", meta = (DisplayName = "OnSteamServersDisconnected"))
-	FOnSteamServersDisconnectedDelegate m_OnSteamServersDisconnected;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User|Delegates", meta = (DisplayName = "OnSteamServersDisconnected"))
+	FOnSteamServersDisconnectedDelegate OnSteamServersDisconnectedDelegate;
 
 	/** Response when we have recieved the authentication URL after a call to RequestStoreAuthURL. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User", meta = (DisplayName = "OnStoreAuthURLResponse"))
-	FOnStoreAuthURLResponseDelegate m_OnStoreAuthURLResponse;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User|Delegates", meta = (DisplayName = "OnStoreAuthURLResponse"))
+	FOnStoreAuthURLResponseDelegate OnStoreAuthURLResponseDelegate;
 
 	/** Called when an auth ticket has been validated. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User", meta = (DisplayName = "OnValidateAuthTicketResponse"))
-	FOnValidateAuthTicketResponseDelegate m_OnValidateAuthTicketResponse;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|User|Delegates", meta = (DisplayName = "OnValidateAuthTicketResponse"))
+	FOnValidateAuthTicketResponseDelegate OnValidateAuthTicketResponseDelegate;
 
 protected:
 private:

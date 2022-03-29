@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #include "Core/SteamMatchmaking.h"
 
@@ -34,7 +34,7 @@ USteamMatchmaking::~USteamMatchmaking()
 	OnLobbyMatchListCallback.Unregister();
 }
 
-int32 USteamMatchmaking::AddFavoriteGame(int32 AppID, const FString& IP, int32 ConnPort, int32 QueryPort, const TArray<ESteamFavoriteFlags>& Flags, const FDateTime& TimeLastPlayedOnServer) const
+int32 USteamMatchmaking::AddFavoriteGame(const int32 AppID, const FString& IP, const int32 ConnPort, const int32 QueryPort, const TArray<ESteamFavoriteFlags>& Flags, const FDateTime& TimeLastPlayedOnServer) const
 {
 	uint32 TmpIP = 0;
 	USteamBridgeUtils::ConvertIPStringToUint32(IP, TmpIP);
@@ -42,7 +42,7 @@ int32 USteamMatchmaking::AddFavoriteGame(int32 AppID, const FString& IP, int32 C
 	int32 TmpFlags = 0;
 	for (const auto& Flag : Flags)
 	{
-		TmpFlags |= 1 << static_cast<int32>(Flag);
+		TmpFlags |= 1 << (int32)Flag;
 	}
 
 	return SteamMatchmaking()->AddFavoriteGame(AppID, TmpIP, ConnPort, QueryPort, TmpFlags, TimeLastPlayedOnServer.ToUnixTimestamp());
@@ -50,7 +50,7 @@ int32 USteamMatchmaking::AddFavoriteGame(int32 AppID, const FString& IP, int32 C
 
 bool USteamMatchmaking::GetFavoriteGame(int32 GameIndex, int32& AppID, FString& IP, int32& ConnPort, int32& QueryPort, TArray<ESteamFavoriteFlags>& Flags, FDateTime& TimeLastPlayedOnServer) const
 {
-	uint32 TmpIP = 0, TmpFlags = 0, TmpTime;
+	uint32 TmpIP = 0, TmpFlags = 0, TmpTime = 0;
 
 	bool bResult = SteamMatchmaking()->GetFavoriteGame(GameIndex, (uint32*)&AppID, &TmpIP, (uint16*)&ConnPort, (uint16*)&QueryPort, &TmpFlags, &TmpTime);
 	IP = USteamBridgeUtils::ConvertIPToString(TmpIP);
@@ -60,24 +60,24 @@ bool USteamMatchmaking::GetFavoriteGame(int32 GameIndex, int32& AppID, FString& 
 	{
 		if (TmpFlags & 1 << i)
 		{
-			Flags.Add(static_cast<ESteamFavoriteFlags>(i));
+			Flags.Add((ESteamFavoriteFlags)i);
 		}
 	}
 
 	return bResult;
 }
 
-int32 USteamMatchmaking::GetLobbyChatEntry(FSteamID SteamIDLobby, int32 ChatID, FSteamID& SteamIDUser, FString& Message, ESteamChatEntryType& ChatEntryType) const
+int32 USteamMatchmaking::GetLobbyChatEntry(const FSteamID SteamIDLobby, const int32 ChatID, FSteamID& SteamIDUser, FString& Message, ESteamChatEntryType& ChatEntryType) const
 {
 	EChatEntryType TmpType;
 	CSteamID TmpUserSteamID = SteamIDUser;
 	TArray<uint8> MessageBuffer;
-	MessageBuffer.SetNum(8192);
+	MessageBuffer.SetNum(SteamDefs::Buffer8192);
 
-	int32 Result = SteamMatchmaking()->GetLobbyChatEntry(SteamIDLobby, ChatID, &TmpUserSteamID, MessageBuffer.GetData(), 8192, &TmpType);
+	int32 Result = SteamMatchmaking()->GetLobbyChatEntry(SteamIDLobby, ChatID, &TmpUserSteamID, MessageBuffer.GetData(), SteamDefs::Buffer8192, &TmpType);
 
 	SteamIDUser = TmpUserSteamID.ConvertToUint64();
-	ChatEntryType = static_cast<ESteamChatEntryType>(TmpType);
+	ChatEntryType = (ESteamChatEntryType)TmpType;
 
 	FMemoryReader MemReader(MessageBuffer, true);
 	MemReader << Message;
@@ -86,13 +86,13 @@ int32 USteamMatchmaking::GetLobbyChatEntry(FSteamID SteamIDLobby, int32 ChatID, 
 	return Result;
 }
 
-bool USteamMatchmaking::GetLobbyDataByIndex(FSteamID SteamIDLobby, int32 LobbyData, FString& Key, FString& Value) const
+bool USteamMatchmaking::GetLobbyDataByIndex(const FSteamID SteamIDLobby, const int32 LobbyData, FString& Key, FString& Value) const
 {
 	TArray<char> TmpKey, TmpValue;
-	TmpKey.SetNum(8192);
-	TmpValue.SetNum(8192);
+	TmpKey.SetNum(SteamDefs::Buffer8192);
+	TmpValue.SetNum(SteamDefs::Buffer8192);
 
-	bool bResult = SteamMatchmaking()->GetLobbyDataByIndex(SteamIDLobby, LobbyData, TmpKey.GetData(), 8192, TmpValue.GetData(), 8192);
+	bool bResult = SteamMatchmaking()->GetLobbyDataByIndex(SteamIDLobby, LobbyData, TmpKey.GetData(), SteamDefs::Buffer8192, TmpValue.GetData(), SteamDefs::Buffer8192);
 
 	Key = UTF8_TO_TCHAR(TmpKey.GetData());
 	Value = UTF8_TO_TCHAR(TmpValue.GetData());
@@ -100,7 +100,7 @@ bool USteamMatchmaking::GetLobbyDataByIndex(FSteamID SteamIDLobby, int32 LobbyDa
 	return bResult;
 }
 
-bool USteamMatchmaking::GetLobbyGameServer(FSteamID SteamIDLobby, FString& GameServerIP, int32& GameServerPort, FSteamID& SteamIDGameServer) const
+bool USteamMatchmaking::GetLobbyGameServer(const FSteamID SteamIDLobby, FString& GameServerIP, int32& GameServerPort, FSteamID& SteamIDGameServer) const
 {
 	uint32 TmpIP = 0;
 	bool bResult = SteamMatchmaking()->GetLobbyGameServer(SteamIDLobby, &TmpIP, (uint16*)&GameServerPort, (CSteamID*)&SteamIDGameServer);
@@ -108,7 +108,7 @@ bool USteamMatchmaking::GetLobbyGameServer(FSteamID SteamIDLobby, FString& GameS
 	return bResult;
 }
 
-bool USteamMatchmaking::RemoveFavoriteGame(int32 AppID, const FString& IP, int32 ConnPort, int32 QueryPort, const TArray<ESteamFavoriteFlags>& Flags) const
+bool USteamMatchmaking::RemoveFavoriteGame(const int32 AppID, const FString& IP, const int32 ConnPort, const int32 QueryPort, const TArray<ESteamFavoriteFlags>& Flags) const
 {
 	uint32 TmpIP = 0;
 	USteamBridgeUtils::ConvertIPStringToUint32(IP, TmpIP);
@@ -116,15 +116,16 @@ bool USteamMatchmaking::RemoveFavoriteGame(int32 AppID, const FString& IP, int32
 	int32 TmpFlags = 0;
 	for (const auto& Flag : Flags)
 	{
-		TmpFlags |= 1 << static_cast<int32>(Flag);
+		TmpFlags |= 1 << (int32)Flag;
 	}
 
 	return SteamMatchmaking()->RemoveFavoriteGame(AppID, TmpIP, ConnPort, QueryPort, TmpFlags);
 }
 
-bool USteamMatchmaking::SendLobbyChatMsg(FSteamID SteamIDLobby, FString Message) const
+bool USteamMatchmaking::SendLobbyChatMsg(const FSteamID SteamIDLobby, FString Message) const
 {
 	TArray<uint8> MessageBuffer;
+	MessageBuffer.Reserve(Message.Len());
 	FMemoryWriter MemWriter(MessageBuffer, true);
 	MemWriter << Message;
 	MemWriter.Close();
@@ -132,7 +133,7 @@ bool USteamMatchmaking::SendLobbyChatMsg(FSteamID SteamIDLobby, FString Message)
 	return SteamMatchmaking()->SendLobbyChatMsg(SteamIDLobby, MessageBuffer.GetData(), MessageBuffer.Num());
 }
 
-void USteamMatchmaking::SetLobbyGameServer(FSteamID SteamIDLobby, const FString& GameServerIP, int32 GameServerPort, FSteamID SteamIDGameServer) const
+void USteamMatchmaking::SetLobbyGameServer(const FSteamID SteamIDLobby, const FString& GameServerIP, const int32 GameServerPort, const FSteamID SteamIDGameServer) const
 {
 	uint32 TmpIP = 0;
 	USteamBridgeUtils::ConvertIPStringToUint32(GameServerIP, TmpIP);
@@ -142,7 +143,7 @@ void USteamMatchmaking::SetLobbyGameServer(FSteamID SteamIDLobby, const FString&
 
 void USteamMatchmaking::OnFavoritesListAccountsUpdated(FavoritesListAccountsUpdated_t* pParam)
 {
-	m_OnFavoritesListAccountsUpdated.Broadcast(static_cast<ESteamResult>(pParam->m_eResult));
+	OnFavoritesListAccountsUpdatedDelegate.Broadcast((ESteamResult)pParam->m_eResult);
 }
 
 void USteamMatchmaking::OnFavoritesListChanged(FavoritesListChanged_t* pParam)
@@ -153,15 +154,15 @@ void USteamMatchmaking::OnFavoritesListChanged(FavoritesListChanged_t* pParam)
 	{
 		if (TmpFlags & 1 << i)
 		{
-			Flags.Add(static_cast<ESteamFavoriteFlags>(i));
+			Flags.Add((ESteamFavoriteFlags)i);
 		}
 	}
-	m_OnFavoritesListChanged.Broadcast(USteamBridgeUtils::ConvertIPToString(pParam->m_nIP), pParam->m_nQueryPort, pParam->m_nConnPort, pParam->m_nAppID, Flags, pParam->m_bAdd, pParam->m_unAccountId);
+	OnFavoritesListChangedDelegate.Broadcast(USteamBridgeUtils::ConvertIPToString(pParam->m_nIP), pParam->m_nQueryPort, pParam->m_nConnPort, pParam->m_nAppID, Flags, pParam->m_bAdd, pParam->m_unAccountId);
 }
 
 void USteamMatchmaking::OnLobbyChatMsg(LobbyChatMsg_t* pParam)
 {
-	m_OnLobbyChatMsg.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_ulSteamIDUser, static_cast<ESteamChatEntryType>(pParam->m_eChatEntryType), pParam->m_iChatID);
+	OnLobbyChatMsgDelegate.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_ulSteamIDUser, (ESteamChatEntryType)pParam->m_eChatEntryType, pParam->m_iChatID);
 }
 
 void USteamMatchmaking::OnLobbyChatUpdate(LobbyChatUpdate_t* pParam)
@@ -172,35 +173,35 @@ void USteamMatchmaking::OnLobbyChatUpdate(LobbyChatUpdate_t* pParam)
 	{
 		if (TmpFlags & 1 << i)
 		{
-			Flags.Add(static_cast<ESteamChatMemberStateChange>(i));
+			Flags.Add((ESteamChatMemberStateChange)i);
 		}
 	}
-	m_OnLobbyChatUpdate.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_ulSteamIDUserChanged, pParam->m_ulSteamIDMakingChange, Flags);
+	OnLobbyChatUpdateDelegate.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_ulSteamIDUserChanged, pParam->m_ulSteamIDMakingChange, Flags);
 }
 
 void USteamMatchmaking::OnLobbyCreated(LobbyCreated_t* pParam)
 {
-	m_OnLobbyCreated.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_ulSteamIDLobby);
+	OnLobbyCreatedDelegate.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_ulSteamIDLobby);
 }
 
 void USteamMatchmaking::OnLobbyDataUpdate(LobbyDataUpdate_t* pParam)
 {
-	m_OnLobbyDataUpdate.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_ulSteamIDMember, pParam->m_bSuccess == 1);
+	OnLobbyDataUpdateDelegate.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_ulSteamIDMember, pParam->m_bSuccess == 1);
 }
 
 void USteamMatchmaking::OnLobbyEnter(LobbyEnter_t* pParam)
 {
-	m_OnLobbyEnter.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_bLocked, static_cast<ESteamChatRoomEnterResponse>(pParam->m_EChatRoomEnterResponse));
+	OnLobbyEnterDelegate.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_bLocked, (ESteamChatRoomEnterResponse)pParam->m_EChatRoomEnterResponse);
 }
 
 void USteamMatchmaking::OnLobbyGameCreated(LobbyGameCreated_t* pParam)
 {
-	m_OnLobbyGameCreated.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_ulSteamIDGameServer, USteamBridgeUtils::ConvertIPToString(pParam->m_unIP), pParam->m_usPort);
+	OnLobbyGameCreatedDelegate.Broadcast(pParam->m_ulSteamIDLobby, pParam->m_ulSteamIDGameServer, USteamBridgeUtils::ConvertIPToString(pParam->m_unIP), pParam->m_usPort);
 }
 
 void USteamMatchmaking::OnLobbyInvite(LobbyInvite_t* pParam)
 {
-	m_OnLobbyInvite.Broadcast(pParam->m_ulSteamIDUser, pParam->m_ulSteamIDLobby, pParam->m_ulGameID);
+	OnLobbyInviteDelegate.Broadcast(pParam->m_ulSteamIDUser, pParam->m_ulSteamIDLobby, pParam->m_ulGameID);
 }
 
 // This is currently unused
@@ -211,5 +212,5 @@ void USteamMatchmaking::OnLobbyInvite(LobbyInvite_t* pParam)
 
 void USteamMatchmaking::OnLobbyMatchList(LobbyMatchList_t* pParam)
 {
-	m_OnLobbyMatchList.Broadcast(pParam->m_nLobbiesMatching);
+	OnLobbyMatchListDelegate.Broadcast(pParam->m_nLobbiesMatching);
 }

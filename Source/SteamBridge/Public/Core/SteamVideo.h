@@ -1,12 +1,13 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
+#include <UObject/NoExportTypes.h>
+
 #include "Steam.h"
 #include "SteamEnums.h"
 #include "SteamStructs.h"
-#include "UObject/NoExportTypes.h"
 
 #include "SteamVideo.generated.h"
 
@@ -41,7 +42,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Video")
-	void GetOPFSettings(int32 VideoAppID) { SteamVideo()->GetOPFSettings(VideoAppID); }
+	void GetOPFSettings(const int32 VideoAppID) { SteamVideo()->GetOPFSettings(VideoAppID); }
 
 	/**
 	 * Gets the OPF string for the specified video App ID.
@@ -54,7 +55,7 @@ public:
 	 * @return bool - true if we have the OPF details from a previous call to GetOPFSettings, otherwise false.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Video")
-	bool GetOPFStringForApp(int32 VideoAppID, FString& OPFString) const;
+	bool GetOPFStringForApp(const int32 VideoAppID, FString& OPFString) const;
 
 	/**
 	 * Asynchronously gets the URL suitable for streaming the video associated with the specified video app ID.
@@ -64,7 +65,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Video")
-	void GetVideoURL(int32 VideoAppID) { SteamVideo()->GetVideoURL(VideoAppID); }
+	void GetVideoURL(const int32 VideoAppID) { SteamVideo()->GetVideoURL(VideoAppID); }
 
 	/**
 	 * Checks if the user is currently live broadcasting and gets the number of users.
@@ -77,19 +78,19 @@ public:
 
 	/** Delegates */
 
-	/*UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Video", meta = (DisplayName = "OnBroadcastUploadStart"))
+	/*UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Video|Delegates", meta = (DisplayName = "OnBroadcastUploadStart"))
 	FOnBroadcastUploadStartDelegate m_OnBroadcastUploadStart;
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Video", meta = (DisplayName = "OnBroadcastUploadStop"))
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Video|Delegates", meta = (DisplayName = "OnBroadcastUploadStop"))
 	FOnBroadcastUploadStopDelegate m_OnBroadcastUploadStop;*/
 
 	/** Triggered when the OPF Details for 360 video playback are retrieved. After receiving this you can use GetOPFStringForApp to access the OPF details. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Video", meta = (DisplayName = "OnGetOPFSettingsResult"))
-	FOnGetOPFSettingsResultDelegate m_OnGetOPFSettingsResult;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Video|Delegates", meta = (DisplayName = "OnGetOPFSettingsResult"))
+	FOnGetOPFSettingsResultDelegate OnGetOPFSettingsResultDelegate;
 
 	/** Provides the result of a call to GetVideoURL. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Video", meta = (DisplayName = "OnGetVideoURLResult"))
-	FOnGetVideoURLResultDelegate m_OnGetVideoURLResult;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Video|Delegates", meta = (DisplayName = "OnGetVideoURLResult"))
+	FOnGetVideoURLResultDelegate OnGetVideoURLResultDelegate;
 
 protected:
 private:

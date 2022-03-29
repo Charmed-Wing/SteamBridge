@@ -1,12 +1,13 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
+#include <UObject/NoExportTypes.h>
+
 #include "Steam.h"
 #include "SteamEnums.h"
 #include "SteamStructs.h"
-#include "UObject/NoExportTypes.h"
 
 #include "SteamUserStats.generated.h"
 
@@ -51,7 +52,7 @@ public:
 	 * @return FSteamAPICall - SteamAPICall_t to be used with a LeaderboardUGCSet_t call result.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UserStats")
-	FSteamAPICall AttachLeaderboardUGC(FSteamLeaderboard SteamLeaderboard, FUGCHandle UGC) const { return SteamUserStats()->AttachLeaderboardUGC(SteamLeaderboard, UGC); }
+	FSteamAPICall AttachLeaderboardUGC(const FSteamLeaderboard SteamLeaderboard, const FUGCHandle UGC) const { return SteamUserStats()->AttachLeaderboardUGC(SteamLeaderboard, UGC); }
 
 	/**
 	 * Resets the unlock status of an achievement.
@@ -80,7 +81,7 @@ public:
 	 * @return FSteamAPICall - SteamAPICall_t to be used with a LeaderboardScoresDownloaded_t call result.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UserStats")
-	FSteamAPICall DownloadLeaderboardEntries(FSteamLeaderboard SteamLeaderboard, ESteamLeaderboardDataRequest LeaderboardDataRequest, int32 RangeStart, int32 RangeEnd) const;
+	FSteamAPICall DownloadLeaderboardEntries(const FSteamLeaderboard SteamLeaderboard, const ESteamLeaderboardDataRequest LeaderboardDataRequest, const int32 RangeStart, const int32 RangeEnd) const;
 
 	// #TODO: DownloadLeaderboardEntriesForUsers
 
@@ -107,7 +108,7 @@ public:
 	 * @return FSteamAPICall - SteamAPICall_t to be used with a LeaderboardFindResult_t call result.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UserStats")
-	FSteamAPICall FindOrCreateLeaderboard(const FString& LeaderboardName, ESteamLeaderboardSortMethod LeaderboardSortMethod, ESteamLeaderboardDisplayType LeaderboardDisplayType) const;
+	FSteamAPICall FindOrCreateLeaderboard(const FString& LeaderboardName, const ESteamLeaderboardSortMethod LeaderboardSortMethod, const ESteamLeaderboardDisplayType LeaderboardDisplayType) const;
 
 	/**
 	 * Gets the unlock status of the Achievement.
@@ -193,7 +194,7 @@ public:
 	 * App ID must have achievements.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	FString GetAchievementName(int32 AchievementIndex = 0) const { return SteamUserStats()->GetAchievementName(AchievementIndex); }
+	FString GetAchievementName(const int32 AchievementIndex = 0) const { return SteamUserStats()->GetAchievementName(AchievementIndex); }
 
 	/**
 	 * Retrieves the data for a single leaderboard entry.
@@ -211,7 +212,7 @@ public:
 	 * If the call is successful then the entry is returned via the parameter pLeaderboardEntry and if cDetailsMax is not 0 then pDetails is filled with the unlock details.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	bool GetDownloadedLeaderboardEntry(FSteamLeaderboardEntries SteamLeaderboardEntries, int32 index, FSteamLeaderboardEntry& LeaderboardEntry, TArray<int32>& Details, int32 DetailsMax) const;
+	bool GetDownloadedLeaderboardEntry(const FSteamLeaderboardEntries SteamLeaderboardEntries, const int32 index, FSteamLeaderboardEntry& LeaderboardEntry, TArray<int32>& Details, const int32 DetailsMax) const;
 
 	/**
 	 * Gets the lifetime totals for an aggregated stat.
@@ -256,7 +257,7 @@ public:
 	 * There is no history available.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	int32 GetGlobalStatHistoryInt64(const FString& StatName, TArray<int64>& Data, int32 Size = 10) const { return SteamUserStats()->GetGlobalStatHistory(TCHAR_TO_UTF8(*StatName), Data.GetData(), Size); }
+	int32 GetGlobalStatHistoryInt64(const FString& StatName, TArray<int64>& Data, const int32 Size = 10) const { return SteamUserStats()->GetGlobalStatHistory(TCHAR_TO_UTF8(*StatName), Data.GetData(), Size); }
 
 	/**
 	 * Gets the daily history for an aggregated stat. pData will be filled with daily values, starting with today. So when called, pData[0] will be today, pData[1] will be yesterday, and pData[2] will be two days ago, etc.
@@ -273,7 +274,7 @@ public:
 	 * There is no history available.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	int32 GetGlobalStatHistoryFloat(const FString& StatName, TArray<float>& Data, int32 Size = 10) const;
+	int32 GetGlobalStatHistoryFloat(const FString& StatName, TArray<float>& Data, const int32 Size = 10) const;
 
 	/**
 	 * Returns the display type of a leaderboard handle.
@@ -282,7 +283,7 @@ public:
 	 * @return ESteamLeaderboardDisplayType - The display type of the leaderboard. Returns k_ELeaderboardDisplayTypeNone if the leaderboard handle is invalid.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	ESteamLeaderboardDisplayType GetLeaderboardDisplayType(FSteamLeaderboard SteamLeaderboard) const { return static_cast<ESteamLeaderboardDisplayType>(SteamUserStats()->GetLeaderboardDisplayType(SteamLeaderboard)); }
+	ESteamLeaderboardDisplayType GetLeaderboardDisplayType(const FSteamLeaderboard SteamLeaderboard) const { return (ESteamLeaderboardDisplayType)SteamUserStats()->GetLeaderboardDisplayType(SteamLeaderboard); }
 
 	/**
 	 * Returns the total number of entries in a leaderboard.
@@ -292,7 +293,7 @@ public:
 	 * @return int32 - The number of entries in the leaderboard. Returns 0 if the leaderboard handle is invalid.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	int32 GetLeaderboardEntryCount(FSteamLeaderboard SteamLeaderboard) const { return SteamUserStats()->GetLeaderboardEntryCount(SteamLeaderboard); }
+	int32 GetLeaderboardEntryCount(const FSteamLeaderboard SteamLeaderboard) const { return SteamUserStats()->GetLeaderboardEntryCount(SteamLeaderboard); }
 
 	/**
 	 * Returns the name of a leaderboard handle.
@@ -301,7 +302,7 @@ public:
 	 * @return FString - The name of the leaderboard. Returns an empty string if the leaderboard handle is invalid.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	FString GetLeaderboardName(FSteamLeaderboard SteamLeaderboard) const { return UTF8_TO_TCHAR(SteamUserStats()->GetLeaderboardName(SteamLeaderboard)); }
+	FString GetLeaderboardName(const FSteamLeaderboard SteamLeaderboard) const { return UTF8_TO_TCHAR(SteamUserStats()->GetLeaderboardName(SteamLeaderboard)); }
 
 	/**
 	 * Returns the sort order of a leaderboard handle.
@@ -310,7 +311,7 @@ public:
 	 * @return ESteamLeaderboardSortMethod - The sort method of the leaderboard. Returns k_ELeaderboardSortMethodNone if the leaderboard handle is invalid.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	ESteamLeaderboardSortMethod GetLeaderboardSortMethod(FSteamLeaderboard SteamLeaderboard) const { return static_cast<ESteamLeaderboardSortMethod>(SteamUserStats()->GetLeaderboardSortMethod(SteamLeaderboard)); }
+	ESteamLeaderboardSortMethod GetLeaderboardSortMethod(const FSteamLeaderboard SteamLeaderboard) const { return (ESteamLeaderboardSortMethod)SteamUserStats()->GetLeaderboardSortMethod(SteamLeaderboard); }
 
 	/**
 	 * Gets the info on the most achieved achievement for the game.
@@ -337,7 +338,7 @@ public:
 	 * If the call is successful it returns an iterator which should be used with subsequent calls to this function.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	int32 GetNextMostAchievedAchievementInfo(int32 IteratorPrevious, FString& Name, float& Percent, bool& bAchieved) const;
+	int32 GetNextMostAchievedAchievementInfo(const int32 IteratorPrevious, FString& Name, float& Percent, bool& bAchieved) const;
 
 	/**
 	 * Get the number of achievements defined in the App Admin panel of the Steamworks website.
@@ -400,7 +401,7 @@ public:
 	 * If the call is successful then the unlock status is returned via the pbAchieved parameter.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	bool GetUserAchievement(FSteamID SteamIDUser, const FString& Name, bool& bAchieved) const { return SteamUserStats()->GetUserAchievement(SteamIDUser, TCHAR_TO_UTF8(*Name), &bAchieved); }
+	bool GetUserAchievement(const FSteamID SteamIDUser, const FString& Name, bool& bAchieved) const { return SteamUserStats()->GetUserAchievement(SteamIDUser, TCHAR_TO_UTF8(*Name), &bAchieved); }
 
 	/**
 	 * Gets the achievement status, and the time it was unlocked if unlocked.
@@ -417,7 +418,7 @@ public:
 	 * If the call is successful then the achieved status and unlock time are provided via the arguments pbAchieved and punUnlockTime.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	bool GetUserAchievementAndUnlockTime(FSteamID SteamIDUser, const FString& Name, bool& bAchieved, FDateTime& UnlockTime) const;
+	bool GetUserAchievementAndUnlockTime(const FSteamID SteamIDUser, const FString& Name, bool& bAchieved, FDateTime& UnlockTime) const;
 
 	/**
 	 * Gets the current value of the a stat for the specified user.
@@ -433,7 +434,7 @@ public:
 	 * The type does not match the type listed in the App Admin panel of the Steamworks website.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	bool GetUserStatInt32(FSteamID SteamIDUser, const FString& Name, int32& Data) const { return SteamUserStats()->GetUserStat(SteamIDUser, TCHAR_TO_UTF8(*Name), &Data); }
+	bool GetUserStatInt32(const FSteamID SteamIDUser, const FString& Name, int32& Data) const { return SteamUserStats()->GetUserStat(SteamIDUser, TCHAR_TO_UTF8(*Name), &Data); }
 
 	/**
 	 * Gets the current value of the a stat for the specified user.
@@ -449,7 +450,7 @@ public:
 	 * The type does not match the type listed in the App Admin panel of the Steamworks website.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|UserStats")
-	bool GetUserStatFloat(FSteamID SteamIDUser, const FString& Name, float& Data) const { return SteamUserStats()->GetUserStat(SteamIDUser, TCHAR_TO_UTF8(*Name), &Data); }
+	bool GetUserStatFloat(const FSteamID SteamIDUser, const FString& Name, float& Data) const { return SteamUserStats()->GetUserStat(SteamIDUser, TCHAR_TO_UTF8(*Name), &Data); }
 
 	/**
 	 * Shows the user a pop-up notification with the current progress of an achievement.
@@ -467,7 +468,7 @@ public:
  	 * nCurProgress is less than nMaxProgress.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UserStats")
-	bool IndicateAchievementProgress(const FString& Name, int32 CurProgress, int32 MaxProgress) const { return SteamUserStats()->IndicateAchievementProgress(TCHAR_TO_UTF8(*Name), CurProgress, MaxProgress); }
+	bool IndicateAchievementProgress(const FString& Name, const int32 CurProgress, const int32 MaxProgress) const { return SteamUserStats()->IndicateAchievementProgress(TCHAR_TO_UTF8(*Name), CurProgress, MaxProgress); }
 
 	/**
 	 * Asynchronously request the user's current stats and achievements from the server.
@@ -498,7 +499,7 @@ public:
 	 * @return FSteamAPICall - SteamAPICall_t to be used with a GlobalStatsReceived_t call result.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UserStats")
-	FSteamAPICall RequestGlobalStats(int32 HistoryDays) const { return SteamUserStats()->RequestGlobalStats(HistoryDays); }
+	FSteamAPICall RequestGlobalStats(const int32 HistoryDays) const { return SteamUserStats()->RequestGlobalStats(HistoryDays); }
 
 	/**
 	 * Asynchronously downloads stats and achievements for the specified user from the server.
@@ -511,7 +512,7 @@ public:
 	 * @return FSteamAPICall - SteamAPICall_t to be used with a UserStatsReceived_t call result.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UserStats")
-	FSteamAPICall RequestUserStats(FSteamID SteamIDUser) const { return SteamUserStats()->RequestUserStats(SteamIDUser); }
+	FSteamAPICall RequestUserStats(const FSteamID SteamIDUser) const { return SteamUserStats()->RequestUserStats(SteamIDUser); }
 
 	/**
 	 * Resets the current users stats and, optionally achievements.
@@ -522,7 +523,7 @@ public:
 	 * @return bool - true indicating success if RequestCurrentStats has been called and successfully returned its callback; otherwise false.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UserStats")
-	bool ResetAllStats(bool bAchievementsToo) const { return SteamUserStats()->ResetAllStats(bAchievementsToo); }
+	bool ResetAllStats(const bool bAchievementsToo) const { return SteamUserStats()->ResetAllStats(bAchievementsToo); }
 
 	/**
 	 * Unlocks an achievement.
@@ -553,7 +554,7 @@ public:
 	 * The type passed to this function must match the type listed in the App Admin panel of the Steamworks website.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UserStats")
-	bool SetStatInt32(const FString& Name, int32 Data) const { return SteamUserStats()->SetStat(TCHAR_TO_UTF8(*Name), Data); }
+	bool SetStatInt32(const FString& Name, const int32 Data) const { return SteamUserStats()->SetStat(TCHAR_TO_UTF8(*Name), Data); }
 
 	/**
 	 * Sets / updates the value of a given stat for the current user.
@@ -570,7 +571,7 @@ public:
 	 * The type passed to this function must match the type listed in the App Admin panel of the Steamworks website.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UserStats")
-	bool SetStatFloat(const FString& Name, float Data) const { return SteamUserStats()->SetStat(TCHAR_TO_UTF8(*Name), Data); }
+	bool SetStatFloat(const FString& Name, const float Data) const { return SteamUserStats()->SetStat(TCHAR_TO_UTF8(*Name), Data); }
 
 	/**
 	 * Send the changed stats and achievements data to the server for permanent storage.
@@ -609,7 +610,7 @@ public:
 	 * The type must be AVGRATE in the Steamworks Partner backend.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UserStats")
-	bool UpdateAvgRateStat(const FString& Name, float CountThisSession, float SessionLength) const { return SteamUserStats()->UpdateAvgRateStat(TCHAR_TO_UTF8(*Name), CountThisSession, static_cast<double>(SessionLength)); }
+	bool UpdateAvgRateStat(const FString& Name, const float CountThisSession, const float SessionLength) const { return SteamUserStats()->UpdateAvgRateStat(TCHAR_TO_UTF8(*Name), CountThisSession, (double)SessionLength); }
 
 	/**
 	 * Uploads a user score to a specified leaderboard.
@@ -624,63 +625,63 @@ public:
 	 * @return FSteamAPICall - SteamAPICall_t to be used with a LeaderboardScoreUploaded_t call result.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|UserStats")
-	FSteamAPICall UploadLeaderboardScore(FSteamLeaderboard SteamLeaderboard, ESteamLeaderboardUploadScoreMethod LeaderboardUploadScoreMethod, int32 Score, const TArray<int32>& ScoreDetails) const;
+	FSteamAPICall UploadLeaderboardScore(const FSteamLeaderboard SteamLeaderboard, const ESteamLeaderboardUploadScoreMethod LeaderboardUploadScoreMethod, const int32 Score, const TArray<int32>& ScoreDetails) const;
 
 	/** Delegates */
 
 	/** Called when the global achievement percentages have been received from the server. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats", meta = (DisplayName = "OnGlobalAchievementPercentagesReady"))
-	FOnGlobalAchievementPercentagesReadyDelegate m_OnGlobalAchievementPercentagesReady;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats|Delegates", meta = (DisplayName = "OnGlobalAchievementPercentagesReady"))
+	FOnGlobalAchievementPercentagesReadyDelegate OnGlobalAchievementPercentagesReadyDelegate;
 
 	/** Called when the global stats have been received from the server. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats", meta = (DisplayName = "OnGlobalStatsReceived"))
-	FOnGlobalStatsReceivedDelegate m_OnGlobalStatsReceived;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats|Delegates", meta = (DisplayName = "OnGlobalStatsReceived"))
+	FOnGlobalStatsReceivedDelegate OnGlobalStatsReceivedDelegate;
 
 	/** Result when finding a leaderboard. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats", meta = (DisplayName = "OnLeaderboardFindResult"))
-	FOnLeaderboardFindResultDelegate m_OnLeaderboardFindResult;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats|Delegates", meta = (DisplayName = "OnLeaderboardFindResult"))
+	FOnLeaderboardFindResultDelegate OnLeaderboardFindResultDelegate;
 
 	/**
 	 * Called when scores for a leaderboard have been downloaded and are ready to be retrieved.
 	 * After calling you must use GetDownloadedLeaderboardEntry to retrieve the info for each downloaded entry.
 	 */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats", meta = (DisplayName = "OnLeaderboardScoresDownloaded"))
-	FOnLeaderboardScoresDownloadedDelegate m_OnLeaderboardScoresDownloaded;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats|Delegates", meta = (DisplayName = "OnLeaderboardScoresDownloaded"))
+	FOnLeaderboardScoresDownloadedDelegate OnLeaderboardScoresDownloadedDelegate;
 
 	/** Result indicating that a leaderboard score has been uploaded. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats", meta = (DisplayName = "OnLeaderboardScoreUploaded"))
-	FOnLeaderboardScoreUploadedDelegate m_OnLeaderboardScoreUploaded;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats|Delegates", meta = (DisplayName = "OnLeaderboardScoreUploaded"))
+	FOnLeaderboardScoreUploadedDelegate OnLeaderboardScoreUploadedDelegate;
 
 	/** Result indicating that user generated content has been attached to one of the current user's leaderboard entries. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats", meta = (DisplayName = "OnLeaderboardUGCSet"))
-	FOnLeaderboardUGCSetDelegate m_OnLeaderboardUGCSet;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats|Delegates", meta = (DisplayName = "OnLeaderboardUGCSet"))
+	FOnLeaderboardUGCSetDelegate OnLeaderboardUGCSetDelegate;
 
 	/** Gets the current number of players for the current AppId. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats", meta = (DisplayName = "OnNumberOfCurrentPlayers"))
-	FOnNumberOfCurrentPlayersDelegate m_OnNumberOfCurrentPlayers;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats|Delegates", meta = (DisplayName = "OnNumberOfCurrentPlayers"))
+	FOnNumberOfCurrentPlayersDelegate OnNumberOfCurrentPlayersDelegate;
 
 	/** Result of an achievement icon that has been fetched */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats", meta = (DisplayName = "OnUserAchievementIconFetched"))
-	FOnUserAchievementIconFetchedDelegate m_OnUserAchievementIconFetched;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats|Delegates", meta = (DisplayName = "OnUserAchievementIconFetched"))
+	FOnUserAchievementIconFetchedDelegate OnUserAchievementIconFetchedDelegate;
 
 	/** Result of a request to store the achievements on the server, or an "indicate progress" call. If both m_nCurProgress and m_nMaxProgress are zero, that means the achievement has been fully unlocked. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats", meta = (DisplayName = "OnUserAchievementStored"))
-	FOnUserAchievementStoredDelegate m_OnUserAchievementStored;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats|Delegates", meta = (DisplayName = "OnUserAchievementStored"))
+	FOnUserAchievementStoredDelegate OnUserAchievementStoredDelegate;
 
 	/** Called when the latest stats and achievements for a specific user (including the local user) have been received from the server. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats", meta = (DisplayName = "OnUserStatsReceived"))
-	FOnUserStatsReceivedDelegate m_OnUserStatsReceived;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats|Delegates", meta = (DisplayName = "OnUserStatsReceived"))
+	FOnUserStatsReceivedDelegate OnUserStatsReceivedDelegate;
 
 	/** Result of a request to store the user stats.*/
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats", meta = (DisplayName = "OnUserStatsStored"))
-	FOnUserStatsStoredDelegate m_OnUserStatsStored;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats|Delegates", meta = (DisplayName = "OnUserStatsStored"))
+	FOnUserStatsStoredDelegate OnUserStatsStoredDelegate;
 
 	/**
 	 * Callback indicating that a user's stats have been unloaded.
 	 * Call RequestUserStats again before accessing stats for this user.
 	 */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats", meta = (DisplayName = "OnUserStatsUnloaded"))
-	FOnUserStatsUnloadedDelegate m_OnUserStatsUnloaded;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|UserStats|Delegates", meta = (DisplayName = "OnUserStatsUnloaded"))
+	FOnUserStatsUnloadedDelegate OnUserStatsUnloadedDelegate;
 
 protected:
 private:

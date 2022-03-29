@@ -1,12 +1,13 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
+#include <UObject/NoExportTypes.h>
+
 #include "Steam.h"
 #include "SteamEnums.h"
 #include "SteamStructs.h"
-#include "UObject/NoExportTypes.h"
 
 #include "SteamScreenshots.generated.h"
 
@@ -55,7 +56,7 @@ public:
 	 * @return FScreenshotHandle - The handle to this screenshot that is valid for the duration of the game process and can be used to apply tags. Returns INVALID_SCREENSHOT_HANDLE if the file could not be saved.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Screenshots")
-	FScreenshotHandle AddVRScreenshotToLibrary(ESteamVRScreenshotType Type, const FString& FileName, const FString& VRFileName) const;
+	FScreenshotHandle AddVRScreenshotToLibrary(const ESteamVRScreenshotType Type, const FString& FileName, const FString& VRFileName) const;
 
 	/**
 	 * Toggles whether the overlay handles screenshots when the user presses the screenshot hotkey, or if the game handles them.
@@ -67,7 +68,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Screenshots")
-	void HookScreenshots(bool bHook) { SteamScreenshots()->HookScreenshots(bHook); }
+	void HookScreenshots(const bool bHook) { SteamScreenshots()->HookScreenshots(bHook); }
 
 	/**
 	 * Checks if the app is hooking screenshots, or if the Steam Overlay is handling them. This can be toggled with HookScreenshots.
@@ -86,7 +87,7 @@ public:
 	 * @return bool - true if the location was successfully added to the screenshot. false if hScreenshot was invalid, or pchLocation is invalid or too long.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Screenshots")
-	bool SetLocation(FScreenshotHandle ScreenshotHandle, const FString& Location) const { return SteamScreenshots()->SetLocation(ScreenshotHandle, TCHAR_TO_UTF8(*Location)); }
+	bool SetLocation(const FScreenshotHandle ScreenshotHandle, const FString& Location) const { return SteamScreenshots()->SetLocation(ScreenshotHandle, TCHAR_TO_UTF8(*Location)); }
 
 	/**
 	 * Tags a published file as being visible in the screenshot.
@@ -99,7 +100,7 @@ public:
 	 * @return bool
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Screenshots")
-	bool TagPublishedFile(FScreenshotHandle ScreenshotHandle, FPublishedFileId PublishedFileID) const { return SteamScreenshots()->TagPublishedFile(ScreenshotHandle, PublishedFileID); }
+	bool TagPublishedFile(const FScreenshotHandle ScreenshotHandle, const FPublishedFileId PublishedFileID) const { return SteamScreenshots()->TagPublishedFile(ScreenshotHandle, PublishedFileID); }
 
 	/**
 	 * Tags a Steam user as being visible in the screenshot.
@@ -112,7 +113,7 @@ public:
 	 * @return bool
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Screenshots")
-	bool TagUser(FScreenshotHandle ScreenshotHandle, FSteamID SteamID) const { return SteamScreenshots()->TagUser(ScreenshotHandle, SteamID); }
+	bool TagUser(const FScreenshotHandle ScreenshotHandle, const FSteamID SteamID) const { return SteamScreenshots()->TagUser(ScreenshotHandle, SteamID); }
 
 	/**
 	 * Either causes the Steam Overlay to take a screenshot, or tells your screenshot manager that a screenshot needs to be taken. Depending on the value of IsScreenshotsHooked.
@@ -138,12 +139,12 @@ public:
 	/** Delegates */
 
 	/** A screenshot successfully written or otherwise added to the library and can now be tagged. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Screenshots", meta = (DisplayName = "OnScreenshotReady"))
-	FOnScreenshotReadyDelegate m_OnScreenshotReady;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Screenshots|Delegates", meta = (DisplayName = "OnScreenshotReady"))
+	FOnScreenshotReadyDelegate OnScreenshotReadyDelegate;
 
 	/** A screenshot has been requested by the user from the Steam screenshot hotkey. This will only be called if HookScreenshots has been enabled, in which case Steam will not take the screenshot itself. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Screenshots", meta = (DisplayName = "OnScreenshotRequested"))
-	FOnScreenshotRequestedDelegate m_OnScreenshotRequested;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Screenshots|Delegates", meta = (DisplayName = "OnScreenshotRequested"))
+	FOnScreenshotRequestedDelegate OnScreenshotRequestedDelegate;
 
 protected:
 private:

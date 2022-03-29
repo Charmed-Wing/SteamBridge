@@ -1,12 +1,13 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
+#include <UObject/NoExportTypes.h>
+
 #include "Steam.h"
 #include "SteamEnums.h"
 #include "SteamStructs.h"
-#include "UObject/NoExportTypes.h"
 
 #include "SteamMatchmakingServers.generated.h"
 
@@ -20,8 +21,6 @@ class STEAMBRIDGE_API USteamMatchmakingServers final : public UObject
 	GENERATED_BODY()
 
 public:
-	USteamMatchmakingServers();
-	~USteamMatchmakingServers();
 
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore", meta = (DisplayName = "Steam Matchmaking Servers", CompactNodeTitle = "SteamMatchmakingServers"))
 	static USteamMatchmakingServers* GetSteamMatchmakingServers() { return USteamMatchmakingServers::StaticClass()->GetDefaultObject<USteamMatchmakingServers>(); }
@@ -30,7 +29,7 @@ public:
 	void CancelQuery(const FHServerListRequest& Request) { SteamMatchmakingServers()->CancelQuery(Request.Value); }
 
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|MatchmakingServers")
-	void CancelServerQuery(FHServerQuery ServerQuery) { SteamMatchmakingServers()->CancelServerQuery(ServerQuery.Value); }
+	void CancelServerQuery(const FHServerQuery ServerQuery) { SteamMatchmakingServers()->CancelServerQuery(ServerQuery.Value); }
 
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|MatchmakingServers")
 	int32 GetServerCount(const FHServerListRequest& Request) const { return SteamMatchmakingServers()->GetServerCount(Request.Value); }

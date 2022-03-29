@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #include "Core/SteamVideo.h"
 
@@ -20,7 +20,7 @@ USteamVideo::~USteamVideo()
 	OnGetVideoURLResultCallback.Unregister();
 }
 
-bool USteamVideo::GetOPFStringForApp(int32 VideoAppID, FString& OPFString) const
+bool USteamVideo::GetOPFStringForApp(const int32 VideoAppID, FString& OPFString) const
 {
 	int32 TmpSize = 0;
 	if (SteamVideo()->GetOPFStringForApp(VideoAppID, nullptr, &TmpSize))
@@ -44,10 +44,10 @@ bool USteamVideo::GetOPFStringForApp(int32 VideoAppID, FString& OPFString) const
 
 void USteamVideo::OnGetOPFSettingsResult(GetOPFSettingsResult_t* pParam)
 {
-	m_OnGetOPFSettingsResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_unVideoAppID);
+	OnGetOPFSettingsResultDelegate.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_unVideoAppID);
 }
 
 void USteamVideo::OnGetVideoURLResult(GetVideoURLResult_t* pParam)
 {
-	m_OnGetVideoURLResult.Broadcast(static_cast<ESteamResult>(pParam->m_eResult), pParam->m_unVideoAppID, UTF8_TO_TCHAR(pParam->m_rgchURL));
+	OnGetVideoURLResultDelegate.Broadcast((ESteamResult)pParam->m_eResult, pParam->m_unVideoAppID, UTF8_TO_TCHAR(pParam->m_rgchURL));
 }

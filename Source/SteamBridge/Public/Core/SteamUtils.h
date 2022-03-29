@@ -1,12 +1,13 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
+#include <UObject/NoExportTypes.h>
+
 #include "Steam.h"
 #include "SteamEnums.h"
 #include "SteamStructs.h"
-#include "UObject/NoExportTypes.h"
 
 #include "SteamUtils.generated.h"
 
@@ -52,7 +53,7 @@ public:
 	 * @return ESteamAPICallFailure_
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Utils")
-	ESteamAPICallFailure_ GetAPICallFailureReason(FSteamAPICall SteamAPICall) const { return static_cast<ESteamAPICallFailure_>(static_cast<uint8>(SteamUtils()->GetAPICallFailureReason(SteamAPICall)) - 1); }
+	ESteamAPICallFailure_ GetAPICallFailureReason(const FSteamAPICall SteamAPICall) const { return (ESteamAPICallFailure_)((uint8)SteamUtils()->GetAPICallFailureReason(SteamAPICall) - 1); }
 
 	// #TODO: GetAPICallResult
 
@@ -70,7 +71,7 @@ public:
 	 * @return ESteamUniverse
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Utils")
-	ESteamUniverse GetConnectedUniverse() const { return static_cast<ESteamUniverse>(SteamUtils()->GetConnectedUniverse()); }
+	ESteamUniverse GetConnectedUniverse() const { return (ESteamUniverse)SteamUtils()->GetConnectedUniverse(); }
 
 	/**
 	 * Gets the IP of the reporting server for valve - currently only used in Source engine games
@@ -79,8 +80,9 @@ public:
 	 * @param int32 & Port - Returns the port that the client is connected to.
 	 * @return bool - Returns true if the user is currently connected; otherwise, false.
 	 */
-	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Utils")
-	bool GetCSERIPPort(FString& IP, int32& Port) const;
+	// GetCSERIPPort is deprecated as of more recent Steamworks SDK releases, so this has been dummied out.
+	//UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Utils")
+	//bool GetCSERIPPort(FString& IP, int32& Port) const;
 
 	/**
 	 * Gets the current amount of battery power on the computer.
@@ -121,7 +123,7 @@ public:
 	 * @return bool - true upon success if the image handle is valid and the buffer was filled out, otherwise false.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Utils")
-	bool GetImageRGBA(int32 Image, TArray<uint8>& Buffer) const;
+	bool GetImageRGBA(const int32 Image, TArray<uint8>& Buffer) const;
 
 	/**
 	 * Gets the size of a Steam image handle.
@@ -132,7 +134,7 @@ public:
 	 * @return bool - true upon success if the image handle is valid and the sizes were filled out, otherwise false.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Utils")
-	bool GetImageSize(int32 Image, FIntPoint& Size) const;
+	bool GetImageSize(const int32 Image, FIntPoint& Size) const;
 
 	/**
 	 * Returns the number of IPC calls made since the last time this function was called.
@@ -195,7 +197,7 @@ public:
 	 * @return bool - true if the API Call is valid and has completed, otherwise false.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Utils")
-	bool IsAPICallCompleted(FSteamAPICall SteamAPICall, bool& bFailed) const { return SteamUtils()->IsAPICallCompleted(SteamAPICall, &bFailed); }
+	bool IsAPICallCompleted(const FSteamAPICall SteamAPICall, bool& bFailed) const { return SteamUtils()->IsAPICallCompleted(SteamAPICall, &bFailed); }
 
 	/**
 	 * Checks if the Steam Overlay is running & the user can access it.
@@ -271,7 +273,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Utils")
-	void SetOverlayNotificationPosition(ESteamNotificationPosition NotificationPosition) { SteamUtils()->SetOverlayNotificationPosition(static_cast<ENotificationPosition>(NotificationPosition)); }
+	void SetOverlayNotificationPosition(const ESteamNotificationPosition NotificationPosition) { SteamUtils()->SetOverlayNotificationPosition((ENotificationPosition)NotificationPosition); }
 
 	/**
 	 * Set whether the HMD content will be streamed via Steam Remote Play.
@@ -283,7 +285,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Utils")
-	void SetVRHeadsetStreamingEnabled(bool bEnabled) { SteamUtils()->SetVRHeadsetStreamingEnabled(bEnabled); }
+	void SetVRHeadsetStreamingEnabled(const bool bEnabled) { SteamUtils()->SetVRHeadsetStreamingEnabled(bEnabled); }
 
 	// #TODO: SetWarningMessageHook
 
@@ -298,7 +300,7 @@ public:
 	 * @return bool - true if the big picture overlay is running; otherwise, false.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Utils")
-	bool ShowGamepadTextInput(ESteamGamepadTextInputMode InputMode, ESteamGamepadTextInputLineMode LineInputMode, const FString& Description, const FString& ExistingText, int32 CharMax = 200) const;
+	bool ShowGamepadTextInput(const ESteamGamepadTextInputMode InputMode, const ESteamGamepadTextInputLineMode LineInputMode, const FString& Description, const FString& ExistingText, const int32 CharMax = 200) const;
 
 	/**
 	 * Asks Steam to create and render the OpenVR dashboard.
@@ -311,24 +313,24 @@ public:
 	/** Delegates */
 
 	/** Called when the big picture gamepad text input has been closed. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Utils", meta = (DisplayName = "OnGamepadTextInputDismissed"))
-	FOnGamepadTextInputDismissedDelegate m_OnGamepadTextInputDismissed;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Utils|Delegates", meta = (DisplayName = "OnGamepadTextInputDismissed"))
+	FOnGamepadTextInputDismissedDelegate OnGamepadTextInputDismissedDelegate;
 
 	/** Called when the country of the user changed. The country should be updated with GetIPCountry. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Utils", meta = (DisplayName = "OnIPCountry"))
-	FOnIPCountryDelegate m_OnIPCountry;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Utils|Delegates", meta = (DisplayName = "OnIPCountry"))
+	FOnIPCountryDelegate OnIPCountryDelegate;
 
 	/** Called when running on a laptop and less than 10 minutes of battery is left, and then fires then every minute afterwards. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Utils", meta = (DisplayName = "OnLowBatteryPower"))
-	FOnLowBatteryPowerDelegate m_OnLowBatteryPower;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Utils|Delegates", meta = (DisplayName = "OnLowBatteryPower"))
+	FOnLowBatteryPowerDelegate OnLowBatteryPowerDelegate;
 
 	/** Called when a SteamAPICall_t has completed (or failed) */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Utils", meta = (DisplayName = "OnSteamAPICallCompleted"))
-	FOnSteamAPICallCompletedDelegate m_OnSteamAPICallCompleted;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Utils|Delegates", meta = (DisplayName = "OnSteamAPICallCompleted"))
+	FOnSteamAPICallCompletedDelegate OnSteamAPICallCompletedDelegate;
 
 	/** Called when Steam wants to shutdown. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Utils", meta = (DisplayName = "OnSteamShutdown"))
-	FOnSteamShutdownDelegate m_OnSteamShutdown;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Utils|Delegates", meta = (DisplayName = "OnSteamShutdown"))
+	FOnSteamShutdownDelegate OnSteamShutdownDelegate;
 
 protected:
 private:

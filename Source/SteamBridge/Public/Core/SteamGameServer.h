@@ -1,18 +1,18 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
+#include <UObject/NoExportTypes.h>
+
 #include "Steam.h"
 #include "SteamEnums.h"
 #include "SteamStructs.h"
-#include "UObject/NoExportTypes.h"
 
 #include "SteamGameServer.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAssociateWithClanResultDelegate, ESteamResult, Result);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FOnComputeNewPlayerCompatibilityResultDelegate, ESteamResult, Result, int32, PlayersThatDontLikeCandidate, int32, PlayersThatDoesntLikeCandidate,
-	int32, ClanPlayersThatDontLikeCandidate, FSteamID, SteamIDCandidate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FOnComputeNewPlayerCompatibilityResultDelegate, ESteamResult, Result, int32, PlayersThatDontLikeCandidate, int32, PlayersThatDoesntLikeCandidate, int32, ClanPlayersThatDontLikeCandidate, FSteamID, SteamIDCandidate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnGSClientApproveDelegate, FSteamID, SteamID, FSteamID, OwnerSteamID);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnGSClientDenyDelegate, FSteamID, SteamID, ESteamDenyReason, DenyReason, FString, OptionalText);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FOnGSClientGroupStatusDelegate, FSteamID, SteamIDUser, FSteamID, SteamIDGroup, bool, bMember, bool, bOfficer);
@@ -42,7 +42,7 @@ public:
 	 * @return FSteamAPICall - SteamAPICall_t to be used with a AssociateWithClanResult_t call result.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|GameServer")
-	FSteamAPICall AssociateWithClan(FSteamID SteamIDClan) const { return SteamGameServer()->AssociateWithClan(SteamIDClan); }
+	FSteamAPICall AssociateWithClan(const FSteamID SteamIDClan) const { return SteamGameServer()->AssociateWithClan(SteamIDClan); }
 
 	/**
 	 * Authenticate the ticket from the entity Steam ID to be sure it is valid and isn't reused.
@@ -55,7 +55,7 @@ public:
 	 * @return ESteamBeginAuthSessionResult
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	ESteamBeginAuthSessionResult BeginAuthSession(TArray<uint8> AuthTicket, FSteamID SteamID) const;
+	ESteamBeginAuthSessionResult BeginAuthSession(TArray<uint8> AuthTicket, const FSteamID SteamID) const;
 
 	/**
 	 * Checks if the game server is logged on.
@@ -80,7 +80,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	void CancelAuthTicket(FHAuthTicket AuthTicketHandle) { SteamGameServer()->CancelAuthTicket(AuthTicketHandle); }
+	void CancelAuthTicket(const FHAuthTicket AuthTicketHandle) { SteamGameServer()->CancelAuthTicket(AuthTicketHandle); }
 
 	/**
 	 * Clears the whole list of key/values that are sent in rules queries.
@@ -100,7 +100,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	void EnableHeartbeats(bool bActive) { SteamGameServer()->EnableHeartbeats(bActive); }
+	void EnableHeartbeats(const bool bActive) { SteamGameServer()->EnableHeartbeats(bActive); }
 
 	/**
 	 * Ends an auth session that was started with BeginAuthSession. This should be called when no longer playing with the specified entity.
@@ -109,7 +109,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	void EndAuthSession(FSteamID SteamID) { SteamGameServer()->EndAuthSession(SteamID); }
+	void EndAuthSession(const FSteamID SteamID) { SteamGameServer()->EndAuthSession(SteamID); }
 
 	/**
 	 * Force a heartbeat to the Steam master servers at the next opportunity.
@@ -200,8 +200,8 @@ public:
 	 * @param FSteamID SteamIDGroup - The group to check.
 	 * @return bool - true if the call was successfully sent out to the Steam servers; otherwise, false if we're not connected to the steam servers or an invalid user or group was provided.
 	 */
-	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|GameServer")
-	bool RequestUserGroupStatus(FSteamID SteamIDUser, FSteamID SteamIDGroup) const { return SteamGameServer()->RequestUserGroupStatus(SteamIDUser, SteamIDGroup); }
+	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|GameServer")
+	bool RequestUserGroupStatus(const FSteamID SteamIDUser, const FSteamID SteamIDGroup) const { return SteamGameServer()->RequestUserGroupStatus(SteamIDUser, SteamIDGroup); }
 
 	/**
 	 * Sets the number of bot/AI players on the game server. The default value is 0.
@@ -210,7 +210,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	void SetBotPlayerCount(int32 BotPlayers) { SteamGameServer()->SetBotPlayerCount(BotPlayers); }
+	void SetBotPlayerCount(const int32 BotPlayers) { SteamGameServer()->SetBotPlayerCount(BotPlayers); }
 
 	/**
 	 * Sets the whether this is a dedicated server or a listen server. The default is listen server.
@@ -220,7 +220,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	void SetDedicatedServer(bool bDedicated) { SteamGameServer()->SetDedicatedServer(bDedicated); }
+	void SetDedicatedServer(const bool bDedicated) { SteamGameServer()->SetDedicatedServer(bDedicated); }
 
 	/**
 	 * Sets a string defining the "gamedata" for this server, this is optional, but if set it allows users to filter in the matchmaking/server-browser interfaces based on the value.
@@ -262,7 +262,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	void SetHeartbeatInterval(int32 HeartbeatInterval) { SteamGameServer()->SetHeartbeatInterval(HeartbeatInterval); }
+	void SetHeartbeatInterval(const int32 HeartbeatInterval) { SteamGameServer()->SetHeartbeatInterval(HeartbeatInterval); }
 
 	/**
 	 * Add/update a rules key/value pair.
@@ -291,7 +291,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	void SetMaxPlayerCount(int32 PlayersMax) { SteamGameServer()->SetMaxPlayerCount(PlayersMax); }
+	void SetMaxPlayerCount(const int32 PlayersMax) { SteamGameServer()->SetMaxPlayerCount(PlayersMax); }
 
 	/**
 	 * Sets the game directory.
@@ -311,7 +311,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	void SetPasswordProtected(bool bPasswordProtected) { SteamGameServer()->SetPasswordProtected(bPasswordProtected); }
+	void SetPasswordProtected(const bool bPasswordProtected) { SteamGameServer()->SetPasswordProtected(bPasswordProtected); }
 
 	/**
 	 * Sets the game product identifier. This is currently used by the master server for version checking purposes.
@@ -349,7 +349,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	void SetSpectatorPort(int32 SpectatorPort) { SteamGameServer()->SetSpectatorPort(FMath::Clamp<uint16>(SpectatorPort, 0, 65535)); }
+	void SetSpectatorPort(const int32 SpectatorPort) { SteamGameServer()->SetSpectatorPort(FMath::Clamp<uint16>(SpectatorPort, 0, 65535)); }
 
 	/**
 	 * Sets the name of the spectator server. This is only used if spectator port is nonzero.
@@ -369,7 +369,7 @@ public:
 	 * @return ESteamUserHasLicenseForAppResult
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	ESteamUserHasLicenseForAppResult UserHasLicenseForApp(FSteamID SteamID, int32 AppID) const { return static_cast<ESteamUserHasLicenseForAppResult>(SteamGameServer()->UserHasLicenseForApp(SteamID, AppID)); }
+	ESteamUserHasLicenseForAppResult UserHasLicenseForApp(const FSteamID SteamID, const int32 AppID) const { return (ESteamUserHasLicenseForAppResult)SteamGameServer()->UserHasLicenseForApp(SteamID, AppID); }
 
 	/**
 	 * Checks if the master server has alerted us that we are out of date.
@@ -383,32 +383,32 @@ public:
 	/** Delegates */
 
 	/** Sent when the game server attempted to be associated with a Steam Group. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer", meta = (DisplayName = "OnAssociateWithClanResult"))
-	FOnAssociateWithClanResultDelegate m_OnAssociateWithClanResult;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer|Delegates", meta = (DisplayName = "OnAssociateWithClanResult"))
+	FOnAssociateWithClanResultDelegate OnAssociateWithClanResultDelegate;
 
 	/** Sent when the game server is checking if the new player is a good fit for the server based on the frenemy system. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer", meta = (DisplayName = "OnComputeNewPlayerCompatibilityResult"))
-	FOnComputeNewPlayerCompatibilityResultDelegate m_OnComputeNewPlayerCompatibilityResult;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer|Delegates", meta = (DisplayName = "OnComputeNewPlayerCompatibilityResult"))
+	FOnComputeNewPlayerCompatibilityResultDelegate OnComputeNewPlayerCompatibilityResultDelegate;
 
 	/** A client has been approved to connect to this game server. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer", meta = (DisplayName = "OnGSClientApprove"))
-	FOnGSClientApproveDelegate m_OnGSClientApprove;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer|Delegates", meta = (DisplayName = "OnGSClientApprove"))
+	FOnGSClientApproveDelegate OnGSClientApproveDelegate;
 
 	/** Called when a user has been denied to connection to this game server. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer", meta = (DisplayName = "OnGSClientDeny"))
-	FOnGSClientDenyDelegate m_OnGSClientDeny;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer|Delegates", meta = (DisplayName = "OnGSClientDeny"))
+	FOnGSClientDenyDelegate OnGSClientDenyDelegate;
 
 	/** Called when we have received the group status of a user. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer", meta = (DisplayName = "OnGSClientGroupStatus"))
-	FOnGSClientGroupStatusDelegate m_OnGSClientGroupStatus;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer|Delegates", meta = (DisplayName = "OnGSClientGroupStatus"))
+	FOnGSClientGroupStatusDelegate OnGSClientGroupStatusDelegate;
 
 	/** Called when the game server should kick the user. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer", meta = (DisplayName = "OnGSClientKick"))
-	FOnGSClientKickDelegate m_OnGSClientKick;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer|Delegates", meta = (DisplayName = "OnGSClientKick"))
+	FOnGSClientKickDelegate OnGSClientKickDelegate;
 
 	/** Received when the game server requests to be displayed as secure (VAC protected) */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer", meta = (DisplayName = "OnGSPolicyResponse"))
-	FOnGSPolicyResponseDelegate m_OnGSPolicyResponse;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|GameServer|Delegates", meta = (DisplayName = "OnGSPolicyResponse"))
+	FOnGSPolicyResponseDelegate OnGSPolicyResponseDelegate;
 
 protected:
 private:

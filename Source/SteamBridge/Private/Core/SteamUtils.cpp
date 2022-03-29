@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #include "Core/SteamUtils.h"
 
@@ -22,25 +22,27 @@ USteamUtils::~USteamUtils()
 	OnSteamShutdownCallback.Unregister();
 }
 
-bool USteamUtils::GetCSERIPPort(FString& IP, int32& Port) const
-{
-	uint32 TmpIP;
-	uint16 TmpPort;
-	bool bResult = SteamUtils()->GetCSERIPPort(&TmpIP, &TmpPort);
-	IP = USteamBridgeUtils::ConvertIPToString(TmpIP);
-	Port = TmpPort;
-	return bResult;
-}
+//// GetCSERIPPort is deprecated as of more recent Steamworks SDK releases, so this has been dummied out.
+//bool USteamUtils::GetCSERIPPort(FString& IP, int32& Port) const
+//{
+	//uint32 TmpIP;
+	//uint16 TmpPort;
+	//bool bResult = SteamUtils()->GetCSERIPPort(&TmpIP, &TmpPort);
+	//IP = USteamBridgeUtils::ConvertIPToString(TmpIP);
+	//Port = TmpPort;
+	//return bResult;
+//}
 
 bool USteamUtils::GetEnteredGamepadTextInput(FString& Text) const
 {
 	TArray<char> TmpStr;
-	bool bResult = SteamUtils()->GetEnteredGamepadTextInput(TmpStr.GetData(), 8192);
+	TmpStr.Reserve(SteamDefs::Buffer8192);
+	bool bResult = SteamUtils()->GetEnteredGamepadTextInput(TmpStr.GetData(), SteamDefs::Buffer8192);
 	Text = UTF8_TO_TCHAR(TmpStr.GetData());
 	return bResult;
 }
 
-bool USteamUtils::GetImageRGBA(int32 Image, TArray<uint8>& Buffer) const
+bool USteamUtils::GetImageRGBA(const int32 Image, TArray<uint8>& Buffer) const
 {
 	uint32 Width, Height;
 	if (SteamUtils()->GetImageSize(Image, &Width, &Height))
@@ -60,40 +62,40 @@ bool USteamUtils::GetImageRGBA(int32 Image, TArray<uint8>& Buffer) const
 	return false;
 }
 
-bool USteamUtils::GetImageSize(int32 Image, FIntPoint& Size) const
+bool USteamUtils::GetImageSize(const int32 Image, FIntPoint& Size) const
 {
 	uint32 Width, Height;
 	bool bResult = SteamUtils()->GetImageSize(Image, &Width, &Height);
-	Size = { static_cast<int32>(Width), static_cast<int32>(Height) };
+	Size = { (int32)Width, (int32)Height };
 	return bResult;
 }
 
-bool USteamUtils::ShowGamepadTextInput(ESteamGamepadTextInputMode InputMode, ESteamGamepadTextInputLineMode LineInputMode, const FString& Description, const FString& ExistingText, int32 CharMax) const
+bool USteamUtils::ShowGamepadTextInput(const ESteamGamepadTextInputMode InputMode, const ESteamGamepadTextInputLineMode LineInputMode, const FString& Description, const FString& ExistingText, const int32 CharMax /*= 200*/) const
 {
-	return SteamUtils()->ShowGamepadTextInput(static_cast<EGamepadTextInputMode>(InputMode), static_cast<EGamepadTextInputLineMode>(LineInputMode), TCHAR_TO_UTF8(*Description), CharMax, TCHAR_TO_UTF8(*ExistingText));
+	return SteamUtils()->ShowGamepadTextInput((EGamepadTextInputMode)InputMode, (EGamepadTextInputLineMode)LineInputMode, TCHAR_TO_UTF8(*Description), CharMax, TCHAR_TO_UTF8(*ExistingText));
 }
 
 void USteamUtils::OnGamepadTextInputDismissed(GamepadTextInputDismissed_t* pParam)
 {
-	m_OnGamepadTextInputDismissed.Broadcast(pParam->m_bSubmitted, pParam->m_unSubmittedText);
+	OnGamepadTextInputDismissedDelegate.Broadcast(pParam->m_bSubmitted, pParam->m_unSubmittedText);
 }
 
 void USteamUtils::OnIPCountry(IPCountry_t* pParam)
 {
-	m_OnIPCountry.Broadcast();
+	OnIPCountryDelegate.Broadcast();
 }
 
 void USteamUtils::OnLowBatteryPower(LowBatteryPower_t* pParam)
 {
-	m_OnLowBatteryPower.Broadcast(pParam->m_nMinutesBatteryLeft);
+	OnLowBatteryPowerDelegate.Broadcast(pParam->m_nMinutesBatteryLeft);
 }
 
 void USteamUtils::OnSteamAPICallCompleted(SteamAPICallCompleted_t* pParam)
 {
-	m_OnSteamAPICallCompleted.Broadcast(static_cast<FSteamAPICall>(pParam->m_hAsyncCall), pParam->m_iCallback, pParam->m_cubParam);
+	OnSteamAPICallCompletedDelegate.Broadcast((FSteamAPICall)pParam->m_hAsyncCall, pParam->m_iCallback, pParam->m_cubParam);
 }
 
 void USteamUtils::OnSteamShutdown(SteamShutdown_t* pParam)
 {
-	m_OnSteamShutdown.Broadcast();
+	OnSteamShutdownDelegate.Broadcast();
 }

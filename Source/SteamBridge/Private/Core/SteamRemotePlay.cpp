@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #include "Core/SteamRemotePlay.h"
 
@@ -26,10 +26,10 @@ bool USteamRemotePlay::BGetSessionClientResolution(int32 SessionID, FIntPoint& R
 
 void USteamRemotePlay::OnSteamRemotePlaySessionConnected(SteamRemotePlaySessionConnected_t* pParam)
 {
-	m_OnSteamRemotePlaySessionConnected.Broadcast(pParam->m_unSessionID);
+	OnSteamRemotePlaySessionConnectedDelegate.Broadcast(pParam->m_unSessionID);
 }
 
 void USteamRemotePlay::OnSteamRemotePlaySessionDisconnected(SteamRemotePlaySessionDisconnected_t* pParam)
 {
-	m_OnSteamRemotePlaySessionDisconnected.Broadcast(pParam->m_unSessionID);
+	OnSteamRemotePlaySessionDisconnectedDelegate.Broadcast(pParam->m_unSessionID);
 }

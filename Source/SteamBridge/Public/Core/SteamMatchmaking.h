@@ -1,12 +1,13 @@
-// Copyright 2020-2021 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
+// Copyright 2020-2022 Russ 'trdwll' Treadwell <trdwll.com>. All Rights Reserved.
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
+#include <UObject/NoExportTypes.h>
+
 #include "Steam.h"
 #include "SteamEnums.h"
 #include "SteamStructs.h"
-#include "UObject/NoExportTypes.h"
 
 #include "SteamMatchmaking.generated.h"
 
@@ -50,7 +51,7 @@ public:
 	 * @return int32
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	int32 AddFavoriteGame(int32 AppID, const FString& IP, int32 ConnPort, int32 QueryPort, const TArray<ESteamFavoriteFlags>& Flags, const FDateTime& TimeLastPlayedOnServer) const;
+	int32 AddFavoriteGame(const int32 AppID, const FString& IP, const int32 ConnPort, const int32 QueryPort, const TArray<ESteamFavoriteFlags>& Flags, const FDateTime& TimeLastPlayedOnServer) const;
 
 	/**
 	 * Sets the physical distance for which we should search for lobbies, this is based on the users IP address and a IP location map on the Steam backed.
@@ -59,7 +60,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Matchmaking")
-	void AddRequestLobbyListDistanceFilter(ESteamLobbyDistanceFilter LobbyDistanceFilter) { SteamMatchmaking()->AddRequestLobbyListDistanceFilter(static_cast<ELobbyDistanceFilter>(LobbyDistanceFilter)); }
+	void AddRequestLobbyListDistanceFilter(const ESteamLobbyDistanceFilter LobbyDistanceFilter) { SteamMatchmaking()->AddRequestLobbyListDistanceFilter((ELobbyDistanceFilter)LobbyDistanceFilter); }
 
 	/**
 	 * Filters to only return lobbies with the specified number of open slots available.
@@ -68,7 +69,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Matchmaking")
-	void AddRequestLobbyListFilterSlotsAvailable(int32 SlotsAvailable) { SteamMatchmaking()->AddRequestLobbyListFilterSlotsAvailable(SlotsAvailable); }
+	void AddRequestLobbyListFilterSlotsAvailable(const int32 SlotsAvailable) { SteamMatchmaking()->AddRequestLobbyListFilterSlotsAvailable(SlotsAvailable); }
 
 	/**
 	 * Sorts the results closest to the specified value.
@@ -79,7 +80,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Matchmaking")
-	void AddRequestLobbyListNearValueFilter(const FString& KeyToMatch, int32 ValueToBeCloseTo) { SteamMatchmaking()->AddRequestLobbyListNearValueFilter(TCHAR_TO_UTF8(*KeyToMatch), ValueToBeCloseTo); }
+	void AddRequestLobbyListNearValueFilter(const FString& KeyToMatch, const int32 ValueToBeCloseTo) { SteamMatchmaking()->AddRequestLobbyListNearValueFilter(TCHAR_TO_UTF8(*KeyToMatch), ValueToBeCloseTo); }
 
 	/**
 	 * Adds a numerical comparison filter to the next RequestLobbyList call.
@@ -90,7 +91,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Matchmaking")
-	void AddRequestLobbyListNumericalFilter(const FString& KeyToMatch, int32 ValueToMatch, ESteamLobbyComparison ComparisonType) { SteamMatchmaking()->AddRequestLobbyListNumericalFilter(TCHAR_TO_UTF8(*KeyToMatch), ValueToMatch, static_cast<ELobbyComparison>(static_cast<uint8>(ComparisonType) - 2)); }
+	void AddRequestLobbyListNumericalFilter(const FString& KeyToMatch, const int32 ValueToMatch, const ESteamLobbyComparison ComparisonType) { SteamMatchmaking()->AddRequestLobbyListNumericalFilter(TCHAR_TO_UTF8(*KeyToMatch), ValueToMatch, (ELobbyComparison)((uint8)ComparisonType - 2)); }
 
 	/**
 	 * Sets the maximum number of lobbies to return. The lower the count the faster it is to download the lobby results & details to the client.
@@ -99,7 +100,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Matchmaking")
-	void AddRequestLobbyListResultCountFilter(int32 MaxResults) { SteamMatchmaking()->AddRequestLobbyListResultCountFilter(MaxResults); }
+	void AddRequestLobbyListResultCountFilter(const int32 MaxResults) { SteamMatchmaking()->AddRequestLobbyListResultCountFilter(MaxResults); }
 
 	/**
 	 * Adds a string comparison filter to the next RequestLobbyList call.
@@ -110,7 +111,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Matchmaking")
-	void AddRequestLobbyListStringFilter(const FString& KeyToMatch, const FString& ValueToMatch, ESteamLobbyComparison ComparisonType) { SteamMatchmaking()->AddRequestLobbyListStringFilter(TCHAR_TO_UTF8(*KeyToMatch), TCHAR_TO_UTF8(*ValueToMatch), static_cast<ELobbyComparison>(static_cast<uint8>(ComparisonType) - 2)); }
+	void AddRequestLobbyListStringFilter(const FString& KeyToMatch, const FString& ValueToMatch, const ESteamLobbyComparison ComparisonType) { SteamMatchmaking()->AddRequestLobbyListStringFilter(TCHAR_TO_UTF8(*KeyToMatch), TCHAR_TO_UTF8(*ValueToMatch), (ELobbyComparison)((uint8)ComparisonType - 2)); }
 
 	/**
 	 * Create a new matchmaking lobby.
@@ -124,7 +125,7 @@ public:
 	 * @return FSteamAPICall - SteamAPICall_t to be used with a LobbyCreated_t call result.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	FSteamAPICall CreateLobby(ESteamLobbyType LobbyType = ESteamLobbyType::FriendsOnly, uint8 MaxMembers = 1) const { return SteamMatchmaking()->CreateLobby(static_cast<ELobbyType>(LobbyType), MaxMembers); }
+	FSteamAPICall CreateLobby(const ESteamLobbyType LobbyType = ESteamLobbyType::FriendsOnly, const uint8 MaxMembers = 1) const { return SteamMatchmaking()->CreateLobby((ELobbyType)LobbyType, MaxMembers); }
 
 	/**
 	 * Removes a metadata key from the lobby.
@@ -136,7 +137,7 @@ public:
 	 * @return bool - true if the key/value was successfully deleted; otherwise, false if steamIDLobby or pchKey are invalid.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool DeleteLobbyData(FSteamID SteamIDLobby, const FString& Key) const { return SteamMatchmaking()->DeleteLobbyData(SteamIDLobby, TCHAR_TO_UTF8(*Key)); }
+	bool DeleteLobbyData(const FSteamID SteamIDLobby, const FString& Key) const { return SteamMatchmaking()->DeleteLobbyData(SteamIDLobby, TCHAR_TO_UTF8(*Key)); }
 
 	/**
 	 * Gets the details of the favorite game server by index.
@@ -152,7 +153,7 @@ public:
 	 * @return bool - true if the details were successfully retrieved. false if iGame was an invalid index.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool GetFavoriteGame(int32 GameIndex, int32& AppID, FString& IP, int32& ConnPort, int32& QueryPort, TArray<ESteamFavoriteFlags>& Flags, FDateTime& TimeLastPlayedOnServer) const;
+	bool GetFavoriteGame(const int32 GameIndex, int32& AppID, FString& IP, int32& ConnPort, int32& QueryPort, TArray<ESteamFavoriteFlags>& Flags, FDateTime& TimeLastPlayedOnServer) const;
 
 	/**
 	 * Gets the number of favorite and recent game servers the user has stored locally.
@@ -170,7 +171,7 @@ public:
 	 * @return FSteamID - Returns k_steamIDNil if the provided index is invalid or there are no lobbies found.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Matchmaking")
-	FSteamID GetLobbyByIndex(int32 LobbyIndex) const { return SteamMatchmaking()->GetLobbyByIndex(LobbyIndex).ConvertToUint64(); }
+	FSteamID GetLobbyByIndex(const int32 LobbyIndex) const { return SteamMatchmaking()->GetLobbyByIndex(LobbyIndex).ConvertToUint64(); }
 
 	/**
 	 * Gets the data from a lobby chat message after receiving a LobbyChatMsg_t callback.
@@ -183,7 +184,7 @@ public:
 	 * @return int32 - The number of bytes copied into pvData.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	int32 GetLobbyChatEntry(FSteamID SteamIDLobby, int32 ChatID, FSteamID& SteamIDUser, FString& Message, ESteamChatEntryType& ChatEntryType) const;
+	int32 GetLobbyChatEntry(const FSteamID SteamIDLobby, const int32 ChatID, FSteamID& SteamIDUser, FString& Message, ESteamChatEntryType& ChatEntryType) const;
 
 	/**
 	 * Gets the metadata associated with the specified key from the specified lobby.
@@ -194,7 +195,7 @@ public:
 	 * @return FString - Returns an empty string ("") if no value is set for this key, or if steamIDLobby is invalid.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Matchmaking")
-	FString GetLobbyData(FSteamID SteamIDLobby, const FString& Key) const { return UTF8_TO_TCHAR(SteamMatchmaking()->GetLobbyData(SteamIDLobby, TCHAR_TO_UTF8(*Key))); }
+	FString GetLobbyData(const FSteamID SteamIDLobby, const FString& Key) const { return UTF8_TO_TCHAR(SteamMatchmaking()->GetLobbyData(SteamIDLobby, TCHAR_TO_UTF8(*Key))); }
 
 	/**
 	 * Gets a lobby metadata key/value pair by index.
@@ -207,7 +208,7 @@ public:
 	 * @return bool - true upon success; otherwise, false if the steamIDLobby or iLobbyData are invalid.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool GetLobbyDataByIndex(FSteamID SteamIDLobby, int32 LobbyData, FString& Key, FString& Value) const;
+	bool GetLobbyDataByIndex(const FSteamID SteamIDLobby, const int32 LobbyData, FString& Key, FString& Value) const;
 
 	/**
 	 * Gets the number of metadata keys set on the specified lobby.
@@ -219,7 +220,7 @@ public:
 	 * @return int32 - Returns 0 if steamIDLobby is invalid.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Matchmaking")
-	int32 GetLobbyDataCount(FSteamID SteamIDLobby) const { return SteamMatchmaking()->GetLobbyDataCount(SteamIDLobby); }
+	int32 GetLobbyDataCount(const FSteamID SteamIDLobby) const { return SteamMatchmaking()->GetLobbyDataCount(SteamIDLobby); }
 
 	/**
 	 * Gets the details of a game server set in a lobby.
@@ -232,7 +233,7 @@ public:
 	 * @return bool - true if the lobby is valid and has a valid game server set; otherwise, false.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool GetLobbyGameServer(FSteamID SteamIDLobby, FString& GameServerIP, int32& GameServerPort, FSteamID& SteamIDGameServer) const;
+	bool GetLobbyGameServer(const FSteamID SteamIDLobby, FString& GameServerIP, int32& GameServerPort, FSteamID& SteamIDGameServer) const;
 
 	/**
 	 * Gets the Steam ID of the lobby member at the given index.
@@ -244,7 +245,7 @@ public:
 	 * @return FSteamID - Invalid indices return k_steamIDNil.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Matchmaking")
-	FSteamID GetLobbyMemberByIndex(FSteamID SteamIDLobby, int32 MemberIndex) const { return SteamMatchmaking()->GetLobbyMemberByIndex(SteamIDLobby, MemberIndex).ConvertToUint64(); }
+	FSteamID GetLobbyMemberByIndex(const FSteamID SteamIDLobby, const int32 MemberIndex) const { return SteamMatchmaking()->GetLobbyMemberByIndex(SteamIDLobby, MemberIndex).ConvertToUint64(); }
 
 	/**
 	 * Gets per-user metadata from another player in the specified lobby.
@@ -256,7 +257,7 @@ public:
 	 * @return FString - Returns NULL if steamIDLobby is invalid, or steamIDUser is not in the lobby. Returns an empty string ("") if pchKey is not set for the player.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Matchmaking")
-	FString GetLobbyMemberData(FSteamID SteamIDLobby, FSteamID SteamIDUser, const FString& Key) const { return UTF8_TO_TCHAR(SteamMatchmaking()->GetLobbyMemberData(SteamIDLobby, SteamIDUser, TCHAR_TO_UTF8(*Key))); }
+	FString GetLobbyMemberData(const FSteamID SteamIDLobby, const FSteamID SteamIDUser, const FString& Key) const { return UTF8_TO_TCHAR(SteamMatchmaking()->GetLobbyMemberData(SteamIDLobby, SteamIDUser, TCHAR_TO_UTF8(*Key))); }
 
 	/**
 	 * The current limit on the # of users who can join the lobby. Returns 0 if no limit is defined.
@@ -265,7 +266,7 @@ public:
 	 * @return int32 - Returns 0 if no metadata is available for the specified lobby.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Matchmaking")
-	int32 GetLobbyMemberLimit(FSteamID SteamIDLobby) const { return SteamMatchmaking()->GetLobbyMemberLimit(SteamIDLobby); }
+	int32 GetLobbyMemberLimit(const FSteamID SteamIDLobby) const { return SteamMatchmaking()->GetLobbyMemberLimit(SteamIDLobby); }
 
 	/**
 	 * Returns the current lobby owner.
@@ -276,7 +277,7 @@ public:
 	 * @return FSteamID - Returns k_steamIDNil if you're not in the lobby.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Matchmaking")
-	FSteamID GetLobbyOwner(FSteamID SteamIDLobby) const { return SteamMatchmaking()->GetLobbyOwner(SteamIDLobby).ConvertToUint64(); }
+	FSteamID GetLobbyOwner(const FSteamID SteamIDLobby) const { return SteamMatchmaking()->GetLobbyOwner(SteamIDLobby).ConvertToUint64(); }
 
 	/**
 	 * Gets the number of users in a lobby.
@@ -288,7 +289,7 @@ public:
 	 * @return int32 - The number of members in the lobby, 0 if the current user has no data from the lobby.
 	 */
 	UFUNCTION(BlueprintPure, Category = "SteamBridgeCore|Matchmaking")
-	int32 GetNumLobbyMembers(FSteamID SteamIDLobby) const { return SteamMatchmaking()->GetNumLobbyMembers(SteamIDLobby); }
+	int32 GetNumLobbyMembers(const FSteamID SteamIDLobby) const { return SteamMatchmaking()->GetNumLobbyMembers(SteamIDLobby); }
 
 	/**
 	 * Invite another user to the lobby.
@@ -301,7 +302,7 @@ public:
 	 * @return bool - true if the invite was successfully sent; otherwise, false if the local user isn't in a lobby, no connection to Steam could be made, or the specified user is invalid.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool InviteUserToLobby(FSteamID SteamIDLobby, FSteamID SteamIDInvitee) const { return SteamMatchmaking()->InviteUserToLobby(SteamIDLobby, SteamIDInvitee); }
+	bool InviteUserToLobby(const FSteamID SteamIDLobby, const FSteamID SteamIDInvitee) const { return SteamMatchmaking()->InviteUserToLobby(SteamIDLobby, SteamIDInvitee); }
 
 	/**
 	 * Joins an existing lobby.
@@ -312,7 +313,7 @@ public:
 	 * @return FSteamAPICall - SteamAPICall_t to be used with a LobbyEnter_t call result.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	FSteamAPICall JoinLobby(FSteamID SteamIDLobby) const { return SteamMatchmaking()->JoinLobby(SteamIDLobby); }
+	FSteamAPICall JoinLobby(const FSteamID SteamIDLobby) const { return SteamMatchmaking()->JoinLobby(SteamIDLobby); }
 
 	/**
 	 * Leave a lobby that the user is currently in; this will take effect immediately on the client side, other users in the lobby will be notified by a LobbyChatUpdate_t callback.
@@ -321,7 +322,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Matchmaking")
-	void LeaveLobby(FSteamID SteamIDLobby) { SteamMatchmaking()->LeaveLobby(SteamIDLobby); }
+	void LeaveLobby(const FSteamID SteamIDLobby) { SteamMatchmaking()->LeaveLobby(SteamIDLobby); }
 
 	/**
 	 * Removes the game server from the local favorites list.
@@ -334,7 +335,7 @@ public:
 	 * @return bool - true if the server was removed; otherwise, false if the specified server was not on the users local favorites list.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool RemoveFavoriteGame(int32 AppID, const FString& IP, int32 ConnPort, int32 QueryPort, const TArray<ESteamFavoriteFlags>& Flags) const;
+	bool RemoveFavoriteGame(const int32 AppID, const FString& IP, const int32 ConnPort, const int32 QueryPort, const TArray<ESteamFavoriteFlags>& Flags) const;
 
 	/**
 	 * Refreshes all of the metadata for a lobby that you're not in right now.
@@ -346,7 +347,7 @@ public:
 	 * @return bool - true if the request was successfully sent to the server. false if no connection to Steam could be made, or steamIDLobby is invalid.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool RequestLobbyData(FSteamID SteamIDLobby) const { return SteamMatchmaking()->RequestLobbyData(SteamIDLobby); }
+	bool RequestLobbyData(const FSteamID SteamIDLobby) const { return SteamMatchmaking()->RequestLobbyData(SteamIDLobby); }
 
 	/**
 	 * Get a filtered list of relevant lobbies.
@@ -375,7 +376,7 @@ public:
 	 * @return bool - true if the message was successfully sent. false if the message is too small or too large, or no connection to Steam could be made.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool SendLobbyChatMsg(FSteamID SteamIDLobby, FString Message) const;
+	bool SendLobbyChatMsg(const FSteamID SteamIDLobby, FString Message) const;
 
 	/**
 	 * Sets a key/value pair in the lobby metadata. This can be used to set the the lobby name, current map, game mode, etc.
@@ -389,7 +390,7 @@ public:
 	 * @return bool - true if the data has been set successfully. false if steamIDLobby was invalid, or the key/value are too long.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool SetLobbyData(FSteamID SteamIDLobby, const FString& Key, const FString& Value) const { return SteamMatchmaking()->SetLobbyData(SteamIDLobby, TCHAR_TO_UTF8(*Key), TCHAR_TO_UTF8(*Value)); }
+	bool SetLobbyData(const FSteamID SteamIDLobby, const FString& Key, const FString& Value) const { return SteamMatchmaking()->SetLobbyData(SteamIDLobby, TCHAR_TO_UTF8(*Key), TCHAR_TO_UTF8(*Value)); }
 
 	/**
 	 * Sets the game server associated with the lobby.
@@ -405,7 +406,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Matchmaking")
-	void SetLobbyGameServer(FSteamID SteamIDLobby, const FString& GameServerIP, int32 GameServerPort, FSteamID SteamIDGameServer) const;
+	void SetLobbyGameServer(const FSteamID SteamIDLobby, const FString& GameServerIP, const int32 GameServerPort, const FSteamID SteamIDGameServer) const;
 
 	/**
 	 * Sets whether or not a lobby is joinable by other players. This always defaults to enabled for a new lobby.
@@ -417,7 +418,7 @@ public:
 	 * @return bool - true upon success; otherwise, false if you're not the owner of the lobby.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool SetLobbyJoinable(FSteamID SteamIDLobby, bool bLobbyJoinable) const { return SteamMatchmaking()->SetLobbyJoinable(SteamIDLobby, bLobbyJoinable); }
+	bool SetLobbyJoinable(const FSteamID SteamIDLobby, const bool bLobbyJoinable) const { return SteamMatchmaking()->SetLobbyJoinable(SteamIDLobby, bLobbyJoinable); }
 
 	/**
 	 * Sets per-user metadata for the local user.
@@ -431,7 +432,7 @@ public:
 	 * @return void
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|Matchmaking")
-	void SetLobbyMemberData(FSteamID SteamIDLobby, const FString& Key, const FString& Value) { SteamMatchmaking()->SetLobbyMemberData(SteamIDLobby, TCHAR_TO_UTF8(*Key), TCHAR_TO_UTF8(*Value)); }
+	void SetLobbyMemberData(const FSteamID SteamIDLobby, const FString& Key, const FString& Value) { SteamMatchmaking()->SetLobbyMemberData(SteamIDLobby, TCHAR_TO_UTF8(*Key), TCHAR_TO_UTF8(*Value)); }
 
 	/**
 	 * Set the maximum number of players that can join the lobby.
@@ -443,7 +444,7 @@ public:
 	 * @return bool - true if the limit was successfully set. false if you are not the owner of the specified lobby.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool SetLobbyMemberLimit(FSteamID SteamIDLobby, uint8 MaxMembers = 5) const { return SteamMatchmaking()->SetLobbyMemberLimit(SteamIDLobby, MaxMembers); }
+	bool SetLobbyMemberLimit(const FSteamID SteamIDLobby, const uint8 MaxMembers = 5) const { return SteamMatchmaking()->SetLobbyMemberLimit(SteamIDLobby, MaxMembers); }
 
 	/**
 	 * Changes who the lobby owner is.
@@ -456,7 +457,7 @@ public:
 	 * @return bool - true if the owner was successfully changed. false if you're not the current owner of the lobby, steamIDNewOwner is not a member in the lobby, or if no connection to Steam could be made.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool SetLobbyOwner(FSteamID SteamIDLobby, FSteamID SteamIDNewOwner) const { return SteamMatchmaking()->SetLobbyOwner(SteamIDLobby, SteamIDNewOwner); }
+	bool SetLobbyOwner(const FSteamID SteamIDLobby, const FSteamID SteamIDNewOwner) const { return SteamMatchmaking()->SetLobbyOwner(SteamIDLobby, SteamIDNewOwner); }
 
 	/**
 	 * Updates what type of lobby this is.
@@ -468,61 +469,61 @@ public:
 	 * @return bool - true upon success; otherwise, false if you're not the owner of the lobby.
 	 */
 	UFUNCTION(BlueprintCallable, BlueprintPure = false, Category = "SteamBridgeCore|Matchmaking")
-	bool SetLobbyType(FSteamID SteamIDLobby, ESteamLobbyType LobbyType) const { return SteamMatchmaking()->SetLobbyType(SteamIDLobby, static_cast<ELobbyType>(LobbyType)); }
+	bool SetLobbyType(const FSteamID SteamIDLobby, const ESteamLobbyType LobbyType) const { return SteamMatchmaking()->SetLobbyType(SteamIDLobby, (ELobbyType)LobbyType); }
 
 	/** Delegates */
 
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking", meta = (DisplayName = "OnFavoritesListAccountsUpdated"))
-	FOnFavoritesListAccountsUpdatedDelegate m_OnFavoritesListAccountsUpdated;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking|Delegates", meta = (DisplayName = "OnFavoritesListAccountsUpdated"))
+	FOnFavoritesListAccountsUpdatedDelegate OnFavoritesListAccountsUpdatedDelegate;
 
 	/** A server was added/removed from the favorites list, you should refresh now. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking", meta = (DisplayName = "OnFavoritesListChanged"))
-	FOnFavoritesListChangedDelegate m_OnFavoritesListChanged;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking|Delegates", meta = (DisplayName = "OnFavoritesListChanged"))
+	FOnFavoritesListChangedDelegate OnFavoritesListChangedDelegate;
 
 	/** A chat (text or binary) message for this lobby has been received. After getting this you must use GetLobbyChatEntry to retrieve the contents of this message. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking", meta = (DisplayName = "OnLobbyChatMsg"))
-	FOnLobbyChatMsgDelegate m_OnLobbyChatMsg;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking|Delegates", meta = (DisplayName = "OnLobbyChatMsg"))
+	FOnLobbyChatMsgDelegate OnLobbyChatMsgDelegate;
 
 	/** A lobby chat room state has changed, this is usually sent when a user has joined or left the lobby. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking", meta = (DisplayName = "OnLobbyChatUpdate"))
-	FOnLobbyChatUpdateDelegate m_OnLobbyChatUpdate;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking|Delegates", meta = (DisplayName = "OnLobbyChatUpdate"))
+	FOnLobbyChatUpdateDelegate OnLobbyChatUpdateDelegate;
 
 	/** Result of our request to create a Lobby. At this point, the lobby has been joined and is ready for use, a LobbyEnter_t callback will also be received (since the local user is joining their own lobby). */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking", meta = (DisplayName = "OnLobbyCreated"))
-	FOnLobbyCreatedDelegate m_OnLobbyCreated;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking|Delegates", meta = (DisplayName = "OnLobbyCreated"))
+	FOnLobbyCreatedDelegate OnLobbyCreatedDelegate;
 
 	/**
 	 * The lobby metadata has changed.
 	 * If m_ulSteamIDMember is a user in the lobby, then use GetLobbyMemberData to access per-user details; otherwise, if m_ulSteamIDMember == m_ulSteamIDLobby, use GetLobbyData to access the lobby metadata.
 	 */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking", meta = (DisplayName = "OnLobbyDataUpdate"))
-	FOnLobbyDataUpdateDelegate m_OnLobbyDataUpdate;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking|Delegates", meta = (DisplayName = "OnLobbyDataUpdate"))
+	FOnLobbyDataUpdateDelegate OnLobbyDataUpdateDelegate;
 
 	/** Recieved upon attempting to enter a lobby. Lobby metadata is available to use immediately after receiving this. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking", meta = (DisplayName = "OnLobbyEnter"))
-	FOnLobbyEnterDelegate m_OnLobbyEnter;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking|Delegates", meta = (DisplayName = "OnLobbyEnter"))
+	FOnLobbyEnterDelegate OnLobbyEnterDelegate;
 
 	/**
 	 * A game server has been set via SetLobbyGameServer for all of the members of the lobby to join.
 	 * It's up to the individual clients to take action on this; the typical game behavior is to leave the lobby and connect to the specified game server; but the lobby may stay open throughout the session if desired.
 	 */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking", meta = (DisplayName = "OnLobbyGameCreated"))
-	FOnLobbyGameCreatedDelegate m_OnLobbyGameCreated;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking|Delegates", meta = (DisplayName = "OnLobbyGameCreated"))
+	FOnLobbyGameCreatedDelegate OnLobbyGameCreatedDelegate;
 
 	/**
 	 * Someone has invited you to join a Lobby. Normally you don't need to do anything with this, as the Steam UI will also display a '<user> has invited you to the lobby, join?' notification and message.
 	 * If the user outside a game chooses to join, your game will be launched with the parameter +connect_lobby <64-bit lobby id>, or with the callback GameLobbyJoinRequested_t if they're already in-game.
 	 */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking", meta = (DisplayName = "OnLobbyInvite"))
-	FOnLobbyInviteDelegate m_OnLobbyInvite;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking|Delegates", meta = (DisplayName = "OnLobbyInvite"))
+	FOnLobbyInviteDelegate OnLobbyInviteDelegate;
 
 	// This is currently unused
-	/*UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking", meta = (DisplayName = "OnLobbyKicked"))
+	/*UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking|Delegates", meta = (DisplayName = "OnLobbyKicked"))
 	FOnLobbyKickedDelegate m_OnLobbyKicked;*/
 
 	/** Result when requesting the lobby list. You should iterate over the returned lobbies with GetLobbyByIndex, from 0 to m_nLobbiesMatching-1. */
-	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking", meta = (DisplayName = "OnLobbyMatchList"))
-	FOnLobbyMatchListDelegate m_OnLobbyMatchList;
+	UPROPERTY(BlueprintAssignable, Category = "SteamBridgeCore|Matchmaking|Delegates", meta = (DisplayName = "OnLobbyMatchList"))
+	FOnLobbyMatchListDelegate OnLobbyMatchListDelegate;
 
 protected:
 private:
