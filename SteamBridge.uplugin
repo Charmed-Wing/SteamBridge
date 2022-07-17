@@ -4,7 +4,7 @@
 	"VersionName": "1.0.0",
 	"FriendlyName": "SteamBridge",
 	"Description": "A UE4 implementation of the Steamworks API.",
-	"Category": "Other",
+	"Category": "Third Party",
 	"CreatedBy": "Russ 'trdwll' Treadwell",
 	"CreatedByURL": "https://trdwll.com",
 	"DocsURL": "",
@@ -19,7 +19,7 @@
 			"Name": "SteamBridge",
 			"Type": "Runtime",
 			"LoadingPhase": "PostConfigInit",
-			"WhitelistPlatforms": [
+			"PlatformAllowList": [
 				"Win64",
 				"Linux",
 				"Mac"
