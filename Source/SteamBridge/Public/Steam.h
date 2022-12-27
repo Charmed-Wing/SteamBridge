@@ -9,8 +9,8 @@
 #endif
 
 #if ENGINE_MAJOR_VERSION == 5
-#include "ThirdParty/Steamworks/Steamv151/sdk/public/steam/steam_api.h"
-#include "ThirdParty/Steamworks/Steamv151/sdk/public/steam/steam_gameserver.h"
+#include "ThirdParty/Steamworks/Steamv153/sdk/public/steam/steam_api.h"
+#include "ThirdParty/Steamworks/Steamv153/sdk/public/steam/steam_gameserver.h"
 #else
 #include "ThirdParty/Steamworks/Steamv147/sdk/public/steam/steam_api.h"
 #include "ThirdParty/Steamworks/Steamv147/sdk/public/steam/steam_gameserver.h"

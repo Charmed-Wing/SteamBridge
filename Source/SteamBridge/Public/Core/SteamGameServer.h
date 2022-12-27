@@ -93,16 +93,6 @@ public:
 	// #TODO ComputeNewPlayerCompatibility
 
 	/**
-	 * Tells the Steam master servers whether or not you want to be active.
-	 * If this is enabled then the server will talk to the master servers, if it's not then incoming messages are ignored and heartbeats will not be sent.
-	 *
-	 * @param bool bActive - Enable (true) or disable (false) the master server updater.
-	 * @return void
-	 */
-	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	void EnableHeartbeats(const bool bActive) { SteamGameServer()->EnableHeartbeats(bActive); }
-
-	/**
 	 * Ends an auth session that was started with BeginAuthSession. This should be called when no longer playing with the specified entity.
 	 *
 	 * @param FSteamID SteamID - The entity to end the active auth session with.
@@ -110,15 +100,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
 	void EndAuthSession(const FSteamID SteamID) { SteamGameServer()->EndAuthSession(SteamID); }
-
-	/**
-	 * Force a heartbeat to the Steam master servers at the next opportunity.
-	 * You usually don't need to use this.
-	 *
-	 * @return void
-	 */
-	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	void ForceHeartbeat() { SteamGameServer()->ForceHeartbeat(); }
 
 	/**
 	 * Retrieve a authentication ticket to be sent to the entity who wishes to authenticate you.
@@ -253,16 +234,6 @@ public:
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
 	void SetGameTags(const FString& GameTags) { SteamGameServer()->SetGameTags(TCHAR_TO_UTF8(*GameTags)); }
-
-	/**
-	 * Changes how often heartbeats are sent to the Steam master servers.
-	 * You usually don't need to use this.
-	 *
-	 * @param int32 HeartbeatInterval - The interval between sending heartbeats in milliseconds. Typically would range between 250-1000. Use -1 to use the default value.
-	 * @return void
-	 */
-	UFUNCTION(BlueprintCallable, Category = "SteamBridgeCore|GameServer")
-	void SetHeartbeatInterval(const int32 HeartbeatInterval) { SteamGameServer()->SetHeartbeatInterval(HeartbeatInterval); }
 
 	/**
 	 * Add/update a rules key/value pair.
